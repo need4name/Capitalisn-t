@@ -406,3 +406,4 @@ body.style-pixel #log-list li { border-bottom-color: rgba(63, 240, 255, 0.3); }
 .card-home .kicker { text-align: left; }
 .home-list { margin: 12px 0; padding-left: 1.1em; }
 .home-list li { margin: 8px 0; }
+.card-home .evening { margin-top: 14px; padding-top: 12px; border-top: 1px dashed currentColor; font-style: italic; opacity: 0.85; }

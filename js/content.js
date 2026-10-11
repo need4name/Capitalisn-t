@@ -45,6 +45,17 @@
     head: { name: 'The Headteacher', skin: SKIN[0], shirt: '#ffffff', trousers: '#333', blazer: '#3a3a4a', tie: '#552222', hair: '#999', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true },
     lanyard: { name: 'Safeguarding Lady', skin: SKIN[3], shirt: '#9b59b6', trousers: '#333', skirt: true, hair: '#2b1b10', hairStyle: 'bob', s: 1.35, adult: true, mood: 'neutral', lanyard: true },
     newkid: { name: 'New Kid', skin: SKIN[3], shirt: '#5a6fd6', trousers: '#1f2a5a', shorts: true, hair: '#1d1410', hairStyle: 'mop', s: 0.85, mood: 'neutral', shoes: ['#d22', '#2a6ad2'], jumperRoll: true },
+    maureen: { name: 'Dinner Lady Maureen', skin: SKIN[1], shirt: '#6fae7a', trousers: '#3b3f46', skirt: true, hair: '#c8c8c8', hairStyle: 'bun', s: 1.3, adult: true, mood: 'neutral', apron: true },
+    dobson: { name: 'Mr Dobson, Caretaker', skin: SKIN[0], shirt: '#35598c', trousers: '#35598c', hair: '#8a8a8a', hairStyle: 'bald', s: 1.35, adult: true, mood: 'tired' },
+    council: { name: 'A Man from the Council', skin: SKIN[0], shirt: '#e2dcc6', trousers: '#5a594a', blazer: '#6b6a58', tie: '#4a4a40', hair: '#5a5a5a', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true, lanyard: true },
+    harrietA: { name: 'Harriet and Harriet', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#e7bf62', hairStyle: 'pony', s: 0.85, mood: 'neutral' },
+    harrietB: { name: 'Harriet', skin: SKIN[3], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#1d1410', hairStyle: 'pony', s: 0.85, mood: 'neutral' },
+    callum: { name: 'Callum (mostly Ribena)', skin: '#e9b9cf', shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#7a3f8a', hairStyle: 'mop', s: 0.9, mood: 'happy' },
+    gary: { name: 'Gary', pigeon: true, s: 1 },
+    grieve: { name: 'Mr Grieve, Chemistry', skin: SKIN[0], shirt: '#ffffff', trousers: '#3b3f46', blazer: '#ececec', hair: '#d0d0d0', hairStyle: 'scruff', s: 1.35, adult: true, mood: 'tired', glasses: true },
+    josh: { name: 'Josh, Head Boy', skin: SKIN[0], shirt: '#ffffff', trousers: '#222', blazer: '#2c2c2c', hair: '#d6b25e', hairStyle: 'mop', s: 1.12, mood: 'happy', badge: true },
+    vince: { name: 'Voltage Vince', skin: SKIN[1], shirt: '#e8202a', trousers: '#222', hair: '#222', hairStyle: 'short', s: 1.4, adult: true, mood: 'happy', can: true },
+    focus: { name: 'The Year 7 Focus Group', skin: SKIN[2], shirt: '#ffffff', trousers: '#222', hair: '#1d1410', hairStyle: 'short', s: 0.9, mood: 'neutral' },
     cryer: { name: 'Crying Kid', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#c4552b', hairStyle: 'pony', s: 0.82, mood: 'crying', sandwich: true },
   };
 
@@ -78,7 +89,7 @@
       feedTitle: 'Things That Happened',
       objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. Six quid.',
       outro: [
-        'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you.',
+        'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you. Gary the pigeon sees you off at the gates. He does not wave. Pigeons can’t wave. It’s implied.',
         'The coat comes with you to big school. So does Biff.',
       ],
       intro: [
@@ -221,8 +232,8 @@
         id: 'kyle',
         scene: { cast: ['kyle'] },
         speaker: 'kyle',
-        text: 'The Swapsies Market behind the climbing frame runs on an honour system. Honour is, in your view, a market inefficiency.',
-        line: 'Swap you two UFO Snaps for a Gummy Snail?',
+        text: 'The Swapsies Market behind the climbing frame runs on an honour system. Honour is, in your view, a market inefficiency. Kyle is nine. He has business cards. They just say KYLE.',
+        line: 'Swap you two UFO Snaps for a Gummy Snail? I’ll throw in a business card.',
         options: [
           { type: 'decent', label: '“Two snaps for a snail. Done.”', cash: 15, result: 'A clean swap. Kyle seems genuinely delighted. The honour system holds for one more day.' },
           { type: 'decent', label: 'Leave the Swapsies Market alone.', cash: 0, soul: 2, result: 'The market thrives without you. It’s annoying to watch.' },
@@ -238,7 +249,7 @@
         id: 'biff',
         scene: { cast: ['biff'] },
         speaker: 'biff',
-        text: 'Biff is in Year 6. Biff has been in Year 6 for what feels like several years. Biff has noticed your jumper.',
+        text: 'Biff is in Year 6. Biff has been in Year 6 for what feels like several years. He has a moustache and, it is rumoured, a mortgage. Biff has noticed your jumper.',
         line: 'Give us the snails or I’ll put you in the bin.',
         options: [
           { type: 'decent', label: 'Give him a snail and walk away.', cash: -15, result: 'Biff takes the snail and pats you on the head, quite hard. You walk away with your dignity, and fewer snails.' },
@@ -543,6 +554,51 @@
   const fillers = {
     1: [
       {
+        id: 'f-gary', scene: { cast: ['gary', 'year2'] }, speaker: 'year2',
+        text: 'A pigeon has a whole sausage roll and is guarding it from three Year 2s, who are trying to reason with him. The Year 2s call him Gary. Gary does not accept the name, but he doesn’t reject it either.',
+        line: 'Gary won’t share. We asked nicely. We asked in French.',
+        options: [
+          { type: 'decent', label: 'Shoo Gary off and let them share it.', cash: 0, result: 'Gary leaves, eventually, with enormous dignity. The Year 2s split the sausage roll into exactly fair pieces using a ruler. Gary watches from the fence. He will remember this.' },
+          { type: 'exploit', label: 'Buy it off Gary for a crisp. Sell it to the Year 2s by the flake.', cash: 80, soul: -5, happy: -3, fanfare: ['PIGEON ARBITRAGE!', '+80p!'], result: 'Gary accepts the crisp, which is all the paperwork a pigeon needs. You sell the sausage roll back flake by flake. The last flake goes for 9p. The Year 2s clap anyway.', feed: ['Gary has learned what a crisp is worth. He looks at you differently now. Like a colleague.', 'One Year 2 had their pastry flakes on credit. They are seven. They have a credit rating.'] },
+        ],
+      },
+      {
+        id: 'f-pudding', scene: { cast: ['maureen'] }, speaker: 'maureen',
+        text: 'Dinner Lady Maureen is holding the last jam roly-poly over her head like a newborn lion. The custard is steaming in a way that feels deliberate.',
+        line: 'The pudding chooses its owner, Tucker. The pudding has chosen Little Billy. I don’t make the rules. The custard makes the rules.',
+        options: [
+          { type: 'decent', label: '“Then Billy should have it.”', cash: 0, result: 'Maureen nods, slowly, as though you’ve passed a test you didn’t know you were sitting. Billy gets the pudding. He eats it with both hands, like a raccoon.' },
+          { type: 'exploit', label: '“Actually, the pudding spoke to me.” Then sell it in slices.', cash: 90, soul: -6, happy: -4, fanfare: ['DIVINE RIGHT OF PUDDING!', '+90p!'], result: 'Maureen hands it over, shaken. You cut it into eleven slices and sell them along the dinner queue. Billy buys a slice of his own destiny for 8p.', feed: ['Maureen has stopped consulting the pudding. Something between them is broken.', 'Billy has started bringing his own pudding. It is a sardine paste sandwich he has labelled PUDDING.'] },
+        ],
+      },
+      {
+        id: 'f-harriets', scene: { cast: ['harrietA', 'harrietB'] }, speaker: 'harrietA',
+        text: 'Harriet and Harriet are twins, but not to each other. Nobody has asked how that works. They want one Gummy Snail and cannot agree which Harriet is paying.',
+        line: 'We share everything. Except a birthday. And a mum.',
+        options: [
+          { type: 'decent', label: 'Snip the snail in half. 5p each.', cash: 10, result: 'Two Harriets, two halves, one snail. They eat in perfect unison. It is quite unsettling.' },
+          { type: 'exploit', label: 'Full price each. They’re two people. Technically.', cash: 60, soul: -4, happy: -3, fanfare: ['DOUBLE BILLING!', '+60p!'], result: 'Each Harriet pays full price for half a snail. They look at each other for a long time. A small, important friendship quietly closes for business.', feed: ['Harriet and Harriet aren’t holding hands today. They are standing exactly one snail apart.'] },
+        ],
+      },
+      {
+        id: 'f-ribena', scene: { cast: ['callum'] }, speaker: 'callum',
+        text: 'Callum in Year 4 has drunk so much Ribena that the school nurse says he is “technically a cordial”. His mum has banned it. He has found out that you have a bottle.',
+        line: 'I can feel my blood going normal, Tuck. Please. I don’t like it.',
+        options: [
+          { type: 'decent', label: 'Give him a glass of water. Tell him he’s fine.', cash: 0, result: 'Callum drinks the water like it’s a betrayal. He goes very slightly less purple. He says the world tastes “loud”.' },
+          { type: 'exploit', label: 'Undiluted. 30p a swig.', cash: 120, soul: -6, happy: -4, fanfare: ['+£1.20!', 'CONCENTRATED GROWTH!'], result: 'Callum has four swigs and briefly sees the face of God. He says God is also mostly Ribena.', feed: ['Callum went purple in Numeracy. Not a bit purple. Properly, permanently purple.', 'The nurse has started a page in her notebook just called CALLUM. It is now three pages.'] },
+        ],
+      },
+      {
+        id: 'f-keys', scene: { cast: ['dobson'] }, speaker: 'dobson',
+        text: 'Mr Dobson the caretaker has dropped his keys down the drain and is staring at them. He has been mopping the same dry corridor since 1987. Without the keys, he cannot get to the corridor.',
+        line: '…',
+        options: [
+          { type: 'decent', label: 'Fish them out with a ruler and some chewing gum.', cash: 0, result: 'You hand back the keys. Mr Dobson looks at you, then at the keys, then mops your shoes, slowly and with great tenderness. It is the nicest thing anyone has ever done to your shoes.' },
+          { type: 'exploit', label: 'Fish them out. Rent him his keys by the hour.', cash: 100, soul: -6, happy: -3, fanfare: ['+£1!', 'KEY WORKER!'], result: 'Mr Dobson pays 10p an hour for his own keys. He says nothing. He mops the drain where they fell, for a very long time.', feed: ['Mr Dobson mopped the same tile all lunchtime. It was a mop of grief.'] },
+        ],
+      },
+      {
         id: 'f-tooth', scene: { cast: ['year2'] }, speaker: 'year2',
         text: 'A Year 2 wants a Gummy Snail. They have 20p and a wobbly tooth.',
         line: 'The tooth fairy gives you a pound, you know.',
@@ -572,6 +628,42 @@
     ],
     2: [
       {
+        id: 'f-council', scene: { cast: ['council'] }, speaker: 'council',
+        text: 'A Man from the Council needs a witness to confirm the corridor is the length he says it is. He says it is four miles long. It is the corridor outside Maths.',
+        line: 'Just a signature, young man. For the corridor. The corridor needs this.',
+        options: [
+          { type: 'decent', label: '“It’s about twenty metres, mate.”', cash: 0, result: 'He measures it again, in front of you, very slowly. It is twenty metres. He looks betrayed. He writes “HOSTILE” on his clipboard and draws a little sad face.' },
+          { type: 'exploit', label: 'Sign whatever he wants. £5 a signature.', cash: 500, soul: -5, happy: -4, fanfare: ['+£5!', 'CIVIC ENGAGEMENT!'], result: 'You sign that the corridor is four miles long, that the canteen is in Belgium, and that you personally are a listed building.', feed: ['The corridor outside Maths has been reclassified as a B-road. There is now a speed limit and a lollipop lady.', 'Year 7s have to take a packed lunch to get to Geography.'] },
+        ],
+      },
+      {
+        id: 'f-grieve', scene: { cast: ['grieve'] }, speaker: 'grieve',
+        text: 'Mr Grieve, Chemistry, has set his eyebrows on fire again and is continuing the lesson. You are the only person holding a bottle of water.',
+        line: 'Bit of water, Tucker? Whenever you like. No rush. It’s just my face.',
+        options: [
+          { type: 'decent', label: 'Throw the water at him.', cash: 0, result: 'You put out Mr Grieve. He thanks you, steaming gently, and gives you a detention for throwing things in a lab.' },
+          { type: 'exploit', label: '“Water’s two quid, sir. Seller’s market.”', cash: 200, soul: -6, happy: -3, fanfare: ['+£2!', 'EMERGENCY PRICING!'], result: 'Mr Grieve pays in coins, one at a time, while still on fire. It is the longest transaction of your life. Neither of you blinks.', feed: ['Mr Grieve now teaches in a balaclava. He says it’s “for the eyebrows”. He hasn’t got eyebrows.'] },
+        ],
+      },
+      {
+        id: 'f-shrine', scene: { bg: 'bikeshed', cast: ['year7s'] }, speaker: 'year7s',
+        text: 'Somebody has built a shrine to Nibbles the hamster behind the science block: candles, a little wheel, and a photo of a hamster that is clearly a guinea pig. Nobody knew Nibbles. Everybody misses him.',
+        line: 'Can we pray to him? Is that allowed? Is he a god now?',
+        options: [
+          { type: 'decent', label: 'Leave them to it.', cash: 0, result: 'They hold a little service. Somebody reads a poem that rhymes “Nibbles” with “Nibbles”. It is genuinely moving.' },
+          { type: 'exploit', label: '20p to pray. 50p for a wish. £1 to touch the wheel.', cash: 600, soul: -6, happy: -4, mono: 5, fanfare: ['ORGANISED RELIGION!', '+£6!'], result: 'By lunch the shrine has a queue, a gift shop and a man from Year 10 who claims to have been healed. You did not see the healing. You did charge for it.', feed: ['Somebody wished for Nibbles to come back. The next morning there was a guinea pig in the shrine. Nobody can explain the guinea pig.', 'The guinea pig has its own following now. It does not want one.'] },
+        ],
+      },
+      {
+        id: 'f-rope', scene: { cast: ['year7s'] }, speaker: 'year7s',
+        text: 'Legend says a Year 9 climbed the PE rope in 1998 and never came down. Today a bucket comes down. Inside: a pound coin and a note that says CRISPS PLS.',
+        line: 'You can’t not, Tuck. He’s been up there since the Spice Girls.',
+        options: [
+          { type: 'decent', label: 'Send up a whole multipack.', cash: -100, result: 'The bucket goes up. After a long time, a little paper aeroplane comes down. It just says THANK YOU in very old handwriting.' },
+          { type: 'exploit', label: 'Send up one crisp. Keep the pound.', cash: 100, soul: -5, happy: -3, fanfare: ['+£1!', 'VERTICAL MARKET!'], result: 'One crisp goes up. A long silence comes down.', feed: ['The bucket came down again. The note just said WHY.'] },
+        ],
+      },
+      {
         id: 'f-drain', scene: { cast: ['year7s'] }, speaker: 'year7s',
         text: 'A Year 7 has dropped his dinner money down a drain. He is staring at the drain as if it might apologise.',
         line: 'That was my dinner. That was my whole dinner.',
@@ -600,6 +692,33 @@
       },
     ],
     3: [
+      {
+        id: 'f-vince', scene: { cast: ['vince'] }, speaker: 'vince',
+        text: 'Voltage Vince, the Volt-Juice™ mascot, has fallen over in the quad. He is a man in a can costume. Nobody has ever seen him take it off. Payroll lists him as “ongoing”. He is fine, he says, from inside the can.',
+        line: 'Bit of help, Mr Tuck? Can’t reach the ground with me arms. Never could.',
+        options: [
+          { type: 'decent', label: 'Stand him up. Ask if he wants to come out.', cash: 0, result: 'You stand him up. There is a long pause. “Out of what?” says Vince. He does a little dance. It is the saddest dance you have ever seen.' },
+          { type: 'exploit', label: 'Leave him down. £1 a selfie with the fallen can.', cash: 6000, soul: -6, happy: -5, fanfare: ['VIRAL CONTENT!', '+£60!'], result: 'Sixty Year 7s pose with Vince. He gives a thumbs-up in every photo, from the floor. The photos are glossy and everyone in them is smiling, especially Vince, who can’t stop.', feed: ['Vince has been standing in the quad since Tuesday. He says he’s fine. The can says he’s fine.', 'Someone left Vince a sandwich. He couldn’t reach it. Nobody could reach it for him. It’s still there.'] },
+        ],
+      },
+      {
+        id: 'f-focus', scene: { cast: ['focus'] }, speaker: 'focus',
+        text: 'Your Year 7 focus group has unionised. They have a banner and a chant. The chant is just “WAGON WHEELS”, but with real anger.',
+        line: 'Two Wagon Wheels a day each or we stop tasting things. We have tasted Blue. We won’t taste Blue again.',
+        options: [
+          { type: 'decent', label: 'Give them the Wagon Wheels.', cash: 0, result: 'The focus group returns to work. They describe the new flavour as “purple, but sad”. It is the first honest review Tuck Enterprises™ has ever had.' },
+          { type: 'exploit', label: 'Replace them with Year 6s from your old primary. Cheaper.', cash: 7000, soul: -7, happy: -6, mono: 5, fanfare: ['SUPPLY CHAIN OPTIMISED!', '+£70!'], result: 'A coach arrives from St. Pete’s every Thursday. The Year 6s call it the Taste Bus. They taste anything. One of them tasted a fire door.', feed: ['One of the Year 6s on the Taste Bus was Billy’s little brother. He said Blue was nice.', 'The original focus group now meets in the car park, tasting rain in protest.'] },
+        ],
+      },
+      {
+        id: 'f-radiator', scene: { cast: ['josh'] }, speaker: 'josh',
+        text: 'Head Boy Josh wants to fix the radiator, like Maya promised. He has a spanner, a dream, and chalk all round his mouth.',
+        line: 'I’ve been reading up. Radiators are just warm windows. How hard can it be?',
+        options: [
+          { type: 'decent', label: '“Go on then, Josh.”', cash: 0, result: 'Josh hits the radiator with the spanner. It comes on for the first time since 1996. Somewhere a plaque that just says DARREN gets very slightly warmer.' },
+          { type: 'exploit', label: 'Sell him a “radiator repair licence”. £70. Non-transferable.', cash: 7000, soul: -6, happy: -5, fanfare: ['REGULATORY FRAMEWORK!', '+£70!'], result: 'Josh buys the licence and laminates it. The licence is a Post-it note that says LICENCE. He laminates that too.', feed: ['Josh fixed the radiator, then got fined £70 for not displaying his licence. You run the fines.', 'Josh has eaten the licence.'] },
+        ],
+      },
       {
         id: 'f-coursework', scene: { cast: ['sixthformer'] }, speaker: 'sixthformer',
         text: 'A Year 12 needs an extension on her coursework. Her teacher says no. You say “maybe”, which is worse.',
@@ -638,7 +757,7 @@
       id: 'rain', label: 'Count raindrops',
       lines: [
         'You count {n} raindrops. The rain does not run out.',
-        '{n} raindrops. Each one identical. None of them are paying the quota.',
+        '{n} raindrops. One of them looked like Mr Dobson. You don’t mention it.',
         '{n} raindrops. You lose count and start again. You lose count deliberately, for something to do.',
       ],
     },
@@ -662,8 +781,16 @@
       id: 'poster', label: 'Read the poster again',
       lines: [
         '“NOW WASH YOUR HANDS.” You read it again. Same instructions.',
-        '“BE KIND. IT COSTS NOTHING.” You check the small print. There isn’t any. It’s lying.',
+        '“BE KIND. IT COSTS NOTHING.” Someone has drawn a moustache on the word KIND. It suits it.',
         '“EVERY CHILD MATTERS.” The poster is laminated. It has been laminated for a long time.',
+      ],
+    },
+    {
+      id: 'gary', label: 'Look for Gary',
+      lines: [
+        'Gary isn’t here. You can feel the absence of Gary like a draught.',
+        'A pigeon lands nearby. It isn’t Gary. It knows it isn’t Gary. It leaves, ashamed.',
+        'You whisper “Gary?” Nothing. Then, very far away, a single coo. Possibly Gary. Possibly a pipe.',
       ],
     },
     {
@@ -671,17 +798,20 @@
       lines: [
         'What is a snail worth? Whatever someone will pay. What is a person worth? You stop thinking.',
         'You think about value for a while. Value doesn’t think about you back.',
-        'You conclude that kindness is priceless, which, in this economy, means unaffordable.',
+        'You try to think of the price of a cloud. You get as far as “quite a lot” and stop.',
       ],
     },
   ];
 
   /* Things the freeze says once you've been sitting in it a while. */
   const freezeEscalation = [
-    { at: 6, text: 'They’re still there, by the way. Mid-sentence. Frozen. Neither of you is going anywhere.' },
-    { at: 12, text: 'A pigeon hangs in the air above the playground. It looks embarrassed for you.' },
-    { at: 20, text: 'You have now spent longer being decent than most people spend being anything. It has achieved nothing.' },
-    { at: 35, text: 'This is it. This is the whole alternative. You can stay here forever, if you like. Lots of people do.' },
+    { at: 4, text: 'Mr Dobson mops past, very slowly, in the opposite direction to time. He nods. He is gone.' },
+    { at: 7, text: 'They’re still there, by the way. Mid-sentence. Neither of you is going anywhere.' },
+    { at: 11, text: 'A pigeon hangs in the air above the playground, mid-flap. It looks embarrassed for you.' },
+    { at: 16, text: 'A Man from the Council appears, measures the silence with a tape measure, writes down “too long” and leaves.' },
+    { at: 22, text: 'Gary the pigeon lands on your shoe and goes to sleep. You can’t move now. That’s just the rules.' },
+    { at: 30, text: 'A dinner lady somewhere has dropped a tray. It is still falling. It might never land.' },
+    { at: 40, text: 'You are beginning to suspect you live here now.' },
   ];
 
   /* The final freeze, in the assembly hall. */
@@ -696,7 +826,7 @@
   /* ------------------------------------------------------------------ */
   const ending = [
     { scene: { bg: 'gates', cast: [], rain: true, style: 'real', tuckSad: true, tuckSit: true, school: "St. Jude's" }, text: 'Tuck is expelled. All assets are seized, including the coat. He sits on the wall outside the gates. It is still raining.' },
-    { scene: { bg: 'gates', cast: [], rain: true, style: 'real', ambientPlay: true, tuckSad: true, tuckSit: true, school: "St. Jude's" }, text: 'Through the railings, kids are playing. Nobody is charging anybody for anything. It looks stupid. It looks brilliant.' },
+    { scene: { bg: 'gates', cast: ['gary'], rain: true, style: 'real', ambientPlay: true, tuckSad: true, tuckSit: true, school: "St. Jude's" }, text: 'Through the railings, kids are playing. Nobody is charging anybody for anything. It looks stupid. It looks brilliant. Gary lands on the wall beside you. He doesn’t want anything. That’s new.' },
     { scene: { bg: 'shed', cast: ['newkid'], noTuck: true, style: 'crayon', school: "St. Pete's Primary" }, text: 'Behind the sports shed at St. Pete’s Primary, a new kid steps out. Eight years old. Mismatched shoes. A jumper rolled tight under one arm.' },
     { scene: { bg: 'playground', cast: ['newkid', 'cryer'], noTuck: true, bench: true, style: 'crayon', school: "St. Pete's Primary" }, text: 'Across the playground, somebody is crying into a sandwich.' },
     { scene: { bg: 'playground', cast: ['newkid', 'cryer'], noTuck: true, bench: true, style: 'crayon', school: "St. Pete's Primary" }, text: '', big: 'THE DEVIL DIES,<br>BUT THE MARKET LIVES FOREVER.' },
@@ -711,6 +841,9 @@
     '*Terms apply. The terms are: you lose.',
     '*Free means free at the point of use. The point of use is later.',
     '*No hamsters were harmed. One hamster was defamed.',
+    '*Voltage Vince is fine. Please stop asking if Vince is fine.',
+    '*Blue is a flavour. Blue has always been a flavour.',
+    '*Gary the pigeon is a non-executive director and is not available for comment.',
   ];
 
   /* The awkward wait after a decent choice. {name} is whoever you're with. */
@@ -720,6 +853,8 @@
       'There is a pause. It goes on slightly too long. Then it keeps going.',
       'Nothing happens. You had expected something to happen.',
       'The clock above the door stops at {time}. Nobody else seems to notice.',
+      'A silence arrives. It sits down next to you. It has brought sandwiches.',
+      'You and {name} stand there. A leaf falls. It takes the scenic route.',
     ],
     // drift into the log while you wait, whether you do anything or not
     beats: [
@@ -730,9 +865,93 @@
       'You become aware of your own hands.',
       'It is still {time}.',
       'Somebody, somewhere, is making money. It isn’t you.',
+      'A teacher walks past, sees the two of you, and decides it isn’t worth it.',
+      '{name} blinks. It takes about a week.',
+      'Your stomach makes a noise. It is the loudest thing that has ever happened.',
+      'Gary the pigeon lands nearby, assesses the situation, and leaves.',
+      'Somewhere in the building, a radiator thinks about coming on, and doesn’t.',
+      'Mr Dobson mops into view, mops a perfect circle around both of you, and mops away.',
+      'A crisp packet blows back the other way. It’s the same crisp packet. It looks tired.',
+      'You think you hear the tannoy clear its throat. It doesn’t say anything.',
     ],
     passes: 'Eventually, the moment passes.',
   };
 
-  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward };
+  /* ------------------------------------------------------------------ */
+  /* Interludes: the school getting on with being strange. No choices.  */
+  /* One may turn up between encounters. Each plays once per run.       */
+  /* ------------------------------------------------------------------ */
+  const interludes = {
+    1: [
+      { id: 'i1-astra', kicker: 'Tannoy', text: 'Ding-dong. “Would the owner of a blue Vauxhall Astra please move it, as it is now in the pond.” There is no pond at St. Pete’s. Everybody goes to look anyway.' },
+      { id: 'i1-field', kicker: 'Tannoy', text: '“Children are reminded that the field is out of bounds due to the field.” Mrs Whitlock does not elaborate. Nobody has been on the field since 2004. It has started to look back.' },
+      { id: 'i1-maureen', kicker: 'Overheard', cast: ['maureen'], text: 'Dinner Lady Maureen leans over the custard. “The chips have told me things, Tucker. About you. About Thursday.” She won’t say what. She gives you one chip. It is warm with prophecy.' },
+      { id: 'i1-dobson', kicker: 'Corridor', bg: 'corridor', cast: ['dobson'], text: 'Mr Dobson is mopping a dry corridor. He has been mopping it since 1987. When you ask why, he mops slightly faster, which is all the answer you’re going to get.' },
+      { id: 'i1-gary', kicker: 'Playground', cast: ['gary'], noTuck: true, text: 'A pigeon lands on the hopscotch and completes it perfectly, all the way to ten, then back. The Year 3s burst into applause. Gary takes no questions.' },
+      { id: 'i1-shoe', kicker: 'Assembly', text: 'In assembly, Mrs Whitlock holds up a single shoe and asks whose it is. It has been three weeks. Nobody claims the shoe. The shoe now has its own hymn.' },
+      { id: 'i1-harriets', kicker: 'Playground', cast: ['harrietA', 'harrietB'], text: 'Harriet and Harriet are holding hands and staring at you. They do not blink. They will keep doing this until the bell. It is not personal. It might be personal.' },
+      { id: 'i1-callum', kicker: 'Overheard', cast: ['callum'], text: 'Callum walks past, leaving faint purple footprints. A Year 1 follows them all the way to the toilets and comes back changed.' },
+      { id: 'i1-parachute', kicker: 'Wet play', text: 'Somebody has found the parachute. Thirty children went under it. Miss Tranter went in after them. Nobody has come out. You can hear singing.' },
+      { id: 'i1-grandad', kicker: 'Show and tell', text: 'Ellie brings in a stone she says is her grandad. The class passes it round, very respectfully. Ellie’s grandad is alive and in the corridor, waving through the window.' },
+      { id: 'i1-photo', kicker: 'Overheard', text: 'Two Year 6s argue about whether Mr Dobson is the same Mr Dobson as in the school photo from 1952. The photo is labelled “Mr Dobson”. He is mopping in it.' },
+      { id: 'i1-nan', kicker: 'Your jumper', text: 'You find a note from your nan tucked between the Gummy Snails. It says: “I KNOW.” Just that. In capitals. Underlined three times.' },
+    ],
+    2: [
+      { id: 'i2-hamster', kicker: 'Tannoy', text: '*Crackle.* “This is a message for… *crackle* …the hamster. We know what you did.” *Click.* Nobody at St. Jude’s owns a hamster. Several people feel guilty.' },
+      { id: 'i2-alarm', kicker: 'Tannoy', text: '“The fire alarm will be tested at eleven. If you hear it at any other time, that is the real one, and you should assume it is personal.”' },
+      { id: 'i2-council', kicker: 'Corridor', bg: 'corridor', cast: ['council'], text: 'A Man from the Council is measuring the corridor with a tape measure. He measures it twice. It is longer the second time. He writes this down and looks at you as though it is your fault.' },
+      { id: 'i2-grieve', kicker: 'Chemistry', cast: ['grieve'], text: 'Mr Grieve has set his eyebrows on fire again. He is teaching through it. “And this,” he says, smouldering gently, “is an exothermic reaction.”' },
+      { id: 'i2-darren', kicker: 'Overheard', text: 'Legend says the radiator in 9C was switched on once, in 1996, and a boy called Darren got so warm he ascended. There is a plaque. It just says DARREN.' },
+      { id: 'i2-bus', kicker: 'The 47 bus', text: 'The school bus has taken a different route this morning. Nobody on it recognises anything. The driver says it is a shortcut. That was forty minutes ago. Some of them are still on it.' },
+      { id: 'i2-gary', kicker: 'Bikeshed', bg: 'bikeshed', cast: ['gary'], noTuck: true, text: 'Gary the pigeon has followed you to big school. He has put on weight. He is sitting on the bikeshed roof like he owns it. He doesn’t own it. Yet.' },
+      { id: 'i2-twizzler', kicker: 'Canteen', text: 'The canteen is serving Turkey Twizzler Surprise. The surprise is that it is Monday’s Turkey Twizzler. It has been reheated so often it has started to remember things.' },
+      { id: 'i2-gavin', kicker: 'Overheard', cast: ['gavin'], text: 'Head Monitor Gavin is practising looking the other way in the mirror of the boys’ toilets. He is very good. His head now naturally points slightly to the left, even in photos.' },
+      { id: 'i2-rope', kicker: 'PE', text: 'Mr Kettle makes everyone climb the rope. Nobody has ever reached the top. A Year 9 who went up in 1998 is still up there. Sometimes, if you listen, he is doing his GCSEs.' },
+      { id: 'i2-tamagotchi', kicker: 'Tannoy', text: '“Would whoever is leaving Tamagotchis in the trophy cabinet please stop. They are not trophies. They are not even dead. They are just very, very hungry.”' },
+      { id: 'i2-nan', kicker: 'Your phone', text: 'Your nan has left a voicemail. It is eleven minutes of her breathing, a kettle, and then, very quietly, “Tucker.”' },
+    ],
+    3: [
+      { id: 'i3-jingle', kicker: 'Tannoy', text: '♪ “This break is brought to you by Volt-Juice™! Volt-Juice: because sleep is for the poor!” ♪ The jingle is in a key that doesn’t exist. Three Year 7s start crying and don’t know why.' },
+      { id: 'i3-vince', kicker: 'The quad', cast: ['vince'], text: 'Voltage Vince is doing a little dance in the quad. Nobody has seen him eat. Nobody has seen him sit. He has been described, in a staff meeting, as “structural”.' },
+      { id: 'i3-josh', kicker: 'Student council', cast: ['josh'], text: 'Head Boy Josh has called an emergency student council meeting to discuss the chalk situation. He has eaten all the chalk. That is the situation.' },
+      { id: 'i3-council', kicker: 'Audit', cast: ['council'], text: 'The Man from the Council is back. He is measuring the vending machines. He asks how many you have. You say eleven. He writes down “twelve” and underlines it.' },
+      { id: 'i3-focus', kicker: 'Market research', cast: ['focus'], text: 'Your focus group has tested the new Volt-Juice flavour, Blue. They describe it as “loud”, “a smell you can hear” and, in one case, “my dad”. Approved for sale.' },
+      { id: 'i3-gary', kicker: 'Board meeting', bg: 'office', cast: ['gary'], text: 'Gary the pigeon now wears a little tie. Nobody gave him the tie. He attends every board meeting. He has never spoken, which puts him ahead of Josh.' },
+      { id: 'i3-copier', kicker: 'Staffroom', cast: ['pembleton'], text: 'Mr Pembleton has started talking to the photocopier. The photocopier has started talking back. It mostly says PC LOAD LETTER, but with real feeling.' },
+      { id: 'i3-mug', kicker: 'Staffroom', text: 'A sign in the staffroom says PLEASE WASH YOUR OWN MUG. Underneath, in your handwriting, it now says: “Mug washing available. 50p. Ask Biff.”' },
+      { id: 'i3-fountain', kicker: 'Tannoy', text: '♪ “A happy student is a hydrated student! A hydrated student is a paying student! Volt-Juice!” ♪ The broken water fountains gurgle in what sounds a lot like grief.' },
+      { id: 'i3-careers', kicker: 'Careers', text: 'The careers adviser has replaced every career in the booklet with “Tuck Enterprises™ (Junior Associate)”. The booklet is now one page long. It is incredibly glossy.' },
+      { id: 'i3-nan', kicker: 'Your phone', text: 'Nan has texted. It just says “£”. You don’t know if it’s a question.' },
+    ],
+    4: [
+      { id: 'i4-tannoy', kicker: 'Tannoy', text: 'The tannoy clicks on. Nobody says anything. You hear someone breathing, a long sigh, a mug being put down. It clicks off.' },
+      { id: 'i4-council', kicker: 'Corridor', bg: 'corridor', cast: ['council'], text: 'The Man from the Council is in the corridor. He isn’t measuring anything today. He just nods at you, once, like he knew all along how long this would be.' },
+      { id: 'i4-gary', kicker: 'Window', text: 'Through the window, Gary the pigeon is sitting on the bikeshed roof in the rain. He isn’t wearing the tie any more. Nobody is wearing the tie any more.' },
+    ],
+  };
+
+  /* One of these closes each day's walk home. */
+  const evenings = {
+    1: [
+      'At home, Nan is watching Countdown with the sound off and shouting the numbers anyway.',
+      'Nan has noticed eleven Gummy Snails missing from her handbag. She has blamed the cat. You don’t have a cat. You do now. She bought one to blame.',
+      'Tea is fish fingers. You arrange them into a small bar chart. Your mum asks what it’s a chart of. You don’t know yet.',
+      'Your mum asks how school was. You say “fine”. The snails in your jumper say nothing. They are very loyal snails.',
+      'You lie in bed and count your money twice. It comes out the same both times. That feels like a sort of love.',
+    ],
+    2: [
+      'At home there’s a programme on about a man who sold his own kidney to buy a better kidney. You take notes.',
+      'Nan rings to ask if you’ve made any friends. You count Biff. Biff counts as about two.',
+      'You fall asleep doing homework. In the dream you’re charging the homework rent. It pays.',
+      'Your mum has found the coat. She asks what the eleven pockets are for. You say “pockets”. She seems to accept this.',
+    ],
+    3: [
+      'At home you pay your little cousin to do your chores, then subcontract him to the kid next door.',
+      'Nan watches you count money at the kitchen table. “You’ve got your grandad’s hands,” she says. You don’t ask what happened to your grandad.',
+      'You dream about the jingle. You wake up humming it. So does the fridge.',
+      'Your dad asks if you want to go fishing at the weekend. You ask what the margins are like on fish. He goes fishing on his own.',
+    ],
+  };
+
+  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings };
 })();

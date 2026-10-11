@@ -55,6 +55,35 @@ At home time someone always wants paying: **the hall monitor (50p), Biff (£3), 
 ### Milestones
 Each school ends with a purchase that only exploitation can afford: the **Mega-Coated Trench Coat (£6)**, the **bikeshed from the Senior Hall Monitors (£50)**, and the **five-year exclusive contract with Vice-Principal Crane (£500)**. Once the story at a school runs out, quick deals keep turning up until you can afford it.
 
+## 3b. Tone, cast and the world being strange
+
+The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're Here!*: mundane British school life treated with enormous gravity, small things escalating past reason, and nobody remarking on it. The jokes keep coming at you while the moral weight lands quietly underneath.
+
+**Recurring cast** (beyond the story characters):
+
+| Who | Where | The bit |
+| --- | --- | --- |
+| **Gary** | Everywhere | A pigeon. Completes the hopscotch, guards sausage rolls, follows Tuck to big school, gets fat, gets a little tie and sits on the board, then loses the tie. He's the last thing beside Tuck on the wall at the end, and the only one who doesn't want anything. |
+| **Dinner Lady Maureen** | St. Pete's | Reads the future in chips. "The pudding chooses its owner." |
+| **Mr Dobson, Caretaker** | St. Pete's | Has mopped the same dry corridor since 1987. Appears in a 1952 photo, mopping. Mops through the freezes. |
+| **Harriet and Harriet** | St. Pete's | Twins, but not to each other. Stare at you until the bell. |
+| **Callum** | St. Pete's | Has drunk so much Ribena he is "technically a cordial". Leaves purple footprints. |
+| **Nan** | Offstage | Notes in the jumper ("I KNOW."), eleven-minute voicemails of breathing, a cat bought specifically to blame. |
+| **A Man from the Council** | St. Jude's onwards | Measures things. They are never the length they should be. Appears in the freezes to measure the silence ("too long"). Nods at you in the Fall. |
+| **Mr Grieve, Chemistry** | St. Jude's | Regularly on fire. Keeps teaching. |
+| **The Year 9 on the rope** | St. Jude's | Climbed the PE rope in 1998 and never came down. Lowers a bucket for crisps. |
+| **Darren** | St. Jude's | Got so warm when the radiator came on in 1996 that he ascended. There's a plaque. |
+| **Nibbles** | St. Jude's | The defamed hamster. Gets a shrine, a religion and, inexplicably, a guinea pig. |
+| **Head Boy Josh** | Sixth Form | Ate all the chalk. Then ate his licence. |
+| **Voltage Vince** | Sixth Form | The Volt-Juice™ mascot: a man in a can who has never been seen out of it. Payroll lists him as "ongoing". |
+| **The Year 7 Focus Group** | Sixth Form | Unionises over Wagon Wheels. Describes the flavour Blue as "my dad". |
+
+**How the world fills in around the choices:**
+- **Interludes:** between encounters there's a coin-flip chance of a short in-world beat with no choice: a tannoy announcement ("the field is out of bounds due to the field"), something overheard, wet play, show and tell, a board meeting with Gary. Each plays once per run. There are about 12 per school, and 3 quiet ones in the Fall.
+- **Quick deals** at each school feature the cast. They follow the same rules as everything else: exploiting pays and comes back on you, and decency pays nothing.
+- **Evenings:** each home-time recap ends with a line from home (Nan, Countdown, the cat bought to blame, fish fingers arranged as a bar chart).
+- **The waits** fill with absurd beats instead of commentary ("A silence arrives. It sits down next to you. It has brought sandwiches."). Dobson, the Council man and Gary wander through.
+
 ## 4. Narrative arc
 
 | Stage | Setting and art | Mechanics and scams | Milestone that moves you on |
@@ -100,7 +129,7 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 
 | File | Role |
 | --- | --- |
-| `js/content.js` | All story, dialogue, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
+| `js/content.js` | All story, dialogue, characters, interludes, evenings, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
 | `js/game.js` | Turn-based state machine: day moments, encounters, the awkward wait, consequences, home-time dues, school transitions, ending. |
 | `js/render.js` | Core renderer (crayon and pixel styles), camera window, compositing, rain, freeze desaturation. |
 | `js/render-ad.js` | The '90s advert style (sets, mascots, broadcast overlays). |
@@ -110,6 +139,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v4:** Filled the world with character and surreal humour: a recurring cast (Gary the pigeon, Dinner Lady Maureen, Mr Dobson, Harriet and Harriet, Callum, the Man from the Council, Mr Grieve, Josh, Voltage Vince, the focus group, Nan offstage), about 38 interludes between encounters, 16 new quick deals, evening lines at home time, and absurd beats for the waits and freezes. Freeze lines that read as moral commentary were replaced. Added drawing for Gary (in every art style) and Vince's can costume.
 
 - **v3:** Removed all explanation (the title screen is just the name; no choice labels or tutorial hints). Removed passive income and the ledger, so money only comes from choices. The game is now turn-based (three moments a day plus home time), and consequences come back as "Meanwhile…" scenes and a home-time recap. Being good no longer earns anything: the surplus/quota mechanic is replaced by an awkward, open-ended wait, then no reward. Daily dues freeze the day if you can't pay. Milestone prices are rebalanced (£6 / £50 / £500).
 

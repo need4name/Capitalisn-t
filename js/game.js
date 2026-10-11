@@ -74,7 +74,7 @@
       act: 1, day: 1, slot: 0, minute: 605, cash: 0,
       soul: 100, happy: 100, mono: 5,
       storyIdx: 0, flags: {},
-      feed: [], later: [], home: [],
+      feed: [], later: [], home: [], seen: [],
       stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0 },
       current: null, freeze: null, phase: 'title', lastFiller: -1,
     };
@@ -110,6 +110,7 @@
       p.trousers = '#2b2f3a';
       if (S.act >= 4 && id === 'biff') p.mood = 'sad';
     }
+    if (id === 'gary' && S.act === 3) p.tie = true;
     return p;
   }
   function sceneFor(enc, extra = {}) {
@@ -251,14 +252,26 @@
 
   // The next thing that happens today.
   function nextSlot() {
+    const then = () => interlude(() => meanwhile(openNext));
     if (act().noDayEnd) {
-      if (storyRemaining()) passTime(S.minute + 9, () => meanwhile(openNext));
+      if (storyRemaining()) passTime(S.minute + 9, then);
       return;
     }
     if (S.slot >= SLOTS.length) { passTime(HOME_T, homeTime); return; }
     const slot = SLOTS[S.slot++];
     el.objective.textContent = slot.label;
-    passTime(slot.t, () => meanwhile(openNext));
+    passTime(slot.t, then);
+  }
+
+  // Sometimes the school just gets on with being strange for a moment.
+  function interlude(then) {
+    S.seen = S.seen || [];
+    const pool = ((C.interludes || {})[S.act] || []).filter((i) => !S.seen.includes(i.id));
+    if (!pool.length || Math.random() > 0.5) { then(); return; }
+    const it = pick(pool);
+    S.seen.push(it.id);
+    showScene({ scene: { bg: it.bg, cast: it.cast || [], noTuck: !!it.noTuck } });
+    beat({ kicker: it.kicker, html: `<p class="narr">${esc(it.text)}</p>`, then });
   }
 
   // Consequences that were waiting for you.
@@ -523,6 +536,8 @@
     pushFeed(a.paid, 'biz');
     // The day's consequences, all at once, on the way home.
     const lines = S.home.splice(0);
+    const ev = (C.evenings || {})[S.act] || [];
+    const evening = ev.length ? ev[(S.day - 1) % ev.length] : '';
     lines.forEach((l) => pushFeed(l));
     hud();
     showScene(null);
@@ -531,7 +546,8 @@
       cls: 'card-home',
       html: `<p class="kicker">${DAYS[(S.day - 1) % 5]}, on the way home</p>` +
         (lines.length ? `<ul class="home-list">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : '<p class="sub">Nothing much happened today.</p>') +
-        `<p class="sub">${esc(a.paid)} You have ${fmt(S.cash)} left.</p>`,
+        `<p class="sub">${esc(a.paid)} You have ${fmt(S.cash)} left.</p>` +
+        (evening ? `<p class="evening">${esc(evening)}</p>` : ''),
       buttons: [{ label: 'Tomorrow', fn: nextDay }],
       delay: 900,
     });
@@ -807,6 +823,8 @@
         choose, doContinue, changeMind, endAwkward, startAct, endAct,
         jumpAct(n) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); nextSlot(); },
         get waiting() { return !!pendingContinue; },
+        openFillerById(n, id) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); const idx = C.fillers[n].findIndex((e) => e.id === id); openEnc({ kind: 'filler', idx }); },
+        showInterlude(n, id) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); const it = C.interludes[n].find((i) => i.id === id); showScene({ scene: { bg: it.bg, cast: it.cast || [], noTuck: !!it.noTuck } }); beat({ kicker: it.kicker, html: `<p class="narr">${esc(it.text)}</p>`, then: () => {} }); },
       };
     }
   }

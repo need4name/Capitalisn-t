@@ -398,6 +398,26 @@
     if (f.organiser) { rr(g, x - bw / 2 - 6 * s, hip - 6 * s, 5 * s, 7 * s, 1 * s); g.fillStyle = '#222'; g.fill(); ink(g, 0.6); rr(g, x - bw / 2 - 5.2 * s, hip - 5 * s, 3.4 * s, 3 * s, 0.4 * s); g.fillStyle = '#5dff8a'; g.fill(); }
     if (f.sandwich) { poly(g, [x - bw / 2 - 7 * s, hip - 1 * s, x - bw / 2 + 0.5 * s, hip - 1 * s, x - bw / 2 - 3 * s, hip - 7 * s]); g.fillStyle = '#f3e1a1'; g.fill(); ink(g, 0.6); }
 
+    if (f.can) {
+      // Voltage Vince: a man inside a can. Face hole at the top. Nobody has seen him take it off.
+      const cw = 18 * s, ch = 40 * s, cx0 = x - cw / 2, cy0 = y - 2.6 * s - ch;
+      rr(g, cx0, cy0, cw, ch, 3 * s);
+      g.fillStyle = hgrad(g, cx0, cx0 + cw, ['#5c0010', '#e8202a', '#ff6a5a', '#ff1f3a', '#7a0014']);
+      g.fill(); ink(g, 1.2);
+      poly(g, [x + 2 * s, cy0 + ch * 0.45, x - 4 * s, cy0 + ch * 0.72, x, cy0 + ch * 0.72, x - 3 * s, cy0 + ch * 0.95, x + 5 * s, cy0 + ch * 0.62, x + 1 * s, cy0 + ch * 0.62]);
+      g.fillStyle = '#ffe600'; g.fill(); ink(g, 0.6);
+      g.beginPath(); g.ellipse(X(x), X(cy0), X(cw / 2), X(2.2 * s), 0, 0, Math.PI * 2);
+      g.fillStyle = hgrad(g, cx0, cx0 + cw, ['#8a8a99', '#ffffff', '#9a9aa8']); g.fill(); ink(g, 0.8);
+      g.fillStyle = 'rgba(255,255,255,0.5)';
+      rr(g, cx0 + cw * 0.18, cy0 + 4 * s, cw * 0.1, ch * 0.8, 0.6); g.fill();
+      // face hole
+      const fy = cy0 + 9 * s;
+      g.beginPath(); g.ellipse(X(x), X(fy), X(5.2 * s), X(5.6 * s), 0, 0, Math.PI * 2);
+      g.fillStyle = skin; g.fill(); ink(g, 0.8);
+      for (const dx of [-2 * s, 2 * s]) { g.beginPath(); g.arc(X(x + dx), X(fy - 1 * s), X(0.9 * s), 0, Math.PI * 2); g.fillStyle = INK; g.fill(); }
+      g.beginPath(); g.moveTo(X(x - 2.4 * s), X(fy + 1.8 * s)); g.quadraticCurveTo(X(x), X(fy + 4.2 * s), X(x + 2.4 * s), X(fy + 1.8 * s)); g.strokeStyle = INK; g.lineWidth = X(0.7); g.stroke();
+      return;
+    }
     // head
     g.beginPath(); g.arc(X(x - headR * 0.95), X(hy + 1 * s), X(1.8 * s), 0, Math.PI * 2); g.fillStyle = skin; g.fill(); ink(g, 0.7);
     g.beginPath(); g.arc(X(x + headR * 0.95), X(hy + 1 * s), X(1.8 * s), 0, Math.PI * 2); g.fill(); ink(g, 0.7);

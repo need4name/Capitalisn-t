@@ -632,6 +632,22 @@
     },
   };
 
+  // Gary. Drawn with the Painter so he works in every art style.
+  function pigeon(p, f) {
+    const s = (f.s || 1) * 1.1, x = f.x, y = f.y != null ? f.y : GROUND;
+    const bob = f.frozen ? 0 : Math.abs(Math.sin(p.t * 3 + x)) * 1.2;
+    const grey = '#8b93a1', dark = '#4f5763';
+    p.line(x - 2 * s, y - 4 * s, x - 2.5 * s, y, '#e08a3a', 0.8);
+    p.line(x + 1.5 * s, y - 4 * s, x + 1.8 * s, y, '#e08a3a', 0.8);
+    p.poly([x - 9 * s, y - 9 * s, x - 4 * s, y - 12 * s - bob * 0.3, x + 5 * s, y - 11 * s, x + 7 * s, y - 6 * s, x + 2 * s, y - 3.5 * s, x - 6 * s, y - 5 * s], grey);
+    p.poly([x - 6 * s, y - 10 * s, x + 2 * s, y - 10.5 * s, x + 1 * s, y - 6.5 * s, x - 5 * s, y - 6.5 * s], dark, { outline: false });
+    p.circle(x + 6 * s, y - 14 * s - bob, 3.3 * s, grey);
+    p.poly([x + 4 * s, y - 12.5 * s - bob, x + 8.5 * s, y - 12.5 * s - bob, x + 7.5 * s, y - 9.5 * s, x + 4.5 * s, y - 9.5 * s], '#5a8a7a', { outline: false });
+    p.poly([x + 9 * s, y - 14.6 * s - bob, x + 11.5 * s, y - 13.8 * s - bob, x + 9 * s, y - 13.2 * s - bob], '#e0a040', { outline: false });
+    p.circle(x + 7 * s, y - 14.8 * s - bob, 0.7 * s, '#ff7a1a', { outline: false });
+    if (f.tie) p.poly([x + 5.5 * s, y - 10 * s, x + 6.5 * s, y - 10 * s, x + 6.3 * s, y - 6.5 * s, x + 5.7 * s, y - 6.5 * s], '#c0392b', { outline: false });
+  }
+
   function crowd(p, v) {
       const r = rng(77);
       const cols = ['#1d1410', '#6b4a2b', '#e7bf62', '#c4552b', '#3a2a1a'];
@@ -760,11 +776,12 @@
     const onStage = view.bg === 'assembly' && !mod;
     const fy = lay.y || (onStage ? 96 : GROUND);
     const fs = lay.scale || (onStage ? FIG * 0.85 : FIG);
+    const one = (f) => (f.pigeon ? pigeon(p, f) : fig(p, f));
     const drawCast = () => {
       if (!view.noTuck && view.tuck) fig(p, Object.assign({}, view.tuck, { x: tuckX, y: fy, s: (view.tuck.s || 1) * fs, frozen: view.frozen, isTuck: true }));
       cast.forEach((f, i) => {
         const x = view.noTuck ? (i === 0 ? 110 : 216) : positions[i] || 220;
-        fig(p, Object.assign({}, f, { x, y: fy, s: (f.s || 1) * fs, frozen: view.frozen }));
+        one(Object.assign({}, f, { x, y: fy, s: (f.s || 1) * fs, frozen: view.frozen }));
       });
     };
     if (mod && mod.beforeCast) mod.beforeCast(p, view, drawCast);
