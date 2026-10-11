@@ -2,57 +2,76 @@
 <html lang="en-GB">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
   <title>Tuck</title>
   <meta name="description" content="Tuck — a dark satirical management sim about the micro-economy of a British schoolyard.">
+  <meta name="theme-color" content="#1b1b1b">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Tuck">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=Patrick+Hand&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;600;800&family=Patrick+Hand&family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="style-crayon">
-  <main id="game" aria-label="Tuck">
-    <canvas id="stage" width="1280" height="720" aria-hidden="true"></canvas>
-
+  <main id="game" data-mode="title" aria-label="Tuck">
     <header id="hud">
       <div class="hud-where">
-        <span id="hud-act"></span>
         <span id="hud-school"></span>
-      </div>
-      <div class="hud-clock">
         <span id="hud-day"></span>
-        <span id="hud-time"></span>
       </div>
+      <div id="hud-time"></div>
       <div class="hud-money">
-        <div><label>Cash</label><span id="hud-cash"></span></div>
-        <div title="Hold at least this much. Decency is only available above the line."><label>Quota</label><span id="hud-quota"></span></div>
-        <div class="hud-sub"><small id="hud-surplus"></small><small id="hud-target"></small></div>
-      </div>
-      <div class="hud-meters">
-        <div class="meter"><label>Soul</label><div class="bar"><i id="bar-soul"></i></div><span id="val-soul"></span></div>
-        <div class="meter"><label>Playground happiness</label><div class="bar"><i id="bar-happy"></i></div><span id="val-happy"></span></div>
-        <div class="meter"><label>Market monopoly</label><div class="bar"><i id="bar-mono"></i></div><span id="val-mono"></span></div>
+        <span id="hud-cash"></span>
+        <span class="hud-q">quota <b id="hud-quota"></b></span>
+        <span id="hud-surplus"></span>
       </div>
       <div class="hud-buttons">
-        <button id="btn-ledger" type="button">Ledger</button>
-        <button id="btn-speed" type="button" title="Game speed">1×</button>
-        <button id="btn-mute" type="button" title="Mute" aria-pressed="false">♪</button>
+        <button id="btn-ledger" type="button" aria-label="Ledger">£</button>
+        <button id="btn-speed" type="button" aria-label="Game speed">1×</button>
+        <button id="btn-mute" type="button" aria-label="Mute" aria-pressed="false">♪</button>
       </div>
     </header>
 
-    <div id="objective"></div>
+    <div id="stage-wrap">
+      <canvas id="stage" width="1280" height="720" aria-hidden="true"></canvas>
+      <div id="fx" aria-hidden="true"></div>
+    </div>
 
-    <aside id="feed">
-      <h3 id="feed-title"></h3>
-      <ol id="feed-list"></ol>
-    </aside>
+    <div id="meters">
+      <div class="meter" title="Soul"><label>Soul</label><div class="bar"><i id="bar-soul"></i></div></div>
+      <div class="meter" title="Playground happiness"><label>Happiness</label><div class="bar"><i id="bar-happy"></i></div></div>
+      <div class="meter" title="Market monopoly"><label>Monopoly</label><div class="bar"><i id="bar-mono"></i></div></div>
+    </div>
 
-    <div id="fx" aria-hidden="true"></div>
+    <div id="ticker" aria-live="polite"></div>
 
-    <section id="dialogue" hidden aria-live="polite">
-      <div id="d-speaker"></div>
-      <div id="d-text"></div>
-      <div id="d-options"></div>
+    <section id="panel">
+      <section id="dialogue" hidden aria-live="polite">
+        <div id="d-speaker"></div>
+        <div id="d-text"></div>
+        <div id="d-options"></div>
+      </section>
+
+      <section id="freeze" hidden aria-live="polite">
+        <h2>STAGNATION</h2>
+        <p id="f-reason"></p>
+        <p id="f-hint"></p>
+        <div id="f-idle"></div>
+        <div id="f-log"></div>
+        <button id="f-reconsider" type="button">Reconsider</button>
+      </section>
+
+      <section id="feed">
+        <p id="objective"></p>
+        <h3 id="feed-title"></h3>
+        <ol id="feed-list"></ol>
+      </section>
     </section>
 
     <section id="ledger" hidden>
@@ -63,23 +82,19 @@
       <div id="ledger-body"></div>
     </section>
 
-    <section id="freeze" hidden aria-live="polite">
-      <h2>STAGNATION</h2>
-      <p id="f-reason"></p>
-      <p id="f-hint"></p>
-      <div id="f-idle"></div>
-      <div id="f-log"></div>
-      <button id="f-reconsider" type="button">Reconsider</button>
-    </section>
-
     <section id="card" class="card" hidden></section>
-
-    <div id="rotate">Turn your device sideways. The market prefers landscape.</div>
   </main>
 
   <script src="js/content.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/render.js"></script>
+  <script src="js/render-ad.js"></script>
+  <script src="js/render-real.js"></script>
   <script src="js/game.js"></script>
+  <script>
+    if ('serviceWorker' in navigator && location.protocol === 'https:') {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    }
+  </script>
 </body>
 </html>

@@ -111,6 +111,7 @@
     const style = sc.style || a.style;
     const tuck = C.tuckLook(S.act, S.soul);
     if (sc.tuckSad) tuck.mood = 'sad';
+    if (sc.tuckSit) tuck.sitting = true;
     let cast = (sc.cast || []).map(person).filter(Boolean);
     if (extra.reaction) {
       // faces change once a choice lands
@@ -143,9 +144,8 @@
   /* ---------------- HUD ---------------- */
   function hud() {
     const a = act();
-    el.act.textContent = S.act < 4 ? `Act ${S.act} · ${a.title}` : 'Act 4 · The Fall';
-    el.school.textContent = a.school;
-    el.day.textContent = S.act < 4 ? `${DAYS[(S.day - 1) % 5]} · Day ${S.day}` : 'MONDAY';
+    el.school.textContent = window.innerWidth < 560 ? (a.short || a.school) : a.school;
+    el.day.textContent = S.act < 4 ? `${DAYS[(S.day - 1) % 5]} · day ${S.day}` : 'Monday';
     el.time.textContent = clock(S.minute);
     el.time.classList.toggle('frozen', !!S.freeze);
     el.cash.textContent = fmt(S.cash);
@@ -153,24 +153,18 @@
       const q = quota();
       el.quota.textContent = fmt(q);
       const surplus = S.cash - q;
-      el.surplus.textContent = surplus >= 0 ? `Surplus ${fmt(surplus)}` : `Short ${fmt(-surplus)}`;
+      el.surplus.textContent = surplus >= 0 ? `+${fmt(surplus)} spare` : `${fmt(-surplus)} short`;
       el.surplus.className = surplus >= 0 ? 'ok' : 'short';
-      el.target.textContent = `Target ${fmt(a.target)}`;
     } else {
       el.quota.textContent = '—';
-      el.surplus.textContent = 'Assets frozen';
+      el.surplus.textContent = 'assets frozen';
       el.surplus.className = 'short';
-      el.target.textContent = '';
     }
     el.soul.style.width = clamp(S.soul, 0, 100) + '%';
     el.happy.style.width = clamp(S.happy, 0, 100) + '%';
     el.mono.style.width = clamp(S.mono, 0, 100) + '%';
-    el.soulV.textContent = Math.round(clamp(S.soul, 0, 100));
-    el.happyV.textContent = Math.round(clamp(S.happy, 0, 100)) + '%';
-    el.monoV.textContent = Math.round(clamp(S.mono, 0, 100)) + '%';
     el.objective.textContent = objectiveText();
     el.ledgerBtn.disabled = !!a.noLedger;
-    el.ledgerBtn.textContent = a.noLedger ? 'Assets Frozen' : 'Ledger';
     el.feedTitle.textContent = a.feedTitle;
     if (!el.ledger.hidden) renderLedger();
   }
@@ -180,7 +174,7 @@
     const done = storyDone();
     if (!done) return a.objective;
     if (S.cash >= a.target) return 'You can afford it now. Somebody will find you.';
-    return a.objective + ' Buy ventures in the Ledger to speed things up.';
+    return a.objective + ' (The £ ledger has ways to make money while you’re busy.)';
   }
 
   /* ---------------- feed ---------------- */
@@ -188,6 +182,12 @@
     S.feed.unshift({ t: clock(S.minute), text, cls });
     S.feed = S.feed.slice(0, 40);
     renderFeed(true);
+    if (cls !== 'sep') {
+      el.ticker.textContent = text;
+      el.ticker.classList.remove('new');
+      void el.ticker.offsetWidth;
+      el.ticker.classList.add('new');
+    }
   }
   function renderFeed(fresh) {
     el.feedList.innerHTML = S.feed
@@ -207,8 +207,8 @@
         const d = document.createElement('div');
         d.className = 'pop';
         d.textContent = txt;
-        d.style.left = 18 + Math.random() * 40 + '%';
-        d.style.top = 30 + i * 9 + '%';
+        d.style.left = 35 + Math.random() * 30 + '%';
+        d.style.top = 18 + i * 16 + '%';
         el.fx.appendChild(d);
         setTimeout(() => d.remove(), 2000);
       }, i * 280);
@@ -277,13 +277,15 @@
     enc.options.forEach((o, i) => {
       const b = document.createElement('button');
       b.className = 'opt opt-' + o.type;
-      b.innerHTML = `<kbd>${i + 1}</kbd><span class="lbl">${esc(o.label)}</span>${optionTag(o)}`;
+      const tags = optionTag(o);
+      b.innerHTML = `<kbd>${i + 1}</kbd><span class="lbl">${esc(o.label)}</span>${tags ? `<span class="tags">${tags}</span>` : ''}`;
       if (o.type === 'milestone' && S.cash < o.cost) b.disabled = true;
       b.addEventListener('click', () => choose(i));
       el.dOptions.appendChild(b);
     });
     el.dialogue.hidden = false;
     el.dialogue.classList.remove('result');
+    el.dialogue.scrollTop = 0;
   }
 
   function apply(o) {
@@ -355,11 +357,12 @@
     resultPending = { enc, o };
     if (o.type === 'exploit' || o.type === 'decent') showScene(enc, { reaction: o.type });
     el.dialogue.classList.add('result');
+    el.dialogue.scrollTop = 0;
     el.dText.innerHTML = `<p class="narr">${esc(fill(o.result || ''))}</p>`;
     el.dOptions.innerHTML = '';
     const b = document.createElement('button');
     b.className = 'opt opt-continue';
-    b.innerHTML = '<kbd>↵</kbd><span class="lbl">Carry on</span>';
+    b.innerHTML = '<span class="lbl">Carry on</span>';
     b.addEventListener('click', continueResult);
     el.dOptions.appendChild(b);
     b.focus({ preventScroll: true });
@@ -429,6 +432,7 @@
     el.fReconsider.textContent = f.kind === 'quota' ? 'Find a quick deal' : 'Reconsider';
     el.freeze.classList.remove('final');
     el.freeze.hidden = false;
+    el.freeze.scrollTop = 0;
     hud();
   }
 
@@ -501,6 +505,7 @@
     });
     el.fReconsider.hidden = true;
     el.freeze.hidden = false;
+    el.freeze.scrollTop = 0;
     clearTimeout(finalTimer);
     finalTimer = setTimeout(revealAccept, 15000);
     hud();
@@ -668,43 +673,35 @@
     setMode('play');
     document.body.className = 'style-' + a.style;
     if (n > 1) pushFeed(`— ${a.school} —`, 'sep');
+    el.ticker.textContent = '';
     el.ledger.hidden = true;
     showScene(null, n === 4 ? { rain: true } : {}, n === 4 ? { glitch: true } : { fade: true });
     if (n === 4) A.rainOn(0.18); else A.rainOff();
     hud();
     renderFeed();
-    if (!opts.skipIntro) {
-      showCard({
-        cls: 'card-act',
-        html: `<p class="kicker">Act ${n} · ${esc(a.ages)}</p><h1>${esc(a.title)}</h1><p class="sub">${esc(a.school)}</p>` +
-          a.intro.map((l) => `<p>${esc(l)}</p>`).join(''),
-        buttons: [{ label: n === 4 ? 'Go to the office' : 'Start the day', fn: () => { save(); } }],
-      });
-    }
+    if (!opts.skipIntro) captions(a.intro, save);
+  }
+
+  // Story beats shown one at a time over the scene. No titles, no act numbers.
+  function captions(lines, done, i = 0) {
+    if (i >= lines.length) { if (done) done(); return; }
+    showCard({
+      cls: 'card-caption',
+      html: `<p>${esc(lines[i])}</p>`,
+      buttons: [{ label: i < lines.length - 1 ? '…' : 'Carry on', fn: () => captions(lines, done, i + 1) }],
+      delay: 400,
+    });
   }
 
   function endAct() {
     const n = S.act;
-    // liquidate this act's ventures at half price
+    // liquidate this school's ventures at half price
     let liq = 0;
     Object.keys(S.ventures).forEach((id) => { if (C.ventures[id].act === n) liq += Math.floor(C.ventures[id].cost / 2); });
     S.cash += liq;
-    const a = act();
-    const next = C.acts[n + 1];
-    showCard({
-      cls: 'card-act',
-      html: `<p class="kicker">Act ${n} complete</p><h1>${esc(a.title)}</h1>
-        <dl>
-          <dt>Cash carried forward</dt><dd>${fmt(S.cash)}</dd>
-          ${liq ? `<dt>Ventures liquidated</dt><dd>+${fmt(liq)}</dd>` : ''}
-          <dt>Children harmed (approx.)</dt><dd>${S.stats.harmed}</dd>
-          <dt>Kindnesses afforded</dt><dd>${S.stats.kind}</dd>
-          <dt>Times time stopped</dt><dd>${S.stats.freezes}</dd>
-          <dt>Soul</dt><dd>${Math.round(S.soul)}/100</dd>
-        </dl>
-        <p class="sub">Next: ${esc(next.school)}</p>`,
-      buttons: [{ label: 'Grow up', fn: () => startAct(n + 1) }],
-    });
+    if (liq) pushFeed(`Sold off the old operation for ${fmt(liq)}.`, 'biz');
+    S.phase = 'transition';
+    captions(act().outro || [], () => startAct(n + 1));
   }
 
   /* ---------------- ending ---------------- */
@@ -729,7 +726,7 @@
       showScene(e, {}, { fade: true });
       i++;
       showCard({
-        cls: 'card-ending' + (e.big ? ' big' : ''),
+        cls: 'card-caption' + (e.big ? ' big' : ''),
         html: e.big ? `<h1 class="market">${e.big}</h1>` : `<p>${esc(e.text)}</p>`,
         buttons: [{ label: '…', fn: step, keep: true }],
         delay: e.big ? 2500 : 900,
@@ -789,7 +786,7 @@
     R.setView(Object.assign(sceneFor(null), { bench: true, cast: [person('billy')] }));
     hud();
     const buttons = [{ label: 'New game', fn: () => newGame(1) }];
-    if (saved) buttons.push({ label: `Continue (Act ${saved.act}, Day ${saved.day})`, fn: () => resume(saved), secondary: true });
+    if (saved) buttons.push({ label: `Continue (${C.acts[saved.act].school}, day ${saved.day})`, fn: () => resume(saved), secondary: true });
     showCard({
       cls: 'card-title',
       html: `<h1 class="logo">TUCK</h1>
@@ -838,9 +835,9 @@
   /* ---------------- boot ---------------- */
   function boot() {
     const ids = {
-      act: '#hud-act', school: '#hud-school', day: '#hud-day', time: '#hud-time', cash: '#hud-cash',
-      quota: '#hud-quota', surplus: '#hud-surplus', target: '#hud-target',
-      soul: '#bar-soul', happy: '#bar-happy', mono: '#bar-mono', soulV: '#val-soul', happyV: '#val-happy', monoV: '#val-mono',
+      school: '#hud-school', day: '#hud-day', time: '#hud-time', cash: '#hud-cash',
+      quota: '#hud-quota', surplus: '#hud-surplus', ticker: '#ticker',
+      soul: '#bar-soul', happy: '#bar-happy', mono: '#bar-mono',
       objective: '#objective', feedTitle: '#feed-title', feedList: '#feed-list',
       dialogue: '#dialogue', dSpeaker: '#d-speaker', dText: '#d-text', dOptions: '#d-options',
       ledger: '#ledger', ledgerBody: '#ledger-body', ledgerBtn: '#btn-ledger',
@@ -850,6 +847,11 @@
     for (const k in ids) el[k] = $(ids[k]);
 
     R.init($('#stage'));
+    const wrap = $('#stage-wrap');
+    const fit = () => { if (wrap.clientHeight) R.setViewport(wrap.clientWidth / wrap.clientHeight); };
+    fit();
+    if (window.ResizeObserver) new ResizeObserver(fit).observe(wrap);
+    window.addEventListener('resize', fit);
     el.ledgerBtn.addEventListener('click', () => { A.click(); toggleLedger(); });
     $('#ledger-close').addEventListener('click', () => toggleLedger(false));
     el.fReconsider.addEventListener('click', () => { if (S.freeze && S.freeze.kind !== 'final') reconsider(); });

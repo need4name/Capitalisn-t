@@ -39,7 +39,7 @@
     pembleton: { name: 'Mr Pembleton', skin: SKIN[0], shirt: '#c7b98f', trousers: '#5a4a35', blazer: '#6e5a3a', tie: '#2e5e3e', hair: '#bbbbbb', hairStyle: 'bald', s: 1.35, adult: true, mood: 'tired', glasses: true },
     crane: { name: 'Mr Crane, Vice-Principal', skin: SKIN[1], shirt: '#ffffff', trousers: '#1a1a1a', blazer: '#1a1a1a', tie: '#c0a000', hair: '#2b2b2b', hairStyle: 'slick', s: 1.4, adult: true, mood: 'smug' },
     sixthformer: { name: 'A Year 12', skin: SKIN[1], shirt: '#ffffff', trousers: '#222', blazer: '#2c2c2c', hair: '#5a3a1a', hairStyle: 'long', s: 1.1, mood: 'sad' },
-    ahmed: { name: 'Mrs Ahmed', skin: SKIN[2], shirt: '#2f7d3b', trousers: '#2a2a2a', hair: '#1d1410', hairStyle: 'wrap', hairColor2: '#334', s: 1.35, adult: true, mood: 'angry' },
+    ahmed: { name: 'Mrs Ahmed', skin: SKIN[2], shirt: '#2f7d3b', trousers: '#2a2a2a', hair: '#1d1410', hairStyle: 'wrap', hairColor2: '#334', s: 1.35, adult: true, mood: 'angry', ledger: true },
     head: { name: 'The Headteacher', skin: SKIN[0], shirt: '#ffffff', trousers: '#333', blazer: '#3a3a4a', tie: '#552222', hair: '#999', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true },
     lanyard: { name: 'Safeguarding Lady', skin: SKIN[3], shirt: '#9b59b6', trousers: '#333', skirt: true, hair: '#2b1b10', hairStyle: 'bob', s: 1.35, adult: true, mood: 'neutral', lanyard: true },
     newkid: { name: 'New Kid', skin: SKIN[3], shirt: '#5a6fd6', trousers: '#1f2a5a', shorts: true, hair: '#1d1410', hairStyle: 'mop', s: 0.85, mood: 'neutral', shoes: ['#d22', '#2a6ad2'], jumperRoll: true },
@@ -63,6 +63,7 @@
       num: 1,
       title: 'Crayon Capitalist',
       school: "St. Pete's Primary",
+      short: "St. Pete's",
       ages: 'Ages 8–10',
       style: 'crayon',
       bg: 'playground',
@@ -77,8 +78,12 @@
       fillerGap: 40,
       feedTitle: 'Things That Happened',
       quotaWhy: 'the hall monitor wants paying',
-      objective: 'Make £10 for the Mega-Coated Trench Coat.',
+      objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. Ten pounds.',
       startVentures: ['snails'],
+      outro: [
+        'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you.',
+        'The coat comes with you to big school. So does Biff.',
+      ],
       intro: [
         "St. Pete's Primary. Morning break.",
         'This is Tucker. Everyone calls him Tuck. Mismatched shoes — one red, one a different red. Navy shorts in a school of grey trousers.',
@@ -90,6 +95,7 @@
       num: 2,
       title: 'The Playground Syndicate',
       school: "St. Jude's Comprehensive",
+      short: "St. Jude's",
       ages: 'Ages 11–13',
       style: 'pixel',
       bg: 'corridor',
@@ -98,6 +104,10 @@
       quotaStep: 500,
       overhead: 300,
       overheadWhy: "Biff's wages",
+      outro: [
+        'Three years go by the way three years do at that age: all at once, and then forever.',
+        'You stop selling things. You start owning the things other people sell.',
+      ],
       rate: 3,
       start: 530,
       firstAt: 545,
@@ -105,7 +115,7 @@
       fillerGap: 40,
       feedTitle: 'Gossip',
       quotaWhy: 'Biff needs to see the money',
-      objective: 'Make £100 to bribe the Senior Hall Monitors.',
+      objective: 'The Senior Hall Monitors run the bikeshed. Word is they’d sell it for £100.',
       startVentures: [],
       intro: [
         "St. Jude's Comprehensive. 1,400 pupils. One working radiator.",
@@ -117,6 +127,7 @@
       num: 3,
       title: 'Campus Oligarch',
       school: 'Sixth Form Campus',
+      short: 'Sixth Form',
       ages: 'Ages 14–16',
       style: 'ad',
       bg: 'sixth',
@@ -125,6 +136,9 @@
       quotaStep: 5000,
       overhead: 4000,
       overheadWhy: 'staff retainers',
+      outro: [
+        'The confetti is still coming down when the picture cuts out.',
+      ],
       rate: 3,
       start: 530,
       firstAt: 545,
@@ -132,7 +146,7 @@
       fillerGap: 40,
       feedTitle: 'Stakeholder Updates',
       quotaWhy: 'the shareholders (Biff) expect liquidity',
-      objective: 'Make £1,000 for the Vice-Principal’s envelope.',
+      objective: 'Mr Crane keeps mentioning an envelope. A thousand pounds would fill it.',
       startVentures: [],
       intro: [
         'TUCK ENTERPRISES™. Est. Year 9. Now with a Sixth Form Campus Division!',
@@ -144,6 +158,7 @@
       num: 4,
       title: 'The Reckoning',
       school: "Headteacher's Office",
+      short: "Head's Office",
       ages: 'The Fall',
       style: 'real',
       bg: 'office',
@@ -158,7 +173,7 @@
       noDayEnd: true,
       noLedger: true,
       feedTitle: 'Evidence',
-      objective: 'Survive the audit.',
+      objective: '',
       startVentures: [],
       intro: [
         "Monday. It's raining. It has always been raining. You just couldn't see it from inside the advert.",
@@ -771,12 +786,23 @@
   /* Ending                                                             */
   /* ------------------------------------------------------------------ */
   const ending = [
-    { scene: { bg: 'gates', cast: [], rain: true, style: 'real', tuckSad: true, school: "St. Jude's" }, text: 'Tuck is expelled. All assets are seized, including the coat. He sits on the wall outside the gates. It is still raining.' },
-    { scene: { bg: 'gates', cast: [], rain: true, style: 'real', ambientPlay: true, tuckSad: true, school: "St. Jude's" }, text: 'Through the railings, kids are playing. Nobody is charging anybody for anything. It looks stupid. It looks brilliant.' },
+    { scene: { bg: 'gates', cast: [], rain: true, style: 'real', tuckSad: true, tuckSit: true, school: "St. Jude's" }, text: 'Tuck is expelled. All assets are seized, including the coat. He sits on the wall outside the gates. It is still raining.' },
+    { scene: { bg: 'gates', cast: [], rain: true, style: 'real', ambientPlay: true, tuckSad: true, tuckSit: true, school: "St. Jude's" }, text: 'Through the railings, kids are playing. Nobody is charging anybody for anything. It looks stupid. It looks brilliant.' },
     { scene: { bg: 'shed', cast: ['newkid'], noTuck: true, style: 'crayon', school: "St. Pete's Primary" }, text: 'Behind the sports shed at St. Pete’s Primary, a new kid steps out. Eight years old. Mismatched shoes. A jumper rolled tight under one arm.' },
     { scene: { bg: 'playground', cast: ['newkid', 'cryer'], noTuck: true, bench: true, style: 'crayon', school: "St. Pete's Primary" }, text: 'Across the playground, somebody is crying into a sandwich.' },
     { scene: { bg: 'playground', cast: ['newkid', 'cryer'], noTuck: true, bench: true, style: 'crayon', school: "St. Pete's Primary" }, text: '', big: 'THE DEVIL DIES,<br>BUT THE MARKET LIVES FOREVER.' },
   ];
 
-  T.content = { people, tuckLook, acts, ventures, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending };
+  /* Small print scrolled along the bottom of the Act 3 "advert". */
+  const adDisclaimers = [
+    '*Results not typical. Happiness not guaranteed. Children may be harmed.',
+    '*Volt-Juice™ is not a food, a drink, or legally a liquid.',
+    '*Tuck Enterprises™ accepts no liability for childhood.',
+    '*Your playground may go down as well as up.',
+    '*Terms apply. The terms are: you lose.',
+    '*Free means free at the point of use. The point of use is later.',
+    '*No hamsters were harmed. One hamster was defamed.',
+  ];
+
+  T.content = { people, tuckLook, acts, ventures, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers };
 })();

@@ -668,7 +668,9 @@
   const grain = [];
   let view = { style: 'crayon', bg: 'playground', cast: [], act: 1, minute: 600, happy: 100 };
   let lastSceneT = -1, sceneSeed = 1, fade = 0, staticFlash = 0, sceneDirty = true;
+  let cropX = 0; // left edge of the camera window, in canvas pixels (portrait phones see a 4:3 crop)
   const drops = [];
+  const styles = (T.styles = T.styles || {}); // per-style modules (render-ad.js, render-real.js)
 
   function makePaper() {
     const c = document.createElement('canvas');
@@ -695,7 +697,7 @@
       for (let i = 0; i < img.data.length; i += 4) {
         const v = Math.random() * 255;
         img.data[i] = img.data[i + 1] = img.data[i + 2] = v;
-        img.data[i + 3] = 34;
+        img.data[i + 3] = 26;
       }
       g.putImageData(img, 0, 0);
       grain.push(c);
@@ -714,9 +716,18 @@
     for (let i = 0; i < 220; i++) drops.push({ x: Math.random() * W, y: Math.random() * H, v: 0.7 + Math.random() * 0.6 });
   }
 
+  // The camera window matches the shape of the stage on screen: narrow stages (phones in
+  // portrait) see the middle of the 16:9 scene, where the people are, instead of a tiny letterboxed picture.
+  function setViewport(aspect) {
+    const w = Math.round(Math.max(800, Math.min(W, H * (aspect || 16 / 9))));
+    cropX = Math.round((W - w) / 2);
+    if (canvas.width !== w) { canvas.width = w; canvas.height = H; sceneDirty = true; }
+  }
+
   function setView(v, opts = {}) {
     const styleChanged = v.style && v.style !== view.style;
     if ((styleChanged || opts.fade) && canvas) {
+      prevG.clearRect(0, 0, W, H);
       prevG.drawImage(canvas, 0, 0);
       fade = 1;
     }
@@ -727,31 +738,39 @@
 
   function drawScene(t) {
     const st = view.style;
+    const mod = styles[st];
     const pixel = st === 'pixel';
     const g = pixel ? lowG : sceneG;
     if (st === 'crayon' && !view.frozen) sceneSeed = Math.floor(t * 8);
     const p = new Painter(g, st, st === 'crayon' ? sceneSeed : 3, view.frozen ? view.frozenT || t : t);
     g.setTransform(1, 0, 0, 1, 0, 0);
+    g.globalAlpha = 1;
     if (st === 'crayon') g.drawImage(paper, 0, 0);
     else g.clearRect(0, 0, pixel ? VW : W, pixel ? VH : H);
 
-    (BG[view.bg] || BG.playground)(p, view);
-    ambientKids(p, view);
+    if (mod && mod.bg) mod.bg(p, view);
+    else (BG[view.bg] || BG.playground)(p, view);
+    if (!mod) ambientKids(p, view);
 
     const cast = view.cast || [];
-    const tuckX = 76;
-    const positions = cast.length > 1 ? [156, 206] : [180];
-    const onStage = view.bg === 'assembly';
-    const fy = onStage ? 96 : GROUND;
-    const fs = onStage ? FIG * 0.85 : FIG;
+    const fig = (mod && mod.figure) || figure;
+    const lay = mod && mod.layout ? mod.layout(view) : {};
+    const tuckX = lay.tuckX || 100;
+    const positions = lay.positions || (cast.length > 1 ? [184, 232] : [206]);
+    const onStage = view.bg === 'assembly' && !mod;
+    const fy = lay.y || (onStage ? 96 : GROUND);
+    const fs = lay.scale || (onStage ? FIG * 0.85 : FIG);
     const drawCast = () => {
-      if (!view.noTuck && view.tuck) figure(p, Object.assign({}, view.tuck, { x: tuckX, y: fy, s: (view.tuck.s || 1) * fs, frozen: view.frozen }));
+      if (!view.noTuck && view.tuck) fig(p, Object.assign({}, view.tuck, { x: tuckX, y: fy, s: (view.tuck.s || 1) * fs, frozen: view.frozen, isTuck: true }));
       cast.forEach((f, i) => {
-        const x = view.noTuck ? (i === 0 ? 80 : 190) : positions[i] || 200;
-        figure(p, Object.assign({}, f, { x, y: fy, s: (f.s || 1) * fs, frozen: view.frozen }));
+        const x = view.noTuck ? (i === 0 ? 110 : 216) : positions[i] || 220;
+        fig(p, Object.assign({}, f, { x, y: fy, s: (f.s || 1) * fs, frozen: view.frozen }));
       });
     };
-    if (onStage) { drawCast(); crowd(p, view); } else drawCast();
+    if (mod && mod.beforeCast) mod.beforeCast(p, view, drawCast);
+    drawCast();
+    if (onStage) crowd(p, view);
+    if (mod && mod.fg) mod.fg(p, view);
 
     if (pixel) {
       sceneG.setTransform(1, 0, 0, 1, 0, 0);
@@ -760,39 +779,37 @@
       sceneG.fillStyle = 'rgba(0,0,0,0.08)';
       for (let y = 0; y < H; y += 4) sceneG.fillRect(0, y, W, 1);
     }
-    if (st === 'ad') {
-      const r = rng(Math.floor(t * 3));
-      for (let i = 0; i < 6; i++) {
-        const x = r() * W, y = r() * H * 0.7, s = 6 + r() * 14;
-        sceneG.fillStyle = 'rgba(255,255,255,0.9)';
-        sceneG.beginPath();
-        sceneG.moveTo(x, y - s); sceneG.lineTo(x + s * 0.25, y - s * 0.25); sceneG.lineTo(x + s, y);
-        sceneG.lineTo(x + s * 0.25, y + s * 0.25); sceneG.lineTo(x, y + s); sceneG.lineTo(x - s * 0.25, y + s * 0.25);
-        sceneG.lineTo(x - s, y); sceneG.lineTo(x - s * 0.25, y - s * 0.25); sceneG.closePath();
-        sceneG.fill();
-      }
-    }
   }
 
-  function drawRain(dt) {
+  function drawRain(dt, cw) {
     const st = view.style;
     const heavy = st === 'real' ? 1 : 0.7;
     const n = Math.floor(drops.length * heavy);
     ctx.save();
     if (st === 'pixel') ctx.fillStyle = '#9fd0ff';
-    else ctx.strokeStyle = st === 'real' ? 'rgba(200,210,220,0.35)' : st === 'crayon' ? 'rgba(60,110,220,0.7)' : 'rgba(255,255,255,0.8)';
-    ctx.lineWidth = st === 'crayon' ? 3 : 1.5;
+    else ctx.strokeStyle = st === 'real' ? 'rgba(190,205,215,0.22)' : st === 'crayon' ? 'rgba(60,110,220,0.7)' : 'rgba(255,255,255,0.8)';
+    ctx.lineWidth = st === 'crayon' ? 3 : st === 'real' ? 1.2 : 1.5;
     ctx.lineCap = 'round';
     ctx.beginPath();
     for (let i = 0; i < n; i++) {
       const d = drops[i];
       d.y += d.v * dt * 900;
       d.x -= d.v * dt * 120;
-      if (d.y > H) { d.y = -20; d.x = Math.random() * (W + 200); }
+      if (d.y > H) { d.y = -20; d.x = Math.random() * (cw + 200); }
       if (st === 'pixel') ctx.fillRect(Math.round(d.x / 4) * 4, Math.round(d.y / 4) * 4, 4, 12);
       else { ctx.moveTo(d.x, d.y); ctx.lineTo(d.x - 5, d.y + 26); }
     }
     if (st !== 'pixel') ctx.stroke();
+    ctx.restore();
+  }
+
+  // Desaturate whatever is on the main canvas (works without ctx.filter, which iOS Safari lacks).
+  function desaturate(amount, cw) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'saturation';
+    ctx.globalAlpha = amount;
+    ctx.fillStyle = '#808080';
+    ctx.fillRect(0, 0, cw, H);
     ctx.restore();
   }
 
@@ -802,6 +819,8 @@
     const dt = Math.min(0.1, t - (lastT || t));
     lastT = t;
     if (!ctx) return;
+    const cw = canvas.width;
+    const mod = styles[view.style];
     const fps = view.style === 'crayon' ? 8 : 12;
     if (sceneDirty || (!view.frozen && t - lastSceneT > 1 / fps)) {
       drawScene(t);
@@ -809,37 +828,17 @@
       sceneDirty = false;
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.filter = 'none';
+    ctx.globalAlpha = 1;
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(sceneC, cropX, 0, cw, H, 0, 0, cw, H);
+    if (mod && mod.post) mod.post(ctx, cw, H, t, view, dt, grain);
+    if ((view.rain || view.frozen || view.style === 'real') && !(mod && mod.noRain && mod.noRain(view))) drawRain(dt, cw);
     if (view.frozen) {
-      ctx.filter = view.final ? 'grayscale(1) contrast(1.15)' : 'grayscale(0.75) brightness(0.92)';
+      desaturate(view.final ? 1 : 0.8, cw);
+      ctx.fillStyle = view.final ? 'rgba(10,10,14,0.2)' : 'rgba(40,60,90,0.2)';
+      ctx.fillRect(0, 0, cw, H);
     }
-    ctx.drawImage(sceneC, 0, 0);
-    ctx.filter = 'none';
-
-    if (view.style === 'ad' && !view.frozen) {
-      const ph = (t % 4) / 4;
-      const x = -400 + ph * (W + 800);
-      const gr = ctx.createLinearGradient(x - 120, 0, x + 120, 0);
-      gr.addColorStop(0, 'rgba(255,255,255,0)');
-      gr.addColorStop(0.5, 'rgba(255,255,255,0.22)');
-      gr.addColorStop(1, 'rgba(255,255,255,0)');
-      ctx.fillStyle = gr;
-      ctx.fillRect(0, 0, W, H);
-    }
-    if (view.rain || view.frozen || view.style === 'real') drawRain(dt);
-    if (view.frozen) {
-      ctx.fillStyle = view.final ? 'rgba(10,10,14,0.2)' : 'rgba(40,60,90,0.22)';
-      ctx.fillRect(0, 0, W, H);
-    }
-    if (view.style === 'real') {
-      ctx.imageSmoothingEnabled = true;
-      ctx.drawImage(grain[Math.floor(t * 24) % grain.length], 0, 0, W, H);
-      const vg = ctx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.9);
-      vg.addColorStop(0, 'rgba(0,0,0,0)');
-      vg.addColorStop(1, 'rgba(0,0,0,0.55)');
-      ctx.fillStyle = vg;
-      ctx.fillRect(0, 0, W, H);
-    }
+    if (mod && mod.postTop) mod.postTop(ctx, cw, H, t, view, dt, grain);
     if (fade > 0) {
       ctx.globalAlpha = fade;
       ctx.drawImage(prevC, 0, 0);
@@ -849,13 +848,16 @@
     if (staticFlash > 0) {
       ctx.globalAlpha = Math.min(1, staticFlash * 1.5);
       ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(grain[Math.floor(Math.random() * grain.length)], 0, 0, W, H);
+      ctx.drawImage(grain[Math.floor(Math.random() * grain.length)], 0, 0, cw, H);
       ctx.fillStyle = `rgba(255,255,255,${staticFlash * 0.25})`;
-      ctx.fillRect(0, Math.random() * H, W, 30 + Math.random() * 80);
+      ctx.fillRect(0, Math.random() * H, cw, 30 + Math.random() * 80);
       ctx.globalAlpha = 1;
+      ctx.imageSmoothingEnabled = true;
       staticFlash = Math.max(0, staticFlash - dt / 0.9);
     }
   }
 
-  T.render = { init, setView, frame, get view() { return view; } };
+  // Shared toolkit for the style modules.
+  T.kit = { Painter, rng, hex, mix, mapColor, figure, wallClock, HAIR, VW, VH, W, H, K, GROUND, FIG };
+  T.render = { init, setView, setViewport, frame, get view() { return view; } };
 })();
