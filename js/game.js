@@ -75,7 +75,8 @@
       soul: 100, happy: 100, mono: 5,
       storyIdx: 0, flags: {},
       feed: [], later: [], home: [], seen: [],
-      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0 },
+      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0, beyond: 0 },
+      cruelty: 0,
       current: null, freeze: null, phase: 'title', lastFiller: -1,
     };
   }
@@ -267,7 +268,8 @@
   function interlude(then) {
     S.seen = S.seen || [];
     const pool = ((C.interludes || {})[S.act] || []).filter((i) => !S.seen.includes(i.id));
-    if (!pool.length || Math.random() > 0.5) { then(); return; }
+    const opening = S.act === 1 && S.day === 1 && S.storyIdx === 0; // Billy always comes first
+    if (opening || !pool.length || Math.random() > 0.5) { then(); return; }
     const it = pick(pool);
     S.seen.push(it.id);
     showScene({ scene: { bg: it.bg, cast: it.cast || [], noTuck: !!it.noTuck } });
@@ -346,31 +348,47 @@
     lines.slice(1).forEach((text) => S.home.push(text));
   }
 
+  // The hidden line: how cruel the world currently requires you to be.
+  // It rises over time at each school, but never above the cruellest option on offer.
+  function requiredCruelty(enc) {
+    const steps = act().line || [[1, 0]];
+    let line = 0;
+    steps.forEach(([fromDay, lvl]) => { if (S.day >= fromDay) line = lvl; });
+    const max = Math.max(0, ...enc.options.filter((o) => o.evil != null).map((o) => o.evil));
+    return Math.min(line, max);
+  }
+
+  function doCruelty(enc, o, req) {
+    const d = o.cash || 0;
+    S.cash = Math.max(0, S.cash + d);
+    if (d > 0) S.stats.extracted += d;
+    S.cruelty += o.evil; // the hidden morality score
+    if (o.evil > req) S.stats.beyond++;
+    if (o.evil >= 2) S.stats.harmed++;
+    // Soul and happiness only ever go one way.
+    S.soul = clamp(S.soul + Math.min(0, o.soul != null ? o.soul : [0, -2, -6, -12][o.evil]), 0, 100);
+    if (o.evil >= 2) S.happy = clamp(S.happy + Math.min(0, o.happy || -3), 0, 100);
+    if (o.evil >= 2) S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
+    if (o.flags) Object.assign(S.flags, o.flags);
+    popups(o.fanfare);
+    queueConsequences(enc, o.feed);
+    showResult(enc, o, o.evil >= 2 ? 'exploit' : null);
+  }
+
   function choose(i) {
     if (!S.current || pendingContinue || S.freeze) return;
     const enc = findEnc(S.current);
     const o = enc.options[i];
     if (!o) return;
     A.click();
+    if (o.evil != null) {
+      const req = requiredCruelty(enc);
+      if (o.evil < req) awkwardWait(enc, o);
+      else doCruelty(enc, o, req);
+      hud();
+      return;
+    }
     switch (o.type) {
-      case 'exploit': {
-        const d = o.cash || 0;
-        S.cash = Math.max(0, S.cash + d);
-        if (d > 0) S.stats.extracted += d;
-        S.stats.harmed++;
-        // Soul and happiness only ever go one way.
-        S.soul = clamp(S.soul + Math.min(0, o.soul || -5), 0, 100);
-        S.happy = clamp(S.happy + Math.min(0, o.happy || -3), 0, 100);
-        S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
-        if (o.flags) Object.assign(S.flags, o.flags);
-        popups(o.fanfare);
-        queueConsequences(enc, o.feed);
-        showResult(enc, o, 'exploit');
-        break;
-      }
-      case 'decent':
-        awkwardWait(enc, o);
-        break;
       case 'futile': {
         const d = o.cash || 0;
         if (d < 0) S.stats.wasted += Math.min(S.cash, -d);
@@ -452,13 +470,14 @@
     clearInterval(beatTimer);
     A.rainOff();
   }
-  // The moment passes. The decent thing happens. Nobody pays you for it.
+  // The moment passes. What you chose happens anyway, slowly, and nothing extra comes of it.
   function endAwkward() {
     const F = S.freeze;
     if (!F || F.kind !== 'awkward') return;
     stopWaiting();
     S.freeze = null;
     S.cash = Math.max(0, S.cash + (F.o.cash || 0));
+    if (F.o.flags) Object.assign(S.flags, F.o.flags);
     S.stats.kind++;
     hud();
     showResult(F.enc, F.o, 'decent', C.awkward.passes);
@@ -695,8 +714,10 @@
           <dt>Total taken</dt><dd>${fmt(st.extracted)}</dd>
           <dt>Spent trying to make it go away</dt><dd>${fmt(st.wasted)}</dd>
           <dt>Children harmed</dt><dd>${st.harmed}</dd>
-          <dt>Decent things done</dt><dd>${st.kind}</dd>
-          <dt>Time spent standing there being decent</dt><dd>${mins(st.waitedMs)}</dd>
+          <dt>Times you held back</dt><dd>${st.kind}</dd>
+          <dt>Times you went further than you had to</dt><dd>${st.beyond || 0}</dd>
+          <dt>Cruelty</dt><dd>${S.cruelty || 0}</dd>
+          <dt>Time spent standing there</dt><dd>${mins(st.waitedMs)}</dd>
           <dt>Raindrops counted</dt><dd>${st.raindrops.toLocaleString('en-GB')}</dd>
           <dt>Soul remaining</dt><dd>${Math.round(S.soul)}/100</dd>
         </dl>
@@ -788,6 +809,19 @@
     };
     for (const k in ids) el[k] = $(ids[k]);
 
+    // In a home-screen web app iOS can report a viewport shorter than the screen
+    // (by the status bar), leaving a gap at the bottom. Size to the real screen there.
+    const standalone = window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    const fillScreen = () => {
+      if (!standalone) return;
+      const portrait = window.matchMedia('(orientation: portrait)').matches;
+      const h = portrait ? Math.max(screen.width, screen.height) : Math.min(screen.width, screen.height);
+      el.game.style.height = Math.max(h, window.innerHeight) + 'px';
+      el.game.style.bottom = 'auto';
+    };
+    fillScreen();
+    window.addEventListener('resize', fillScreen);
+    window.addEventListener('orientationchange', () => setTimeout(fillScreen, 300));
     R.init($('#stage'));
     const wrap = $('#stage-wrap');
     const fit = () => { if (wrap.clientHeight) R.setViewport(wrap.clientWidth / wrap.clientHeight); };
@@ -823,6 +857,8 @@
         choose, doContinue, changeMind, endAwkward, startAct, endAct,
         jumpAct(n) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); nextSlot(); },
         get waiting() { return !!pendingContinue; },
+        required() { return S.current ? requiredCruelty(findEnc(S.current)) : null; },
+        enc() { return S.current ? findEnc(S.current) : null; },
         openFillerById(n, id) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); const idx = C.fillers[n].findIndex((e) => e.id === id); openEnc({ kind: 'filler', idx }); },
         showInterlude(n, id) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); const it = C.interludes[n].find((i) => i.id === id); showScene({ scene: { bg: it.bg, cast: it.cast || [], noTuck: !!it.noTuck } }); beat({ kicker: it.kicker, html: `<p class="narr">${esc(it.text)}</p>`, then: () => {} }); },
       };

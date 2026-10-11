@@ -16,7 +16,7 @@
 
 | Pillar | How it shows up in play | Intent |
 | --- | --- | --- |
-| **The Stagnation Trap** | Every decent choice stops time in an awkward wait, then pays nothing. Daily dues freeze the day until you find money, and only exploitation makes money. | Make the player actively choose corruption in order to keep playing, and feel it. |
+| **The Stagnation Trap** | Any choice kinder than the hidden, rising line stops time in an awkward wait. Daily dues freeze the day until you find money. You have to get progressively worse to keep going. | Make the player actively choose corruption in order to keep playing, and feel it. |
 | **Visual progression** | Crayon → Y2K pixel art → glossy '90s TV advert → stark cinematic realism. | Mirror Tuck's growing detachment from reality as the empire scales. |
 | **Explicit feedback** | Arcade fanfares for every exploit, then a "Meanwhile…" scene of the person you hurt, and a home-time recap of the whole day. | Set hyperactive rewards against raw human damage, and make the player sit with it. |
 | **British satire** | Dry, absurdist tone in the vein of *Thank Goodness You're Here!* | Ground big economic critiques in mundane, recognisable school tropes. |
@@ -39,15 +39,33 @@ Every exploitative choice has consequences that come back later:
 - **On the way home.** At home time, the day's remaining consequences are listed together before you can go to bed.
 - Everything is kept in a log (≡ button), titled *Things That Happened → Gossip → Stakeholder Updates → Evidence* as Tuck changes school.
 
-### Being good: the awkward wait
-There are no rewards for being good. Choosing the decent option triggers an **awkward wait**:
-- Time stops. The clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion.
-- Nothing happens, for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small lines drift in ("Billy shifts from one foot to the other.", "Somebody, somewhere, is making money. It isn't you."). You can count raindrops, look at the clock, retie your shoe, read the poster again or think about the nature of value. None of it speeds anything up.
-- At any point you can **Change your mind**, which takes you back to the choice and the options that pay.
-- If you wait it out, *"Eventually, the moment passes."* The decent thing happens, and you get no money, no fanfare and nothing back. Soul does not go up.
+### The hidden morality score and the rising line
+Every ordinary option has a hidden **cruelty rating**:
+
+| Rating | Meaning | Example (Little Billy) |
+| --- | --- | --- |
+| 0 | Kind | "Have it. It's only a snail." |
+| 1 | Fair / selfish | "50p. Fair's fair." |
+| 2 | Exploitative | "A pound. You can owe me the other 50p." |
+| 3 | Vindictive | "50p. And the Holo-Dragon." |
+
+Each school has a hidden **line**, the cruelty the world currently demands, and it rises as you go:
+
+| Where | Line |
+| --- | --- |
+| St. Pete's Primary | Fair (1) for the first three days, then exploitative (2) from day 4 |
+| St. Jude's Comprehensive | Exploitative (2), then vindictive (3) from day 3 |
+| Sixth Form | Vindictive (3) from the start |
+
+An encounter never demands more than the cruellest option it actually offers, so you can never be stuck.
+
+- **At or above the line,** the choice just happens. Crueller options pay more, so **pure vindictiveness is the speedrun**: about 2 in-game days per school. Doing only what the line demands takes roughly three times as long at the first two schools (about 6 and 5 days in testing), and the line keeps dragging you upward. Going beyond what's needed is counted and shown in the final ledger.
+- **Below the line,** the **awkward wait** begins. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. **Change your mind** takes you back to the choice. If you wait it out, *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
+- The total cruelty of your choices is the hidden **morality score**. The player never sees it until the final ledger, alongside "times you held back" and "times you went further than you had to".
+- A player who is always kind never leaves St. Pete's: in testing, still there on day 11 after more than a hundred awkward waits.
 
 ### Daily dues (the trap)
-At home time someone always wants paying: **the hall monitor (50p), Biff (£3), then the payroll (£40)**. If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal. Honest income barely covers the dues and never comes close to the next milestone. A player who keeps choosing decency is stuck at St. Pete's indefinitely, frozen at the gate every few days, until they face the fact that they have to sell their soul to make money.
+At home time someone always wants paying: **the hall monitor (50p), Biff (£3), then the payroll (£40)**. If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal. Fair trading covers the dues, slowly, while the line allows it, and then the line rises. A player who keeps choosing decency is stuck at St. Pete's indefinitely, frozen at the gate every few days, until they face the fact that they have to sell their soul to make money.
 
 ### Meters
 **Soul**, **Playground Happiness** and **Market Monopoly** are shown without numbers. Soul and happiness only ever go down: exploiting lowers them, and kindness never raises them again. Below 30 Soul, Tuck's eyes turn into £ signs.
@@ -97,8 +115,10 @@ Transitions between schools are in-world captions ("Summer comes. Billy moves to
 
 ### The first choice: the sardine sandwich and the Holo-Dragon
 Little Billy is crying on a damp bench over a sardine paste sandwich, and wants Tuck's only Gummy Snail. Nothing tells the player what's at stake.
-- **"50p. Fair's fair."** or **"Have it."** Billy looks at you, you look at Billy, it starts to rain, and the clock above the door stops. Nothing happens for a long time. Eventually Billy gets his snail. You're left with 50p or less, and the hall monitor wants paying at home time.
-- **"50p. And the Holo-Dragon."** An arcade fanfare plays (+50p! RARE CARD ACQUIRED! SOLD TO KYLE: +75p!). Then, before the next encounter, *Meanwhile: Billy didn't finish his sandwich.*
+- **"Have it."** Billy looks at you, you look at Billy, it starts to rain, and the clock above the door stops. Nothing happens for a long time. Eventually Billy gets his snail and you get nothing.
+- **"50p. Fair's fair."** A plain, honest sale. No pause and no fanfare. Fine, for now.
+- **"A pound. You can owe me the other 50p."** Billy hands over an IOU in felt tip: "I.O.U. 50P. LOVE BILLY."
+- **"50p. And the Holo-Dragon."** An arcade fanfare plays (+50p! RARE CARD ACQUIRED! SOLD TO KYLE: +£1.25!). Then, before the next encounter, *Meanwhile: Billy didn't finish his sandwich.* This is the speedrun opening.
 
 ### The Fall and the twist ending
 Every option in the Fall is **futile**: bribes, denial, shredding evidence and hiring a solicitor all cost money and change nothing. In assembly, apologising and offering to give it all back triggers the **final freeze**. A high-pitched drone plays, the whole school freezes mid-cough, and the game refuses redemption ("Refunds are not available at this time"). The only way out is to accept expulsion.
@@ -119,7 +139,7 @@ Tuck sits on a wall outside the gates in the rain, assetless, watching kids play
 - **Browser game, built for iPhone first.** In portrait the layout stacks a compact HUD, the scene, the meters, the latest consequence and the story panel. In landscape and on desktop, the scene sits beside the story panel.
 - The camera window adapts to the stage's shape: narrow phone stages see the middle of the scene, where the characters are.
 - Tap targets are at least 44 px. The layout respects iPhone safe areas and the notch. Keyboard hints only appear on devices with a keyboard.
-- **Home-screen app:** a web app manifest, icons and a service worker mean it can be added to the home screen, runs full-screen and works offline after the first visit.
+- **Home-screen app:** a web app manifest, icons and a service worker mean it can be added to the home screen, runs full-screen and works offline after the first visit. In home-screen mode the game sizes itself to the physical screen, because iOS otherwise reports a viewport one status bar short and leaves a gap at the bottom.
 - Progress autosaves at the start of each day.
 - Controls are tap-only: options, *Carry on*, the ≡ log and mute. There is no speed control, because the pace is the player's.
 
@@ -139,6 +159,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v5:** Added the hidden morality score. Every option has a cruelty rating (kind / fair / exploitative / vindictive), and each school has a hidden line that rises over time (fair at first, then exploitative, then vindictive). Only choices below the line trigger the awkward wait. Crueller pays more, so pure vindictiveness is the speedrun, and holding back takes longer. New vindictive and fair options were written across the story and quick deals. The final ledger now shows cruelty, times held back, and times you went further than you had to. Fixed the bottom gap on iPhone home-screen apps. Billy is always the first encounter.
 
 - **v4:** Filled the world with character and surreal humour: a recurring cast (Gary the pigeon, Dinner Lady Maureen, Mr Dobson, Harriet and Harriet, Callum, the Man from the Council, Mr Grieve, Josh, Voltage Vince, the focus group, Nan offstage), about 38 interludes between encounters, 16 new quick deals, evening lines at home time, and absurd beats for the waits and freezes. Freeze lines that read as moral commentary were replaced. Added drawing for Gary (in every art style) and Vince's can costume.
 

@@ -7,7 +7,7 @@
 - Core design intent (from the owner), not to be undone:
   - Never explain the morality to the player: no tutorial text, and no labels on choices (no "decent/exploit" tags, no money previews).
   - No passive income. Money only ever comes from the player choosing to exploit someone.
-  - No rewards for being good. Decent choices trigger the awkward wait and pay nothing, and Soul never goes back up.
+  - No rewards for being good. Every option has a hidden `evil` rating (0 kind … 3 vindictive). Each school has a hidden rising `line`, and any choice below it triggers the awkward wait. Crueller pays more (vindictive is the speedrun), and Soul never goes back up. Any new encounter must rate every option and should offer a range of cruelty, including one at or above the line where it appears.
   - The game must be paced so the player can read and face the consequences: turn-based days, "Meanwhile…" beats, a home-time recap.
 - Story and tuning live in `js/content.js`. Prefer editing content there over hard-coding text in the engine.
 - The site (https://need4name.github.io/Capitalisn-t/) is served by GitHub Pages straight from the `claude/tuck-game` branch: pushing that branch redeploys it within a minute or two. Pages' build status shows up as the "pages build and deployment" workflow run.
