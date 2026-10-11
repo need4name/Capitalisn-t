@@ -47,4 +47,4 @@ docs/GAME_DESIGN.md     living design document
 
 ## Hosting
 
-The site is served by GitHub Pages from the `gh-pages` branch. Pushing to that branch updates the live link within a minute or two.
+The site is served by GitHub Pages from the `claude/tuck-game` branch. Pushing to that branch updates the live link within a minute or two.
