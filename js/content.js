@@ -29,16 +29,16 @@
   /* ------------------------------------------------------------------ */
   const SKIN = ['#f3d2b3', '#e8b88f', '#c68e5f', '#8d5a3b', '#5e3a26'];
   const people = {
-    billy: { name: 'Little Billy', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#e7bf62', hairStyle: 'mop', s: 0.85, mood: 'crying' },
-    jade: { name: 'Jade', skin: SKIN[1], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#7a3f1d', hairStyle: 'pony', s: 0.9, mood: 'sad' },
-    priya: { name: 'Priya', skin: SKIN[2], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#1d1410', hairStyle: 'long', s: 0.9, mood: 'neutral' },
-    kyle: { name: 'Kyle', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#c4552b', hairStyle: 'short', s: 0.95, mood: 'happy' },
-    biff: { name: 'Biff', skin: SKIN[1], shirt: '#d9d9d9', trousers: '#3b3f46', hair: '#3a2a1a', hairStyle: 'buzz', s: 1.2, mood: 'angry', wide: 1.35 },
+    billy: { name: 'Little Billy', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#e7bf62', hairStyle: 'mop', s: 0.85, mood: 'crying', sandwich: true },
+    jade: { name: 'Jade', skin: SKIN[1], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#7a3f1d', hairStyle: 'pony', s: 0.9, mood: 'sad', graze: true },
+    priya: { name: 'Priya', skin: SKIN[2], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#1d1410', hairStyle: 'long', s: 0.9, mood: 'neutral', sandwich: true },
+    kyle: { name: 'Kyle', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#c4552b', hairStyle: 'short', s: 0.95, mood: 'happy', card: true },
+    biff: { name: 'Biff', skin: SKIN[1], shirt: '#d9d9d9', trousers: '#3b3f46', hair: '#3a2a1a', hairStyle: 'buzz', s: 1.2, mood: 'angry', wide: 1.35, moustache: true },
     year2: { name: 'A Year 2', skin: SKIN[3], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#1d1410', hairStyle: 'short', s: 0.72, mood: 'happy' },
     leaver: { name: 'Year 6 Leaver', skin: SKIN[2], shirt: '#d9d9d9', trousers: '#3b3f46', hair: '#1d1410', hairStyle: 'short', s: 1.15, mood: 'neutral', shades: true },
     dev: { name: 'Dev', skin: SKIN[2], shirt: '#ffffff', trousers: '#2b2f3a', blazer: '#1f2f6b', tie: '#b71c1c', hair: '#1d1410', hairStyle: 'short', s: 1.0, mood: 'sad' },
-    year7s: { name: 'Soggy Year 7s', skin: SKIN[0], shirt: '#ffffff', trousers: '#2b2f3a', blazer: '#1f2f6b', tie: '#b71c1c', hair: '#8a5a2b', hairStyle: 'mop', s: 0.95, mood: 'sad' },
-    penny: { name: 'Penny', skin: SKIN[3], shirt: '#ffffff', trousers: '#2b2f3a', skirt: true, blazer: '#1f2f6b', tie: '#b71c1c', hair: '#1d1410', hairStyle: 'bun', s: 1.0, mood: 'tired', glasses: true },
+    year7s: { name: 'Soggy Year 7s', skin: SKIN[0], shirt: '#ffffff', trousers: '#2b2f3a', blazer: '#1f2f6b', tie: '#b71c1c', hair: '#8a5a2b', hairStyle: 'wet', s: 0.95, mood: 'sad' },
+    penny: { name: 'Penny', skin: SKIN[3], shirt: '#ffffff', trousers: '#2b2f3a', skirt: true, blazer: '#1f2f6b', tie: '#b71c1c', hair: '#1d1410', hairStyle: 'bun', s: 1.0, mood: 'tired', glasses: true, eyebags: true },
     okafor: { name: 'Mrs Okafor', skin: SKIN[4], shirt: '#e67e22', trousers: '#3b3f46', skirt: true, hair: '#1d1410', hairStyle: 'wrap', hairColor2: '#f1c40f', s: 1.35, adult: true, mood: 'happy', apron: true },
     gavin: { name: 'Head Monitor Gavin', skin: SKIN[0], shirt: '#ffffff', trousers: '#2b2f3a', blazer: '#1f2f6b', tie: '#b71c1c', hair: '#d6b25e', hairStyle: 'side', s: 1.15, mood: 'smug', sash: true },
     maya: { name: 'Maya Patel', skin: SKIN[2], shirt: '#ffffff', trousers: '#222', skirt: true, blazer: '#2c2c2c', hair: '#1d1410', hairStyle: 'long', s: 1.15, mood: 'happy', badge: true },
@@ -49,15 +49,15 @@
     head: { name: 'The Headteacher', skin: SKIN[0], shirt: '#ffffff', trousers: '#333', blazer: '#3a3a4a', tie: '#552222', hair: '#999', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true },
     lanyard: { name: 'Safeguarding Lady', skin: SKIN[3], shirt: '#9b59b6', trousers: '#333', skirt: true, hair: '#2b1b10', hairStyle: 'bob', s: 1.35, adult: true, mood: 'neutral', lanyard: true },
     newkid: { name: 'New Kid', skin: SKIN[3], shirt: '#5a6fd6', trousers: '#1f2a5a', shorts: true, hair: '#1d1410', hairStyle: 'mop', s: 0.85, mood: 'neutral', shoes: ['#d22', '#2a6ad2'], jumperRoll: true },
-    maureen: { name: 'Dinner Lady Maureen', skin: SKIN[1], shirt: '#6fae7a', trousers: '#3b3f46', skirt: true, hair: '#c8c8c8', hairStyle: 'bun', s: 1.3, adult: true, mood: 'neutral', apron: true },
-    dobson: { name: 'Mr Dobson, Caretaker', skin: SKIN[0], shirt: '#35598c', trousers: '#35598c', hair: '#8a8a8a', hairStyle: 'bald', s: 1.35, adult: true, mood: 'tired' },
-    council: { name: 'A Man from the Council', skin: SKIN[0], shirt: '#e2dcc6', trousers: '#5a594a', blazer: '#6b6a58', tie: '#4a4a40', hair: '#5a5a5a', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true, lanyard: true },
+    maureen: { name: 'Dinner Lady Maureen', hairnet: true, skin: SKIN[1], shirt: '#6fae7a', trousers: '#3b3f46', skirt: true, hair: '#c8c8c8', hairStyle: 'bun', s: 1.3, adult: true, mood: 'neutral', apron: true },
+    dobson: { name: 'Mr Dobson, Caretaker', skin: SKIN[0], shirt: '#35598c', trousers: '#35598c', hair: '#8a8a8a', hairStyle: 'bald', s: 1.35, adult: true, mood: 'tired', mop: true },
+    council: { name: 'A Man from the Council', clipboard: true, skin: SKIN[0], shirt: '#e2dcc6', trousers: '#5a594a', blazer: '#6b6a58', tie: '#4a4a40', hair: '#5a5a5a', hairStyle: 'side', s: 1.4, adult: true, mood: 'neutral', glasses: true, lanyard: true },
     harrietA: { name: 'Harriet and Harriet', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#e7bf62', hairStyle: 'pony', s: 0.85, mood: 'neutral' },
     harrietB: { name: 'Harriet', skin: SKIN[3], shirt: '#d9d9d9', trousers: '#5b5f66', skirt: true, hair: '#1d1410', hairStyle: 'pony', s: 0.85, mood: 'neutral' },
-    callum: { name: 'Callum (mostly Ribena)', skin: '#e9b9cf', shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#7a3f8a', hairStyle: 'mop', s: 0.9, mood: 'happy' },
+    callum: { name: 'Callum (mostly Ribena)', skin: '#dcaee6', purple: true, shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#7a3f8a', hairStyle: 'mop', s: 0.9, mood: 'happy' },
     gary: { name: 'Gary', pigeon: true, s: 1 },
-    grieve: { name: 'Mr Grieve, Chemistry', skin: SKIN[0], shirt: '#ffffff', trousers: '#3b3f46', blazer: '#ececec', hair: '#d0d0d0', hairStyle: 'scruff', s: 1.35, adult: true, mood: 'tired', glasses: true },
-    josh: { name: 'Josh, Head Boy', skin: SKIN[0], shirt: '#ffffff', trousers: '#222', blazer: '#2c2c2c', hair: '#d6b25e', hairStyle: 'mop', s: 1.12, mood: 'happy', badge: true },
+    grieve: { name: 'Mr Grieve, Chemistry', skin: SKIN[0], shirt: '#ffffff', trousers: '#3b3f46', blazer: '#ececec', hair: '#d0d0d0', hairStyle: 'scruff', s: 1.35, adult: true, mood: 'tired', glasses: true, fireBrows: true },
+    josh: { name: 'Josh, Head Boy', skin: SKIN[0], shirt: '#ffffff', trousers: '#222', blazer: '#2c2c2c', hair: '#d6b25e', hairStyle: 'mop', s: 1.12, mood: 'happy', badge: true, chalk: true },
     vince: { name: 'Voltage Vince', skin: SKIN[1], shirt: '#e8202a', trousers: '#222', hair: '#222', hairStyle: 'short', s: 1.4, adult: true, mood: 'happy', can: true },
     focus: { name: 'The Year 7 Focus Group', skin: SKIN[2], shirt: '#ffffff', trousers: '#222', hair: '#1d1410', hairStyle: 'short', s: 0.9, mood: 'neutral' },
     cryer: { name: 'Crying Kid', skin: SKIN[0], shirt: '#d9d9d9', trousers: '#5b5f66', hair: '#c4552b', hairStyle: 'pony', s: 0.82, mood: 'crying', sandwich: true },
@@ -68,7 +68,7 @@
     const base = { name: 'Tuck', skin: SKIN[0], hair: '#6b4a2b', s: 1, mood: 'neutral', pound: soul < 30 };
     if (act === 1) return Object.assign(base, { shirt: '#c9c9c9', trousers: '#1f2a5a', shorts: true, hairStyle: 'scruff', s: 0.9, shoes: ['#c62828', '#e0473a'], jumperRoll: true });
     if (act === 2) return Object.assign(base, { shirt: '#ffffff', trousers: '#2b2f3a', coat: '#7a5a34', hairStyle: 'scruff', s: 1.0, shoes: ['#c62828', '#e0473a'] });
-    if (act === 3) return Object.assign(base, { shirt: '#ffffff', trousers: '#111', blazer: '#111', tie: '#ffcc00', hairStyle: 'slick', s: 1.15, mood: 'smug', organiser: true, shoes: ['#111', '#111'] });
+    if (act === 3) return Object.assign(base, { shirt: '#ffffff', trousers: '#111', blazer: '#111', tie: '#ffcc00', hairStyle: 'slick', s: 1.15, mood: 'smug', organiser: true, shoes: ['#111', '#111'], fluff: true });
     return Object.assign(base, { shirt: '#cfcfcf', trousers: '#2a2a2a', coat: '#4a4038', hairStyle: 'wet', s: 1.15, mood: 'sad', shoes: ['#222', '#222'] });
   }
 
@@ -86,13 +86,15 @@
       bg: 'playground',
       target: 600,
       line: [[1, 1], [4, 2]], // [from day, cruelty required]
-      dues: 50, // owed every day at home time
+      dues: 60, // owed at home time on day 1…
+      duesStep: 20, // …and this much more every day after (for duesDays days). The price "depends".
+      duesDays: 4,
       duesWho: 'the hall monitor',
-      broke: 'The hall monitor is waiting at the gate with his hand out. He wants 50p. You have {cash}. The bell doesn’t ring. Nobody goes home.',
-      paid: 'Gave the hall monitor 50p at the gate. Nobody knows why.',
+      broke: 'The hall monitor is waiting at the gate with his hand out. Today it’s {dues}. Yesterday it was less. You have {cash}. The bell doesn’t ring. Nobody goes home.',
+      paid: 'Gave the hall monitor {dues} at the gate. He says the price depends. He won’t say on what.',
       start: 605, // 10:05 on day one
       feedTitle: 'Things That Happened',
-      objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. Six quid.',
+      objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. {target}.',
       outro: [
         'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you. Gary the pigeon sees you off at the gates. He does not wave. Pigeons can’t wave. It’s implied.',
         'The coat comes with you to big school. So does Biff.',
@@ -101,7 +103,7 @@
         "St. Pete's Primary. Morning break.",
         'This is Tucker. Everyone calls him Tuck. Mismatched shoes — one red, one a different red. Navy shorts in a school of grey trousers.',
         "Rolled inside his jumper: eleven Gummy Snails, liberated from his nan's handbag.",
-        'The hall monitor wants 50p every day by home time. Nobody knows why. That is just how it is.',
+        'The hall monitor wants paying every day at home time. Nobody knows why. The price, he says, depends.',
       ],
     },
     2: {
@@ -114,21 +116,23 @@
       bg: 'corridor',
       target: 5000,
       line: [[1, 2], [3, 3]],
-      dues: 300,
+      dues: 800,
+      duesStep: 200,
+      duesDays: 4,
       duesWho: 'Biff',
-      broke: 'Biff is waiting by the gates. Biff is on £3 a day. You have {cash}. Biff doesn’t go home until he’s paid, and neither do you.',
-      paid: 'Paid Biff his £3. He counted it twice.',
+      broke: 'Biff is waiting by the gates. Today Biff is on {dues}. You have {cash}. Biff doesn’t go home until he’s paid, and neither do you.',
+      paid: 'Paid Biff {dues}. He counted it twice. His rate has gone up. He says it’s “inflation”. He pronounces it “inflection”.',
       outro: [
         'Three years go by the way three years do at that age: all at once, and then forever.',
         'You stop selling things. You start owning the things other people sell.',
       ],
       start: 530,
       feedTitle: 'Gossip',
-      objective: 'The Senior Hall Monitors run the bikeshed. Word is they’d sell it for fifty quid.',
+      objective: 'The Senior Hall Monitors run the bikeshed. Word is they’d sell it for {target}.',
       intro: [
         "St. Jude's Comprehensive. 1,400 pupils. One working radiator.",
         'Tuck is eleven now. The coat is still enormous. It is a statement. The statement is: inside this coat there are things you want.',
-        "Biff came too. Biff was held back, then pushed forward, and now he's in Year 7 with you. He's on £3 a day.",
+        "Biff came too. Biff was held back, then pushed forward, and now he's in Year 7 with you. He's on a daily rate. The rate is whatever Biff says it is.",
       ],
     },
     3: {
@@ -139,18 +143,20 @@
       ages: 'Ages 14–16',
       style: 'ad',
       bg: 'sixth',
-      target: 50000,
-      line: [[1, 3]],
-      dues: 4000,
+      target: 60000,
+      line: [[1, 2], [3, 3]],
+      dues: 6000,
+      duesStep: 2000,
+      duesDays: 3,
       duesWho: 'the payroll',
-      broke: 'Biff, Gavin and Mr Pembleton are waiting outside your office. Between them they’re owed £40 a day. You have {cash}. Nobody leaves until everybody’s paid.',
-      paid: 'Paid out £40 in retainers: Biff, Gavin, and an envelope for Mr Pembleton.',
+      broke: 'Biff, Gavin and Mr Pembleton are waiting outside your office. Today they’re owed {dues} between them. You have {cash}. Nobody leaves until everybody’s paid.',
+      paid: 'Paid out {dues} in retainers: Biff, Gavin, and an envelope for Mr Pembleton, who has started counting his.',
       outro: [
         'The confetti is still coming down when the picture cuts out.',
       ],
       start: 530,
       feedTitle: 'Stakeholder Updates',
-      objective: 'Mr Crane keeps mentioning an envelope. Five hundred pounds would fill it.',
+      objective: 'Mr Crane keeps mentioning an envelope. {target} would fill it.',
       intro: [
         'TUCK ENTERPRISES™. Est. Year 9. Now with a Sixth Form Campus Division!',
         "Tuck doesn't deal any more. He has a digital organiser, a mission statement, and a moustache he's very proud of. It's mostly shadow.",
@@ -596,9 +602,9 @@
       scene: { bg: 'shed', cast: ['leaver'] },
       speaker: 'leaver',
       text: 'Behind the sports shed, a Year 6 leaver is selling a Mega-Coated Trench Coat. It is enormous. It has eleven inside pockets. It smells of Lynx Africa and ambition.',
-      line: 'Six quid. And I’ll throw in Biff. He follows the coat.',
+      line: '{target}. And I’ll throw in Biff. He follows the coat.',
       options: [
-        { type: 'milestone', label: 'Buy the coat. Take Biff. (£6)', cost: 600, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
+        { type: 'milestone', label: 'Buy the coat. Take Biff. ({target})', cost: 600, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -607,9 +613,9 @@
       scene: { bg: 'bikeshed', cast: ['gavin'] },
       speaker: 'gavin',
       text: 'The Senior Hall Monitors control the bikeshed: the only covered, unsupervised, teacher-blind square metre at St. Jude’s. Head Monitor Gavin wears his sash like a war medal.',
-      line: 'Fifty quid, Tucker, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
+      line: '{target}, Tucker, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
       options: [
-        { type: 'milestone', label: 'Pay Gavin. Take the bikeshed. (£50)', cost: 5000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
+        { type: 'milestone', label: 'Pay Gavin. Take the bikeshed. ({target})', cost: 5000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -617,10 +623,10 @@
       id: 'contract',
       scene: { bg: 'office', cast: ['crane'] },
       speaker: 'crane',
-      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He would like £500. He has brought an envelope.',
+      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He would like {target}. He has brought an envelope.',
       line: 'Just sign here, Tucker. And here. And initial there. Lovely pen, isn’t it?',
       options: [
-        { type: 'milestone', label: 'Sign the five-year exclusive contract. (£500)', cost: 50000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
+        { type: 'milestone', label: 'Sign the five-year exclusive contract. ({target})', cost: 60000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -718,6 +724,7 @@
         line: 'Just a signature, young man. For the corridor. The corridor needs this.',
         options: [
           { evil: 0, label: '“It’s about twenty metres, mate.”', cash: 0, result: 'He measures it again, in front of you, very slowly. It is twenty metres. He looks betrayed. He writes “HOSTILE” on his clipboard and draws a little sad face.' },
+          { evil: 3, label: 'Sign whatever he wants, then sell him a second, angrier witness. Biff.', cash: 1000, soul: -10, happy: -6, fanfare: ['CIVIC CORRUPTION!', 'WITNESS SUPPLIED!'], result: 'Biff signs that the corridor is four miles long, that the canteen is in Belgium, and that he personally saw it happen. The Man from the Council shakes his hand for a full minute.', feed: ['The corridor outside Maths is now officially a motorway. Year 7s are not allowed on it without a responsible adult.', 'Biff has been called as an expert witness in three more council disputes. He is very good. He is always angry.'] },
           { evil: 2, label: 'Sign whatever he wants. £5 a signature.', cash: 500, soul: -5, happy: -4, fanfare: ['+£5!', 'CIVIC ENGAGEMENT!'], result: 'You sign that the corridor is four miles long, that the canteen is in Belgium, and that you personally are a listed building.', feed: ['The corridor outside Maths has been reclassified as a B-road. There is now a speed limit and a lollipop lady.', 'Year 7s have to take a packed lunch to get to Geography.'] },
         ],
       },
@@ -727,6 +734,7 @@
         line: 'Bit of water, Tucker? Whenever you like. No rush. It’s just my face.',
         options: [
           { evil: 0, label: 'Throw the water at him.', cash: 0, result: 'You put out Mr Grieve. He thanks you, steaming gently, and gives you a detention for throwing things in a lab.' },
+          { evil: 3, label: 'Sell him the water. Then sell the class tickets to watch.', cash: 900, soul: -11, happy: -6, fanfare: ['LIVE EVENT!', 'SOLD OUT!'], result: 'Thirty tickets at 20p each. Mr Grieve burns gently through the whole sale, then pays for the water with what’s left of his dignity and a fiver.', feed: ['Mr Grieve’s lesson is now listed in the school calendar as “an event”.', 'Mr Grieve has asked the Head for a fire blanket. He has been told to “budget for it”.'] },
           { evil: 2, label: '“Water’s two quid, sir. Seller’s market.”', cash: 200, soul: -6, happy: -3, fanfare: ['+£2!', 'EMERGENCY PRICING!'], result: 'Mr Grieve pays in coins, one at a time, while still on fire. It is the longest transaction of your life. Neither of you blinks.', feed: ['Mr Grieve now teaches in a balaclava. He says it’s “for the eyebrows”. He hasn’t got eyebrows.'] },
         ],
       },
@@ -736,6 +744,7 @@
         line: 'Can we pray to him? Is that allowed? Is he a god now?',
         options: [
           { evil: 0, label: 'Leave them to it.', cash: 0, result: 'They hold a little service. Somebody reads a poem that rhymes “Nibbles” with “Nibbles”. It is genuinely moving.' },
+          { evil: 3, label: 'Charge for prayers, then tell them Nibbles hears paid wishes first.', cash: 1200, soul: -11, happy: -7, mono: 6, fanfare: ['PRIORITY PRAYER!', 'RELIGION: PREMIUM TIER!'], result: 'A Year 7 empties her piggy bank for a priority wish. She wishes for her nan to get better. You keep the piggy bank too. It’s a nice piggy bank.', feed: ['The Year 7 checks the shrine every lunchtime to see if the wish worked.', 'Somebody wished for Nibbles to come back. A guinea pig appeared. Nobody can explain the guinea pig.'] },
           { evil: 2, label: '20p to pray. 50p for a wish. £1 to touch the wheel.', cash: 600, soul: -6, happy: -4, mono: 5, fanfare: ['ORGANISED RELIGION!', '+£6!'], result: 'By lunch the shrine has a queue, a gift shop and a man from Year 10 who claims to have been healed. You did not see the healing. You did charge for it.', feed: ['Somebody wished for Nibbles to come back. The next morning there was a guinea pig in the shrine. Nobody can explain the guinea pig.', 'The guinea pig has its own following now. It does not want one.'] },
         ],
       },
@@ -745,6 +754,7 @@
         line: 'You can’t not, Tuck. He’s been up there since the Spice Girls.',
         options: [
           { evil: 0, label: 'Send up a whole multipack.', cash: -100, result: 'The bucket goes up. After a long time, a little paper aeroplane comes down. It just says THANK YOU in very old handwriting.' },
+          { evil: 3, label: 'Keep the pound. Send up a bill for “bucket handling”.', cash: 900, soul: -10, happy: -4, fanfare: ['LOGISTICS FEE!', 'VERTICAL INTEGRATION!'], result: 'The bucket goes up with an invoice. After a long time it comes back down with his life savings: a Woolworths voucher, nine pounds in 2p coins, and a note that says SORRY.', feed: ['The rope has gone very quiet.', 'Mr Kettle says nobody is allowed to climb the rope now. “Out of respect,” he says, and won’t say for what.'] },
           { evil: 2, label: 'Send up one crisp. Keep the pound.', cash: 100, soul: -5, happy: -3, fanfare: ['+£1!', 'VERTICAL MARKET!'], result: 'One crisp goes up. A long silence comes down.', feed: ['The bucket came down again. The note just said WHY.'] },
         ],
       },
@@ -754,6 +764,7 @@
         line: 'That was my dinner. That was my whole dinner.',
         options: [
           { evil: 0, label: 'Give him £2.', cash: -200, soul: 4, result: 'He eats. He tells everyone. Nobody believes him.' },
+          { evil: 3, label: 'Lend him £2 at 500%. Take his blazer as collateral. It’s raining.', cash: 1000, soul: -11, happy: -6, fanfare: ['COLLATERAL SEIZED!', '500% APR!'], result: 'He signs a napkin and hands over his blazer. He eats his chips in the rain in his shirtsleeves, and he says thank you, which is the worst part.', feed: ['The drain boy got a cold. Then a detention for “improper uniform”.', 'His mum came in about the blazer. She was told to take it up with you. Nobody knows how to take things up with you.'] },
           { evil: 2, label: 'Lend him £2. £4 back Monday.', cash: 500, soul: -5, happy: -3, fanfare: ['+£2 INTEREST!', 'NEW CUSTOMER!', 'LOAN SOLD ON: +£3!'], result: 'He signs a napkin. You sell the napkin to Biff for £3 before he’s finished his chips.', feed: ['The drain boy now owes £11. It was £2 on Tuesday.'] },
         ],
       },
@@ -763,6 +774,7 @@
         line: 'Bagsy back seat!',
         options: [
           { evil: 0, label: '“First come, first served.”', cash: 0, soul: 2, result: 'The back seat goes to whoever runs fastest. As God intended.' },
+          { evil: 3, label: 'Auction every seat. Standing room extra. The driver gets 10%.', cash: 1200, soul: -10, happy: -8, fanfare: ['TRANSPORT PRIVATISED!', 'STANDING ROOM ONLY!'], result: 'Every seat on the coach is auctioned. The kids who can’t pay stand in the aisle all the way to the Peak District, holding on to each other like a little human handrail.', feed: ['Four Year 8s threw up on the M1. They were standing. The driver charged them for cleaning.', 'The kid who couldn’t afford standing room went in the luggage hold. He says it was fine. He’s just a bit quieter now.'] },
           { evil: 2, label: 'Auction the back seat.', cash: 650, soul: -4, happy: -5, fanfare: ['AUCTION CLOSED!', '+£6.50!'], result: 'The back seat goes for £6.50 to a Year 8 whose dad sells conservatories. He sits there alone. It is the best day of his life.', feed: ['The coach smelled of Monster Munch and resentment.'] },
         ],
       },
@@ -772,6 +784,7 @@
         line: 'You’re not going to sell people fake top-up cards, are you?',
         options: [
           { evil: 0, label: '“Course not.”', cash: 0, soul: 2, result: 'You don’t. Penny seems relieved. Her relief costs you about seven quid.' },
+          { evil: 3, label: 'Fake top-up codes, then a helpline for when they don’t work. 50p a minute.', cash: 1200, soul: -11, happy: -7, fanfare: ['DIGITAL PRODUCTS!', 'PREMIUM HELPLINE!'], result: 'The helpline is Biff, under a coat, in a cupboard. He has been told to say “have you tried turning it off and on again” and then nothing. He does it perfectly.', feed: ['A Year 9 spent his whole birthday money on the helpline. Biff says he was a very nice boy and they talked about dogs.', 'Your nan has started getting calls about her Lotto numbers. She thinks she’s famous.'] },
           { evil: 2, label: 'Sell “top-up codes” that are just your nan’s Lotto numbers.', cash: 700, soul: -6, happy: -5, fanfare: ['DIGITAL PRODUCTS!', '+£7.00!'], result: 'You sell fourteen codes. None work. One of them wins a tenner on the Lotto. You keep that too.', feed: ['Fourteen kids spent break typing your nan’s Lotto numbers into Nokias.'] },
         ],
       },
@@ -1038,5 +1051,29 @@
     ],
   };
 
-  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings };
+  /* ------------------------------------------------------------------ */
+  /* The tuck shop: things to spend spare money on at bedtime.          */
+  /* Each makes every deal pay more (`mult`). The player is never told  */
+  /* that the world quietly scales dues and prices by the same amount,  */
+  /* so all an upgrade really does is cost them. `cost` is in pence.    */
+  /* ------------------------------------------------------------------ */
+  const upgrades = {
+    1: [
+      { id: 'u-jumper', name: 'A second jumper', cost: 80, mult: 1.3, text: 'Nick your little brother’s school jumper. Twice the pockets. Snails stay warmer, and it turns out people will pay for a warm snail.', feed: 'Your little brother went to school in his pyjama top. He says he’s “trying a look”.' },
+      { id: 'u-ribena', name: 'Water down the Ribena', cost: 100, mult: 1.3, text: 'One bottle becomes four. Nobody will notice, apart from Callum, and nobody listens to Callum.', feed: 'Callum says the Ribena tastes “thin”. He’s drinking twice as much to make up for it.' },
+      { id: 'u-premium', name: 'Premium snails', cost: 120, mult: 1.3, text: 'Write PREMIUM on the snail bag in biro. Same snails. Better snails.', feed: 'Everybody agrees the Premium Snails taste more premium. Nobody can say how.' },
+    ],
+    2: [
+      { id: 'u-pockets', name: 'Eleven more pockets', cost: 600, mult: 1.3, text: 'Biff’s nan sews eleven extra pockets into the coat. She thinks it’s for a school play. It is, in a way.', feed: 'Biff’s nan asked how the play is going. Biff said “great”. Biff has never seen a play.' },
+      { id: 'u-laminate', name: 'Laminated prices', cost: 800, mult: 1.3, text: 'Laminate the price list. You can argue with paper. You cannot argue with lamination.', feed: 'A Year 8 tried to argue with the laminated price list. The lamination won.' },
+      { id: 'u-biffer', name: 'Hire Biffer', cost: 1000, mult: 1.3, text: 'Biff’s cousin Biffer, for collections. Nobody is sure Biffer isn’t just Biff in a different hat.', feed: 'Biff and Biffer have never been seen in the same room. Biffer is also on a daily rate.' },
+    ],
+    3: [
+      { id: 'u-platinum', name: 'Volt-Juice™ Platinum', cost: 8000, mult: 1.3, text: 'The same can, with a gold sticker and a price that suggests the gold is real.', feed: 'A Year 10 is saving up for Volt-Juice Platinum. He has stopped buying lunch to afford it.' },
+      { id: 'u-loyalty', name: 'A loyalty scheme', cost: 10000, mult: 1.3, text: 'Ten stamps gets you a stamp. The stamp is very glossy.', feed: 'Somebody completed a loyalty card. They got a stamp. They cried a bit, from happiness, they think.' },
+      { id: 'u-consultant', name: 'A consultant', cost: 12000, mult: 1.3, text: 'Josh has eaten a book about consultancy. He now consults. Mostly he says “synergy” and points at things.', feed: 'Josh pointed at the radiator and said “synergy”. It has not been switched on since.' },
+    ],
+  };
+
+  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings, upgrades };
 })();

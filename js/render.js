@@ -476,6 +476,39 @@
       default:
         p.line(x - 1.6 * s, my, x + 1.6 * s, my, '#5a1f1f', 0.6);
     }
+    props(p, f, { x, s, hy, headR, ex, ey, my, hip, sh, bw, yy, legH });
+  }
+
+  // Details that the story text mentions, so people look like their descriptions.
+  function props(p, f, d) {
+    const { x, s, hy, headR, ex, ey, my, hip, sh, bw, yy } = d;
+    if (f.moustache || f.fluff) {
+      p.poly([x - 2.6 * s, my - 1.2 * s, x + 2.6 * s, my - 1.2 * s, x + 2 * s, my - 0.3 * s, x - 2 * s, my - 0.3 * s], f.fluff ? '#b8a080' : '#3a2a1a', { outline: false, wash: f.fluff ? 0.25 : 0.6 });
+    }
+    if (f.eyebags) {
+      p.line(x - ex - 1 * s, ey + 1.4 * s, x - ex + 1 * s, ey + 1.4 * s, '#6a4a6a', 0.5);
+      p.line(x + ex - 1 * s, ey + 1.4 * s, x + ex + 1 * s, ey + 1.4 * s, '#6a4a6a', 0.5);
+    }
+    if (f.chalk) p.circle(x, my + 0.3 * s, 2.4 * s, '#ffffff', { outline: false, wash: 0.5 });
+    if (f.fireBrows) {
+      const flick = f.frozen ? 0 : Math.sin(p.t * 12) * 0.5 * s;
+      for (const dx of [-ex, ex]) {
+        p.poly([x + dx - 1.8 * s, ey - 2 * s, x + dx - 0.6 * s, ey - 5 * s - flick, x + dx, ey - 3.2 * s, x + dx + 0.7 * s, ey - 5.6 * s + flick, x + dx + 1.8 * s, ey - 2 * s], '#ff8a1a', { outline: false });
+        p.poly([x + dx - 0.9 * s, ey - 2 * s, x + dx, ey - 3.8 * s - flick, x + dx + 0.9 * s, ey - 2 * s], '#ffe14a', { outline: false });
+      }
+    }
+    if (f.hairnet) p.circle(x, hy - headR * 1.35, headR * 0.62, '#ffffff', { fill: false, w: 0.4 });
+    if (f.purple) p.circle(x + 2 * s, sh + 6 * s, 2.4 * s, '#8e3aa8', { outline: false, wash: 0.55 });
+    if (f.graze && (f.skirt || f.shorts)) { p.circle(x + 2.8 * s, hip + 7.5 * s, 2 * s, '#d9302a', { outline: false }); p.circle(x + 2.4 * s, hip + 7.2 * s, 0.8 * s, '#ff8a7a', { outline: false }); }
+    if (f.card) p.rect(x + bw / 2 + 1.2 * s, hip - 3.5 * s, 3.6 * s, 2.4 * s, '#ffffff');
+    if (f.clipboard) {
+      p.rect(x - bw / 2 - 7 * s, hip - 8 * s, 5.5 * s, 7.5 * s, '#8a6a3a');
+      p.rect(x - bw / 2 - 6.4 * s, hip - 7 * s, 4.3 * s, 5.8 * s, '#ffffff', { outline: false });
+    }
+    if (f.mop) {
+      p.line(x + bw / 2 + 2.5 * s, hip - 2 * s, x + bw / 2 + 8 * s, yy - 1 * s, '#a07a4a', 1.2 * s);
+      p.poly([x + bw / 2 + 5 * s, yy - 1 * s, x + bw / 2 + 11 * s, yy - 1 * s, x + bw / 2 + 12 * s, yy + 1 * s, x + bw / 2 + 4 * s, yy + 1 * s], '#d8d4c0');
+    }
   }
 
   /* ---------------- backgrounds ---------------- */
@@ -875,6 +908,6 @@
   }
 
   // Shared toolkit for the style modules.
-  T.kit = { Painter, rng, hex, mix, mapColor, figure, wallClock, HAIR, VW, VH, W, H, K, GROUND, FIG };
+  T.kit = { Painter, rng, hex, mix, mapColor, figure, props, wallClock, HAIR, VW, VH, W, H, K, GROUND, FIG };
   T.render = { init, setView, setViewport, frame, get view() { return view; } };
 })();

@@ -56,9 +56,25 @@
   const act = () => C.acts[S.act];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+  /* ---------------- money (with the hidden treadmill) ---------------- */
+  // Tuck-shop upgrades multiply every payout by S.mult. Without telling the player,
+  // dues, prices and targets scale by exactly the same factor.
+  function scale(p) {
+    const v = p * (S.mult || 1);
+    return Math.abs(v) < 5 ? Math.round(v) : Math.round(v / 5) * 5;
+  }
+  function duesToday() {
+    const a = act();
+    const days = Math.min(S.day - 1, a.duesDays != null ? a.duesDays : 99);
+    return scale((a.dues || 0) + (a.duesStep || 0) * days);
+  }
+  function target() { return scale(act().target || 0); }
+
   function fill(str, extra = {}) {
     return str.replace(/\{(\w+)\}/g, (_, k) => {
       if (k === 'cash') return fmt(S.cash);
+      if (k === 'dues') return fmt(duesToday());
+      if (k === 'target') return fmt(target());
       if (k === 'time') return clock(S.minute);
       if (k in extra) return extra[k];
       return '';
@@ -78,6 +94,7 @@
       stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0, beyond: 0 },
       cruelty: 0,
       current: null, freeze: null, phase: 'title', lastFiller: -1,
+      mult: 1, bought: [],
     };
   }
 
@@ -155,9 +172,6 @@
     el.time.textContent = clock(S.minute);
     el.time.classList.toggle('frozen', !!S.freeze);
     el.cash.textContent = fmt(S.cash);
-    el.soul.style.width = clamp(S.soul, 0, 100) + '%';
-    el.happy.style.width = clamp(S.happy, 0, 100) + '%';
-    el.mono.style.width = clamp(S.mono, 0, 100) + '%';
     el.feedTitle.textContent = a.feedTitle;
   }
 
@@ -187,8 +201,10 @@
   }
 
   /* ---------------- fanfare popups ---------------- */
-  function popups(list) {
-    if (!list || !list.length) return;
+  function popups(list, cash) {
+    list = (list || []).filter((t) => !/£\d|\d+p\b/.test(t));
+    if (cash > 0) list.unshift(`+${fmt(cash)}!`);
+    if (!list.length) return;
     A.fanfare(act().style);
     list.forEach((txt, i) => {
       setTimeout(() => {
@@ -302,7 +318,7 @@
   function openNext() {
     if (storyRemaining()) return openEnc({ kind: 'story', idx: S.storyIdx });
     const ms = C.milestones[S.act];
-    if (ms && S.cash >= act().target) return openEnc({ kind: 'milestone' });
+    if (ms && S.cash >= target()) return openEnc({ kind: 'milestone' });
     openFiller();
   }
   function openFiller(rescue) {
@@ -324,13 +340,23 @@
     pendingContinue = null;
     const sp = C.people[enc.speaker];
     el.dSpeaker.textContent = sp ? sp.name : '';
-    el.dText.innerHTML = `<p class="narr">${esc(fill(enc.text))}</p>` + (enc.line ? `<p class="line">“${esc(enc.line.replace(/^“|”$/g, ''))}”</p>` : '');
+    el.dText.innerHTML = `<p class="narr">${esc(fill(enc.text))}</p>` + (enc.line ? `<p class="line">“${esc(fill(enc.line).replace(/^“|”$/g, ''))}”</p>` : '');
     el.dOptions.innerHTML = '';
-    enc.options.forEach((o, i) => {
+    // Options come in a random order (kept if you come back to the same choice),
+    // except "Not yet", which stays last.
+    const ref = S.current || {};
+    if (!ref.order || ref.order.length !== enc.options.length) {
+      const idx = enc.options.map((_, i) => i).filter((i) => enc.options[i].type !== 'later');
+      for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+      enc.options.forEach((o, i) => { if (o.type === 'later') idx.push(i); });
+      ref.order = idx;
+    }
+    ref.order.forEach((i, pos) => {
+      const o = enc.options[i];
       const b = document.createElement('button');
       b.className = 'opt';
-      b.innerHTML = `<kbd>${i + 1}</kbd><span class="lbl">${esc(o.label)}</span>`;
-      if (o.type === 'milestone' && S.cash < o.cost) b.disabled = true;
+      b.innerHTML = `<kbd>${pos + 1}</kbd><span class="lbl">${esc(fill(o.label))}</span>`;
+      if (o.type === 'milestone' && S.cash < target()) b.disabled = true;
       b.addEventListener('click', () => choose(i));
       el.dOptions.appendChild(b);
     });
@@ -359,7 +385,7 @@
   }
 
   function doCruelty(enc, o, req) {
-    const d = o.cash || 0;
+    const d = scale(o.cash || 0);
     S.cash = Math.max(0, S.cash + d);
     if (d > 0) S.stats.extracted += d;
     S.cruelty += o.evil; // the hidden morality score
@@ -370,7 +396,7 @@
     if (o.evil >= 2) S.happy = clamp(S.happy + Math.min(0, o.happy || -3), 0, 100);
     if (o.evil >= 2) S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
     if (o.flags) Object.assign(S.flags, o.flags);
-    popups(o.fanfare);
+    popups(o.fanfare, d);
     queueConsequences(enc, o.feed);
     showResult(enc, o, o.evil >= 2 ? 'exploit' : null);
   }
@@ -390,7 +416,7 @@
     }
     switch (o.type) {
       case 'futile': {
-        const d = o.cash || 0;
+        const d = scale(o.cash || 0);
         if (d < 0) S.stats.wasted += Math.min(S.cash, -d);
         S.cash = Math.max(0, S.cash + d);
         A.thud();
@@ -399,8 +425,8 @@
         break;
       }
       case 'milestone':
-        if (S.cash < o.cost) return;
-        S.cash -= o.cost;
+        if (S.cash < target()) return;
+        S.cash -= target();
         popups(o.fanfare);
         S.mono = clamp(S.mono + 20, 0, 100);
         showResult(enc, o, 'exploit');
@@ -476,7 +502,7 @@
     if (!F || F.kind !== 'awkward') return;
     stopWaiting();
     S.freeze = null;
-    S.cash = Math.max(0, S.cash + (F.o.cash || 0));
+    S.cash = Math.max(0, S.cash + scale(F.o.cash || 0));
     if (F.o.flags) Object.assign(S.flags, F.o.flags);
     S.stats.kind++;
     hud();
@@ -533,7 +559,8 @@
   function homeTime() {
     const a = act();
     el.objective.textContent = 'Home time.';
-    if (S.cash < a.dues) {
+    const dues = duesToday();
+    if (S.cash < dues) {
       // Can't pay. The day doesn't end.
       S.freeze = { kind: 'broke', started: 0, idles: 0 };
       S.stats.freezes++;
@@ -551,8 +578,9 @@
       hud();
       return;
     }
-    S.cash -= a.dues;
-    pushFeed(a.paid, 'biz');
+    S.cash -= dues;
+    const paid = fill(a.paid);
+    pushFeed(paid, 'biz');
     // The day's consequences, all at once, on the way home.
     const lines = S.home.splice(0);
     const ev = (C.evenings || {})[S.act] || [];
@@ -565,11 +593,46 @@
       cls: 'card-home',
       html: `<p class="kicker">${DAYS[(S.day - 1) % 5]}, on the way home</p>` +
         (lines.length ? `<ul class="home-list">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : '<p class="sub">Nothing much happened today.</p>') +
-        `<p class="sub">${esc(a.paid)} You have ${fmt(S.cash)} left.</p>` +
+        `<p class="sub">${esc(paid)} You have ${fmt(S.cash)} left.</p>` +
         (evening ? `<p class="evening">${esc(evening)}</p>` : ''),
-      buttons: [{ label: 'Tomorrow', fn: nextDay }],
+      buttons: [{ label: shopFor().length ? 'Carry on' : 'Tomorrow', fn: () => (shopFor().length ? bedtime() : nextDay()) }],
       delay: 900,
     });
+  }
+
+  /* ---------------- bedtime: the tuck shop ---------------- */
+  function shopFor() {
+    S.bought = S.bought || [];
+    return ((C.upgrades || {})[S.act] || []).filter((u) => !S.bought.includes(u.id));
+  }
+  function bedtime() {
+    const list = shopFor();
+    if (!list.length) { nextDay(); return; }
+    showScene(null);
+    const buttons = list.map((u) => {
+      const cost = scale(u.cost);
+      return { label: `${u.name} · ${fmt(cost)}`, secondary: true, disabled: S.cash < cost, fn: () => buyUpgrade(u) };
+    });
+    buttons.push({ label: 'Go to bed', fn: nextDay });
+    showCard({
+      cls: 'card-home card-shop',
+      html: `<p class="kicker">Bedtime</p><p>You have ${fmt(S.cash)}. You lie awake thinking about the business.</p>` +
+        `<ul class="home-list">${list.map((u) => `<li><b>${esc(u.name)}.</b> ${esc(u.text)}</li>`).join('')}</ul>`,
+      buttons,
+    });
+  }
+  function buyUpgrade(u) {
+    const cost = scale(u.cost);
+    if (S.cash < cost) { bedtime(); return; }
+    S.cash -= cost;
+    S.mult = (S.mult || 1) * u.mult; // the world quietly keeps pace; see scale()
+    S.bought.push(u.id);
+    S.cruelty += 1;
+    S.soul = clamp(S.soul - 3, 0, 100);
+    if (u.feed) S.later.push({ text: u.feed, cast: [] });
+    popups(['BUSINESS IMPROVED!', u.name.toUpperCase() + '!']);
+    hud();
+    bedtime();
   }
   function nextDay() {
     S.day++;
@@ -659,7 +722,7 @@
     if (i >= lines.length) { if (done) done(); return; }
     showCard({
       cls: 'card-caption',
-      html: `<p>${esc(lines[i])}</p>`,
+      html: `<p>${esc(fill(lines[i]))}</p>`,
       buttons: [{ label: i < lines.length - 1 ? '…' : 'Carry on', fn: () => captions(lines, done, i + 1) }],
       delay: 500,
     });
@@ -736,6 +799,7 @@
       const btn = document.createElement('button');
       btn.textContent = b.label;
       if (b.secondary) btn.className = 'secondary';
+      if (b.disabled) btn.disabled = true;
       btn.addEventListener('click', () => {
         A.init();
         A.click();
@@ -743,7 +807,7 @@
         el.card.hidden = true;
         b.fn();
       });
-      if (delay) { btn.disabled = true; setTimeout(() => { btn.disabled = false; if (i === 0) btn.focus({ preventScroll: true }); }, delay); }
+      if (delay && !b.disabled) { btn.disabled = true; setTimeout(() => { btn.disabled = false; if (i === 0) btn.focus({ preventScroll: true }); }, delay); }
       box.appendChild(btn);
     });
     el.card.hidden = false;
@@ -789,7 +853,7 @@
     if (pendingContinue && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); doContinue(); return; }
     if (S && S.current && !pendingContinue && !S.freeze && /^[1-9]$/.test(e.key)) {
       const btn = el.dOptions.children[+e.key - 1];
-      if (btn && !btn.disabled) choose(+e.key - 1);
+      if (btn && !btn.disabled) btn.click();
       return;
     }
     if (e.key === 'l' || e.key === 'L') toggleLog();
@@ -800,7 +864,6 @@
   function boot() {
     const ids = {
       school: '#hud-school', day: '#hud-day', time: '#hud-time', cash: '#hud-cash', ticker: '#ticker',
-      soul: '#bar-soul', happy: '#bar-happy', mono: '#bar-mono',
       objective: '#objective', feedTitle: '#feed-title', feedList: '#feed-list',
       dialogue: '#dialogue', dSpeaker: '#d-speaker', dText: '#d-text', dOptions: '#d-options',
       log: '#log', logList: '#log-list', logTitle: '#log-title', logBtn: '#btn-log',
@@ -857,6 +920,8 @@
         choose, doContinue, changeMind, endAwkward, startAct, endAct,
         jumpAct(n) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); nextSlot(); },
         get waiting() { return !!pendingContinue; },
+        bedtime() { cardOpen = false; el.card.hidden = true; bedtime(); },
+        openStory(n, i) { cardOpen = false; el.card.hidden = true; anim = null; S.storyIdx = i; openEnc({ kind: 'story', idx: i }); },
         required() { return S.current ? requiredCruelty(findEnc(S.current)) : null; },
         enc() { return S.current ? findEnc(S.current) : null; },
         openFillerById(n, id) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); const idx = C.fillers[n].findIndex((e) => e.id === id); openEnc({ kind: 'filler', idx }); },

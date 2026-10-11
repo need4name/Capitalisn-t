@@ -499,6 +499,15 @@
         g.fillStyle = '#5ad1ff'; g.fill(); ink(g, 0.4);
       }
     }
+    if (f.moustache || f.fluff) {
+      g.beginPath(); g.ellipse(X(x), X(my - 1.4 * s), X(3 * s), X(0.9 * s), 0, 0, Math.PI * 2);
+      g.fillStyle = f.fluff ? 'rgba(120,90,60,0.35)' : '#3a2a1a'; g.fill();
+    }
+    if (f.eyebags) {
+      for (const dx of [-ex, ex]) { g.beginPath(); g.moveTo(X(x + dx - 1.6 * s), X(ey + 2.8 * s)); g.quadraticCurveTo(X(x + dx), X(ey + 3.6 * s), X(x + dx + 1.6 * s), X(ey + 2.8 * s)); g.strokeStyle = 'rgba(90,40,90,0.7)'; g.lineWidth = X(0.6); g.stroke(); }
+    }
+    if (f.chalk) { g.beginPath(); g.ellipse(X(x), X(my + 1 * s), X(4.4 * s), X(2.6 * s), 0, 0, Math.PI * 2); g.fillStyle = 'rgba(255,255,255,0.65)'; g.fill(); }
+    if (f.clipboard) { rr(g, x - bw / 2 - 7 * s, hip - 8 * s, 5.5 * s, 7.5 * s, 0.6 * s); g.fillStyle = '#8a6a3a'; g.fill(); ink(g, 0.6); rr(g, x - bw / 2 - 6.4 * s, hip - 7 * s, 4.3 * s, 5.8 * s, 0.3 * s); g.fillStyle = '#fff'; g.fill(); }
     // specular rim on the head
     g.beginPath();
     g.arc(X(x), X(hy), X(headR * 0.82), Math.PI * 1.1, Math.PI * 1.45);

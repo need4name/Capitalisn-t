@@ -28,7 +28,7 @@ Then open http://localhost:8123. Opening `index.html` directly also works, but t
 
 ## Changing the story
 
-All narrative content and tuning lives in [`js/content.js`](js/content.js): encounters, characters, interludes (tannoy announcements, overheard bits), evenings at home, dialogue, prices, daily dues, the awkward-wait lines, the ending and the advert's small print. Money is in **pence** (`100` = £1). The design doc explains each system.
+All narrative content and tuning lives in [`js/content.js`](js/content.js): encounters, characters, interludes (tannoy announcements, overheard bits), evenings at home, tuck-shop improvements, dialogue, prices, daily dues, the awkward-wait lines, the ending and the advert's small print. Money is in **pence** (`100` = £1). The design doc explains each system.
 
 ## Code layout
 

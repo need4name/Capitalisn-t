@@ -9,6 +9,9 @@
   - No passive income. Money only ever comes from the player choosing to exploit someone.
   - No rewards for being good. Every option has a hidden `evil` rating (0 kind … 3 vindictive). Each school has a hidden rising `line`, and any choice below it triggers the awkward wait. Crueller pays more (vindictive is the speedrun), and Soul never goes back up. Any new encounter must rate every option and should offer a range of cruelty, including one at or above the line where it appears.
   - The game must be paced so the player can read and face the consequences: turn-based days, "Meanwhile…" beats, a home-time recap.
+  - The path of least resistance (exactly the line) should only just scrape by. Dues rise daily for a few days per school. Re-run the balance bots after changing any money (see the design doc's balance table).
+  - Tuck-shop improvements secretly change nothing: the world scales dues, prices and targets by the same multiplier. Never reveal this to the player, and write prices in text as `{dues}`/`{target}` tokens so they stay consistent.
+  - No morality meters on screen. Options are shuffled each time.
 - Story and tuning live in `js/content.js`. Prefer editing content there over hard-coding text in the engine.
 - The site (https://need4name.github.io/Capitalisn-t/) is served by GitHub Pages straight from the `claude/tuck-game` branch: pushing that branch redeploys it within a minute or two. Pages' build status shows up as the "pages build and deployment" workflow run.
 - Test with `npx http-server -p 8123 -s -c-1 .` and Playwright (`/opt/node22/lib/node_modules/playwright`). `?debug` exposes `Tuck.debug`.

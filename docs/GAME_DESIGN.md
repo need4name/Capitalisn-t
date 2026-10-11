@@ -55,23 +55,51 @@ Each school has a hidden **line**, the cruelty the world currently demands, and 
 | --- | --- |
 | St. Pete's Primary | Fair (1) for the first three days, then exploitative (2) from day 4 |
 | St. Jude's Comprehensive | Exploitative (2), then vindictive (3) from day 3 |
-| Sixth Form | Vindictive (3) from the start |
+| Sixth Form | Exploitative (2), then vindictive (3) from day 3 |
 
 An encounter never demands more than the cruellest option it actually offers, so you can never be stuck.
 
-- **At or above the line,** the choice just happens. Crueller options pay more, so **pure vindictiveness is the speedrun**: about 2 in-game days per school. Doing only what the line demands takes roughly three times as long at the first two schools (about 6 and 5 days in testing), and the line keeps dragging you upward. Going beyond what's needed is counted and shown in the final ledger.
+- **At or above the line,** the choice just happens. Crueller options pay more, so **pure vindictiveness is the speedrun**. Doing only what the line demands is deliberately *just* enough: at St. Pete's it leaves well under a pound spare at the end of most days, so the player keeps weighing whether to go one step further. Going beyond what's needed is counted and shown in the final ledger.
+- **Options are shuffled** every time an encounter appears, so the kind answer isn't always at the top and the cruel one at the bottom.
 - **Below the line,** the **awkward wait** begins. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. **Change your mind** takes you back to the choice. If you wait it out, *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
 - The total cruelty of your choices is the hidden **morality score**. The player never sees it until the final ledger, alongside "times you held back" and "times you went further than you had to".
-- A player who is always kind never leaves St. Pete's: in testing, still there on day 11 after more than a hundred awkward waits.
+- A player who is always kind never leaves St. Pete's.
+
+**Balance (tested by playing bots end to end):**
+
+| Strategy | St. Pete's | St. Jude's | Sixth Form |
+| --- | --- | --- | --- |
+| Pure vindictive | 2 days | 3 days | 3 days |
+| Only what the line demands | 7 days | 4 days | 4 days |
+| Always kind | Stuck: still at St. Pete's on day 12, frozen at the gate every night | | |
 
 ### Daily dues (the trap)
-At home time someone always wants paying: **the hall monitor (50p), Biff (£3), then the payroll (£40)**. If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal. Fair trading covers the dues, slowly, while the line allows it, and then the line rises. A player who keeps choosing decency is stuck at St. Pete's indefinitely, frozen at the gate every few days, until they face the fact that they have to sell their soul to make money.
+At home time someone always wants paying: **the hall monitor, then Biff, then the payroll**. The price **rises every day** for the first few days at each school ("the price depends"), then levels off:
 
-### Meters
-**Soul**, **Playground Happiness** and **Market Monopoly** are shown without numbers. Soul and happiness only ever go down: exploiting lowers them, and kindness never raises them again. Below 30 Soul, Tuck's eyes turn into £ signs.
+| Where | Day 1 | Rises by | Levels off after |
+| --- | --- | --- | --- |
+| St. Pete's | 60p | 20p a day | 4 days (£1.40) |
+| St. Jude's | £8 | £2 a day | 4 days (£16) |
+| Sixth Form | £60 | £20 a day | 3 days (£120) |
+
+If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal.
+
+### Bedtime: the tuck shop (the treadmill)
+After home time, if you have money left, you lie awake thinking about the business and can buy grubby "improvements". Each one has an in-world description and a consequence that turns up the next morning:
+
+| Where | Improvements |
+| --- | --- |
+| St. Pete's | A second jumper (nicked from your little brother), watered-down Ribena, "Premium" snails written on in biro |
+| St. Jude's | Eleven more pockets (sewn by Biff's nan, who thinks it's for a play), laminated prices, Biffer (Biff's cousin, or Biff in a hat) |
+| Sixth Form | Volt-Juice™ Platinum (a gold sticker), a loyalty scheme (ten stamps gets you a stamp), a consultant (Josh, who ate a book about consultancy) |
+
+Each improvement makes every deal pay about 30% more. **Hidden from the player:** the world scales every dues payment, every milestone price and every later improvement by exactly the same factor. Upgrades never make the game easier; they only ever cost what you paid for them. In testing, a player who buys everything takes longer at every school (9, 5 and 6 days) than one who buys nothing. The game never says so, and the text never contradicts it, because all prices in the text come from the same scaled numbers. Buying an improvement also counts towards the hidden cruelty score.
+
+### Hidden state
+Nothing about morality is shown on screen. **Soul**, **playground happiness** and **market monopoly** are still tracked, but there are no meters. The only visible sign is Tuck himself: below 30 Soul, his eyes turn into £ signs. Soul only ever goes down. The player sees their cash and nothing else.
 
 ### Milestones
-Each school ends with a purchase that only exploitation can afford: the **Mega-Coated Trench Coat (£6)**, the **bikeshed from the Senior Hall Monitors (£50)**, and the **five-year exclusive contract with Vice-Principal Crane (£500)**. Once the story at a school runs out, quick deals keep turning up until you can afford it.
+Each school ends with a purchase that only exploitation can afford: the **Mega-Coated Trench Coat (£6)**, the **bikeshed from the Senior Hall Monitors (£50)**, and the **five-year exclusive contract with Vice-Principal Crane (£600)**. These are the base prices; they scale secretly with tuck-shop improvements. Once the story at a school runs out, quick deals keep turning up until you can afford it.
 
 ## 3b. Tone, cast and the world being strange
 
@@ -108,7 +136,7 @@ The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're
 | --- | --- | --- | --- |
 | Ages 8–10 | St. Pete's Primary. Hand-drawn crayon on paper. | Billy and the Holo-Dragon, the plaster shortage, loot-box lunchboxes, the Swapsies fee, Biff | Buy the Mega-Coated Trench Coat and take Biff (£6) |
 | Ages 11–13 | St. Jude's Comprehensive. Crisp Y2K pixel art. | Dev's loan (200% plus his Game Boy), rain-shelter tenancy, Penny's homework factory, the flapjack/"Nibbles" smear, debt collection | Bribe the Senior Hall Monitors for the bikeshed (£50) |
-| Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£500) |
+| Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£600) |
 | The Fall | Headteacher's office. Stark cinematic realism. | Mrs Ahmed and the ledger, the audit, Biff's statement, teachers confess, Penny leaves, the assembly | Expulsion. The cycle restarts. |
 
 Transitions between schools are in-world captions ("Summer comes. Billy moves to Leicester…"), not title cards. The cut from the advert into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
@@ -134,9 +162,12 @@ Tuck sits on a wall outside the gates in the rain, assetless, watching kids play
 | **'90s TV advert** | A studio set with a rotating sunburst, floating Memphis-pattern confetti, an extruded TUCK logo and a reflective floor with a perspective grid. A hero Volt-Juice™ can sits on a pedestal with a lens flare, or the boardroom has a sunset over the school. Glossy mascot characters have big shiny eyes and fixed grins: **everybody smiles in the advert, even the crying kids**. Broadcast overlays include a TUCK TV channel bug, a NEW!/400%/FREE* starburst, scanlines, VHS tracking glitches and rotating small-print disclaimers ("*Tuck Enterprises™ accepts no liability for childhood"). |
 | **Stark realism** | One-point-perspective rooms (office, corridor, assembly hall, street at dusk) lit by cold window light and failing fluorescent tubes. Rain runs down the glass. People have realistic proportions and are drawn as backlit silhouettes with rim light, with only shadowed eye sockets for faces. Heads drop and shoulders slump when sad; arms fold when angry. Letterboxed with film grain and a vignette. The final freeze fully desaturates the frame. |
 
+### Characters match their descriptions
+Every detail the text mentions is drawn: Billy's sardine sandwich, Jade's grazed knee, Priya's sandwich, Kyle's business card, Biff's moustache, Penny's tired eyes, Mr Dobson's mop, Dinner Lady Maureen's hairnet, Callum's purple Ribena stain, Mr Grieve's burning eyebrows, the Council man's clipboard, Josh's chalky mouth, Voltage Vince's can, Gary the pigeon, and Tuck's sixth-form moustache ("mostly shadow").
+
 ## 6. Platforms and interface
 
-- **Browser game, built for iPhone first.** In portrait the layout stacks a compact HUD, the scene, the meters, the latest consequence and the story panel. In landscape and on desktop, the scene sits beside the story panel.
+- **Browser game, built for iPhone first.** In portrait the layout stacks a compact HUD (place, day, time, cash), the scene, the latest consequence and the story panel. In landscape and on desktop, the scene sits beside the story panel.
 - The camera window adapts to the stage's shape: narrow phone stages see the middle of the scene, where the characters are.
 - Tap targets are at least 44 px. The layout respects iPhone safe areas and the notch. Keyboard hints only appear on devices with a keyboard.
 - **Home-screen app:** a web app manifest, icons and a service worker mean it can be added to the home screen, runs full-screen and works offline after the first visit. In home-screen mode the game sizes itself to the physical screen, because iOS otherwise reports a viewport one status bar short and leaves a gap at the bottom.
@@ -149,7 +180,7 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 
 | File | Role |
 | --- | --- |
-| `js/content.js` | All story, dialogue, characters, interludes, evenings, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
+| `js/content.js` | All story, dialogue, characters, interludes, evenings, tuck-shop improvements, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
 | `js/game.js` | Turn-based state machine: day moments, encounters, the awkward wait, consequences, home-time dues, school transitions, ending. |
 | `js/render.js` | Core renderer (crayon and pixel styles), camera window, compositing, rain, freeze desaturation. |
 | `js/render-ad.js` | The '90s advert style (sets, mascots, broadcast overlays). |
@@ -159,6 +190,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v6:** Rebalanced so that doing only what the line demands is just about enough to scrape by. Dues now rise daily for the first few days at each school, then level off. The Sixth Form line starts at exploitative. St. Jude's quick deals gained vindictive options. Added the bedtime tuck shop: immoral improvements that secretly don't help, because the world scales to match. Options are now shuffled. Removed the Soul, Happiness and Monopoly meters from the screen. Characters now visibly match their descriptions. Milestone and dues amounts in the text are generated from the scaled numbers.
 
 - **v5:** Added the hidden morality score. Every option has a cruelty rating (kind / fair / exploitative / vindictive), and each school has a hidden line that rises over time (fair at first, then exploitative, then vindictive). Only choices below the line trigger the awkward wait. Crueller pays more, so pure vindictiveness is the speedrun, and holding back takes longer. New vindictive and fair options were written across the story and quick deals. The final ledger now shows cruelty, times held back, and times you went further than you had to. Fixed the bottom gap on iPhone home-screen apps. Billy is always the first encounter.
 

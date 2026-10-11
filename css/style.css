@@ -47,8 +47,8 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
   position: fixed; inset: 0;
   display: grid;
   grid-template-columns: 100%;
-  grid-template-rows: auto auto auto auto minmax(0, 1fr);
-  grid-template-areas: "hud" "stage" "meters" "ticker" "panel";
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  grid-template-areas: "hud" "stage" "ticker" "panel";
   padding: calc(var(--safe-t) + 6px) calc(var(--safe-r) + 8px) calc(var(--safe-b) + 8px) calc(var(--safe-l) + 8px);
   gap: 6px;
   background: var(--bg);
@@ -57,7 +57,6 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 
 #hud { grid-area: hud; }
 #stage-wrap { grid-area: stage; }
-#meters { grid-area: meters; }
 #ticker { grid-area: ticker; }
 #panel { grid-area: panel; }
 
@@ -65,8 +64,8 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 @media (min-aspect-ratio: 5/4) {
   #game {
     grid-template-columns: minmax(0, 1.75fr) minmax(300px, 1fr);
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
-    grid-template-areas: "hud hud" "stage panel" "meters panel" "ticker panel";
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas: "hud hud" "stage panel" "ticker panel";
     padding: calc(var(--safe-t) + 10px) calc(var(--safe-r) + 12px) calc(var(--safe-b) + 10px) calc(var(--safe-l) + 12px);
     gap: 8px 12px;
   }
@@ -102,7 +101,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 
 /* ---------------- stage ---------------- */
 #stage-wrap {
-  position: relative; width: 100%; height: min(36dvh, 78vw); justify-self: center;
+  position: relative; width: 100%; height: min(40dvh, 80vw); justify-self: center;
   border: var(--bw) solid var(--line); border-radius: var(--radius); overflow: hidden;
   background: var(--stage-bg); box-shadow: var(--shadow);
 }
@@ -408,3 +407,6 @@ body.style-pixel #log-list li { border-bottom-color: rgba(63, 240, 255, 0.3); }
 .home-list { margin: 12px 0; padding-left: 1.1em; }
 .home-list li { margin: 8px 0; }
 .card-home .evening { margin-top: 14px; padding-top: 12px; border-top: 1px dashed currentColor; font-style: italic; opacity: 0.85; }
+
+.card-shop .card-buttons { flex-direction: column; align-items: stretch; }
+.card-shop .card-buttons button { min-width: 0; }
