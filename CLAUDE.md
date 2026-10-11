@@ -4,6 +4,11 @@
 - Keep the README in step with how to run and edit the game.
 - Never show act numbers or act titles to the player. Progression must feel organic: use in-world captions and locations instead. The `title`/`ages` fields in `js/content.js` are internal only.
 - The game must stay playable on iPhone in portrait. Check the layout at 390×844 with touch after any UI change.
+- Core design intent (from the owner), not to be undone:
+  - Never explain the morality to the player: no tutorial text, and no labels on choices (no "decent/exploit" tags, no money previews).
+  - No passive income. Money only ever comes from the player choosing to exploit someone.
+  - No rewards for being good. Decent choices trigger the awkward wait and pay nothing, and Soul never goes back up.
+  - The game must be paced so the player can read and face the consequences: turn-based days, "Meanwhile…" beats, a home-time recap.
 - Story and tuning live in `js/content.js`. Prefer editing content there over hard-coding text in the engine.
 - The site (https://need4name.github.io/Capitalisn-t/) is served by GitHub Pages straight from the `claude/tuck-game` branch: pushing that branch redeploys it within a minute or two. Pages' build status shows up as the "pages build and deployment" workflow run.
 - Test with `npx http-server -p 8123 -s -c-1 .` and Playwright (`/opt/node22/lib/node_modules/playwright`). `?debug` exposes `Tuck.debug`.

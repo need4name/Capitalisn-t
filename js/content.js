@@ -6,9 +6,11 @@
  * Money is always in PENCE (100 = £1).
  *
  * Option types:
- *   exploit   – always allowed. The market rewards you.
- *   decent    – only allowed if (cash + option.cash) stays at or above the day's
- *               QUOTA. Otherwise: Stagnation Freeze.
+ *   exploit   – works immediately. Money, a fanfare, and a consequence that
+ *               comes back to you later ("Meanwhile…" and at home time).
+ *   decent    – triggers the awkward wait: time stops and nothing happens for
+ *               an uncomfortably long time. Then the moment passes, the decent
+ *               thing happens, and you get no money and no reward.
  *   futile    – Act 4 only. Costs money, changes nothing.
  *   milestone – ends the act. Needs option.cost in cash.
  *   later     – snooze the milestone for an hour.
@@ -67,19 +69,14 @@
       ages: 'Ages 8–10',
       style: 'crayon',
       bg: 'playground',
-      target: 1000,
-      quotaBase: 100,
-      quotaStep: 50,
-      overhead: 0,
-      rate: 3, // game minutes per real second
+      target: 600,
+      dues: 50, // owed every day at home time
+      duesWho: 'the hall monitor',
+      broke: 'The hall monitor is waiting at the gate with his hand out. He wants 50p. You have {cash}. The bell doesn’t ring. Nobody goes home.',
+      paid: 'Gave the hall monitor 50p at the gate. Nobody knows why.',
       start: 605, // 10:05 on day one
-      firstAt: 615, // 10:15 — Billy
-      gap: 30,
-      fillerGap: 40,
       feedTitle: 'Things That Happened',
-      quotaWhy: 'the hall monitor wants paying',
-      objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. Ten pounds.',
-      startVentures: ['snails'],
+      objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. Six quid.',
       outro: [
         'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you.',
         'The coat comes with you to big school. So does Biff.',
@@ -88,7 +85,7 @@
         "St. Pete's Primary. Morning break.",
         'This is Tucker. Everyone calls him Tuck. Mismatched shoes — one red, one a different red. Navy shorts in a school of grey trousers.',
         "Rolled inside his jumper: eleven Gummy Snails, liberated from his nan's handbag.",
-        'The hall monitor wants £1 by lunch. Nobody knows why. That is just how it is.',
+        'The hall monitor wants 50p every day by home time. Nobody knows why. That is just how it is.',
       ],
     },
     2: {
@@ -99,24 +96,18 @@
       ages: 'Ages 11–13',
       style: 'pixel',
       bg: 'corridor',
-      target: 10000,
-      quotaBase: 800,
-      quotaStep: 500,
-      overhead: 300,
-      overheadWhy: "Biff's wages",
+      target: 5000,
+      dues: 300,
+      duesWho: 'Biff',
+      broke: 'Biff is waiting by the gates. Biff is on £3 a day. You have {cash}. Biff doesn’t go home until he’s paid, and neither do you.',
+      paid: 'Paid Biff his £3. He counted it twice.',
       outro: [
         'Three years go by the way three years do at that age: all at once, and then forever.',
         'You stop selling things. You start owning the things other people sell.',
       ],
-      rate: 3,
       start: 530,
-      firstAt: 545,
-      gap: 30,
-      fillerGap: 40,
       feedTitle: 'Gossip',
-      quotaWhy: 'Biff needs to see the money',
-      objective: 'The Senior Hall Monitors run the bikeshed. Word is they’d sell it for £100.',
-      startVentures: [],
+      objective: 'The Senior Hall Monitors run the bikeshed. Word is they’d sell it for fifty quid.',
       intro: [
         "St. Jude's Comprehensive. 1,400 pupils. One working radiator.",
         'Tuck is eleven now. The coat is still enormous. It is a statement. The statement is: inside this coat there are things you want.',
@@ -131,23 +122,17 @@
       ages: 'Ages 14–16',
       style: 'ad',
       bg: 'sixth',
-      target: 100000,
-      quotaBase: 8000,
-      quotaStep: 5000,
-      overhead: 4000,
-      overheadWhy: 'staff retainers',
+      target: 50000,
+      dues: 4000,
+      duesWho: 'the payroll',
+      broke: 'Biff, Gavin and Mr Pembleton are waiting outside your office. Between them they’re owed £40 a day. You have {cash}. Nobody leaves until everybody’s paid.',
+      paid: 'Paid out £40 in retainers: Biff, Gavin, and an envelope for Mr Pembleton.',
       outro: [
         'The confetti is still coming down when the picture cuts out.',
       ],
-      rate: 3,
       start: 530,
-      firstAt: 545,
-      gap: 30,
-      fillerGap: 40,
       feedTitle: 'Stakeholder Updates',
-      quotaWhy: 'the shareholders (Biff) expect liquidity',
-      objective: 'Mr Crane keeps mentioning an envelope. A thousand pounds would fill it.',
-      startVentures: [],
+      objective: 'Mr Crane keeps mentioning an envelope. Five hundred pounds would fill it.',
       intro: [
         'TUCK ENTERPRISES™. Est. Year 9. Now with a Sixth Form Campus Division!',
         "Tuck doesn't deal any more. He has a digital organiser, a mission statement, and a moustache he's very proud of. It's mostly shadow.",
@@ -163,91 +148,15 @@
       style: 'real',
       bg: 'office',
       target: 0,
-      quotaBase: 0,
-      quotaStep: 0,
-      overhead: 0,
-      rate: 0.6,
+      dues: 0,
       start: 552,
-      firstAt: 556,
-      gap: 4,
       noDayEnd: true,
-      noLedger: true,
       feedTitle: 'Evidence',
       objective: '',
-      startVentures: [],
       intro: [
         "Monday. It's raining. It has always been raining. You just couldn't see it from inside the advert.",
         "Dev's mum found the ledger, in the inside pocket of the coat you left in lost property. It has everyone's name in it. Some names more than once.",
       ],
-    },
-  };
-
-  /* ------------------------------------------------------------------ */
-  /* Ventures — passive income bought from the Ledger                   */
-  /* yield is pence per in-game hour                                    */
-  /* ------------------------------------------------------------------ */
-  const ventures = {
-    snails: {
-      act: 1, name: 'Jumper Stall', cost: 0, yield: 15,
-      blurb: 'Gummy Snails from a rolled-up jumper. Overheads: one nan.',
-      ext: ['A Year 3 spent his bus fare on Gummy Snails and walked home.', 'Two Gummy Snails have been found fused to the inside of a reading folder.'],
-    },
-    ufo: {
-      act: 1, name: 'UFO Snaps Resale', cost: 200, yield: 30,
-      blurb: 'Buy them at 2p from the corner shop. Sell them at 10p from behind the climbing frame.',
-      ext: ['A Year 4 ate nineteen UFO Snaps and was sent home "fizzing".', 'The corner shop has started a one-child-at-a-time rule. It is aimed at you.'],
-    },
-    loot: {
-      act: 1, name: 'Loot-Box Lunchboxes', cost: 350, yield: 50,
-      blurb: 'Mystery lunches. 1-in-500 chance of a Wagon Wheel. There is no Wagon Wheel.',
-      ext: ['Ollie in Year 4 has opened fourteen lunchboxes. Fourteen carrots.', 'A Year 5 sold his bike to fund his lunchbox habit. He is ten.'],
-    },
-    plasters: {
-      act: 1, name: 'Plaster Monopoly', cost: 500, yield: 80,
-      blurb: 'You own every plaster within a mile. Nurse Pat does not.',
-      ext: ['Nurse Pat now describes grazes as "character building".', 'A Year 1 used a crisp packet as a bandage. It was salt and vinegar.'],
-    },
-
-    pawn: {
-      act: 2, name: 'Pawn Desk', cost: 1000, yield: 150,
-      blurb: 'Game Boys, Tamagotchis and one confused hamster, held as collateral.',
-      ext: ["Somebody's Tamagotchi died in your locker. You sold the corpse back to them.", 'A Year 8 pawned his grandad’s watch. The grandad has not been told.'],
-    },
-    loans: {
-      act: 2, name: 'Loan Book (200% APR)', cost: 1500, yield: 250,
-      blurb: 'Dinner money advances. Biff handles customer services.',
-      ext: ['Three Year 7s are skipping lunch to make repayments.', 'A Year 9 asked what APR stands for. Biff said "Always Pay, Right?"'],
-    },
-    shelter: {
-      act: 2, name: 'Rain Shelter Lettings', cost: 2500, yield: 400,
-      blurb: 'Dry space under the science block overhang. 50p per ten minutes.',
-      ext: ['Thirty Year 7s sat through Maths soaking wet. The radiator was on. It still doesn’t work.', 'Two Year 8s have developed what the nurse calls "a proper cough".'],
-    },
-    homework: {
-      act: 2, name: 'Homework Factory', cost: 4000, yield: 650,
-      blurb: 'Penny writes it. You sell it. Penny gets "exposure".',
-      ext: ['Penny fell asleep in Chemistry. She got a detention for "attitude".', 'Penny has written 212 essays this term. None of them are hers.'],
-    },
-
-    autodebt: {
-      act: 3, name: 'Automated Debt Collection', cost: 10000, yield: 1500,
-      blurb: 'Your digital organiser beeps at debtors. Biff follows the beep.',
-      ext: ['The beep has been reported in three separate wellbeing surveys.', 'A Year 10 hears the organiser beep in his sleep.'],
-    },
-    volt: {
-      act: 3, name: 'Volt-Juice™ Distribution', cost: 15000, yield: 2200,
-      blurb: 'Now with 400% more volt. What is volt? Shut up.',
-      ext: ['The nurse is keeping a tally of palpitations on a Volt-Juice can. It’s on 41.', 'The Year 11 rowing team has been banned from caffeine. They’re a rowing team.'],
-    },
-    guides: {
-      act: 3, name: 'Bootleg Revision Guides', cost: 20000, yield: 3200,
-      blurb: 'Photocopied from textbooks the school already owns. £15 each.',
-      ext: ['The library’s copy of the textbook is missing pages 40–212. They’re in your guides.', 'Mr Pembleton now eats lunch in his car. It is very cold in his car.'],
-    },
-    exams: {
-      act: 3, name: 'Exam Ring', cost: 35000, yield: 5200,
-      blurb: 'Someone in the exams office has a key and a gambling problem.',
-      ext: ['The exam board is "looking into" a statistically poetic set of results.', 'A Year 11 who studied honestly came last in her class. She is reconsidering studying.'],
     },
   };
 
@@ -262,7 +171,7 @@
         speaker: 'billy',
         text: 'Little Billy is on the damp bench, crying into a sardine paste sandwich. His mum cut the crusts off. It didn’t help. He is looking at your Gummy Snail the way men in films look at the sea.',
         line: 'Tuck… can I have your snail? I’ve got 50p.',
-        freeze: 'The hall monitor needs £1 by lunch and fairness only gets you to {after}. The rain starts. The clock stops at {time}. The world, it seems, will wait for you to be reasonable.',
+        awkward: 'Billy looks at you. You look at Billy. It starts to rain. The clock above the door stops at {time}. Neither of you moves.',
         options: [
           { type: 'decent', label: '“50p. Fair’s fair.”', cash: 50, result: 'Billy hands over a warm 50p and eats the snail slowly, like it’s the last good thing that will ever happen to him.' },
           { type: 'decent', label: '“Have it. It’s only a snail.”', cash: 0, soul: 3, result: 'Billy stops crying. He says thank you four times. You feel something warm in your chest. It doesn’t pay the hall monitor.' },
@@ -597,9 +506,9 @@
       scene: { bg: 'shed', cast: ['leaver'] },
       speaker: 'leaver',
       text: 'Behind the sports shed, a Year 6 leaver is selling a Mega-Coated Trench Coat. It is enormous. It has eleven inside pockets. It smells of Lynx Africa and ambition.',
-      line: 'Tenner. And I’ll throw in Biff. He follows the coat.',
+      line: 'Six quid. And I’ll throw in Biff. He follows the coat.',
       options: [
-        { type: 'milestone', label: 'Buy the coat. Hire Biff as security. (£10)', cost: 1000, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
+        { type: 'milestone', label: 'Buy the coat. Take Biff. (£6)', cost: 600, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -608,9 +517,9 @@
       scene: { bg: 'bikeshed', cast: ['gavin'] },
       speaker: 'gavin',
       text: 'The Senior Hall Monitors control the bikeshed: the only covered, unsupervised, teacher-blind square metre at St. Jude’s. Head Monitor Gavin wears his sash like a war medal.',
-      line: 'A hundred quid, Tucker, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
+      line: 'Fifty quid, Tucker, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
       options: [
-        { type: 'milestone', label: 'Pay Gavin. Take the bikeshed. (£100)', cost: 10000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
+        { type: 'milestone', label: 'Pay Gavin. Take the bikeshed. (£50)', cost: 5000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -618,10 +527,10 @@
       id: 'contract',
       scene: { bg: 'office', cast: ['crane'] },
       speaker: 'crane',
-      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He would like £1,000. He has brought an envelope.',
+      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He would like £500. He has brought an envelope.',
       line: 'Just sign here, Tucker. And here. And initial there. Lovely pen, isn’t it?',
       options: [
-        { type: 'milestone', label: 'Sign the five-year exclusive contract. (£1,000)', cost: 100000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
+        { type: 'milestone', label: 'Sign the five-year exclusive contract. (£500)', cost: 50000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
         { type: 'later', label: '“Not yet.”' },
       ],
     },
@@ -629,7 +538,7 @@
 
   /* ------------------------------------------------------------------ */
   /* Fillers — repeatable quick deals once the story for an act is done */
-  /* (also used to escape a day-end quota freeze)                       */
+  /* (also used to find the money when you can't pay at home time)    */
   /* ------------------------------------------------------------------ */
   const fillers = {
     1: [
@@ -738,7 +647,7 @@
       lines: [
         'It is {time}. It was {time} a moment ago.',
         'Still {time}. The second hand twitches, as if it wants to say something, then thinks better of it.',
-        'It will be {time} for as long as you insist on being nice.',
+        'It is {time}. It has been {time} for quite a while now.',
       ],
     },
     {
@@ -804,5 +713,26 @@
     '*No hamsters were harmed. One hamster was defamed.',
   ];
 
-  T.content = { people, tuckLook, acts, ventures, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers };
+  /* The awkward wait after a decent choice. {name} is whoever you're with. */
+  const awkward = {
+    open: [
+      '{name} looks at you. You look at {name}. Nobody says anything.',
+      'There is a pause. It goes on slightly too long. Then it keeps going.',
+      'Nothing happens. You had expected something to happen.',
+      'The clock above the door stops at {time}. Nobody else seems to notice.',
+    ],
+    // drift into the log while you wait, whether you do anything or not
+    beats: [
+      '{name} shifts from one foot to the other.',
+      'Somewhere, a bell should be ringing. It isn’t.',
+      'A crisp packet blows past. It doesn’t come back.',
+      '{name} clears their throat, then thinks better of it.',
+      'You become aware of your own hands.',
+      'It is still {time}.',
+      'Somebody, somewhere, is making money. It isn’t you.',
+    ],
+    passes: 'Eventually, the moment passes.',
+  };
+
+  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward };
 })();

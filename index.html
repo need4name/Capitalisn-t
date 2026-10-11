@@ -26,14 +26,9 @@
         <span id="hud-day"></span>
       </div>
       <div id="hud-time"></div>
-      <div class="hud-money">
-        <span id="hud-cash"></span>
-        <span class="hud-q">quota <b id="hud-quota"></b></span>
-        <span id="hud-surplus"></span>
-      </div>
+      <div id="hud-cash"></div>
       <div class="hud-buttons">
-        <button id="btn-ledger" type="button" aria-label="Ledger">£</button>
-        <button id="btn-speed" type="button" aria-label="Game speed">1×</button>
+        <button id="btn-log" type="button" aria-label="What happened">≡</button>
         <button id="btn-mute" type="button" aria-label="Mute" aria-pressed="false">♪</button>
       </div>
     </header>
@@ -59,7 +54,6 @@
       </section>
 
       <section id="freeze" hidden aria-live="polite">
-        <h2>STAGNATION</h2>
         <p id="f-reason"></p>
         <p id="f-hint"></p>
         <div id="f-idle"></div>
@@ -74,12 +68,12 @@
       </section>
     </section>
 
-    <section id="ledger" hidden>
-      <div class="ledger-head">
-        <h2>The Ledger</h2>
-        <button id="ledger-close" type="button" aria-label="Close ledger">×</button>
+    <section id="log" hidden>
+      <div class="log-head">
+        <h2 id="log-title">What happened</h2>
+        <button id="log-close" type="button" aria-label="Close">×</button>
       </div>
-      <div id="ledger-body"></div>
+      <ol id="log-list"></ol>
     </section>
 
     <section id="card" class="card" hidden></section>

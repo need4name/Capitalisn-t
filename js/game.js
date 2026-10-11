@@ -1,11 +1,16 @@
 /*
  * TUCK — game state machine.
  *
- * Core loop: the school clock runs, ventures pay out, encounters arrive.
- * Exploitative options always work. Decent options only work if you can
- * stay above the day's QUOTA afterwards — otherwise time stops (Stagnation
- * Freeze) until you reconsider. Surplus cash above the quota is what buys
- * the occasional kindness.
+ * Turn-based school days: morning break, lunch, afternoon break, home time.
+ * The clock only moves when the player carries on, so there is always time
+ * to read what just happened.
+ *
+ * Money only comes from choices. Exploiting someone pays immediately, and the
+ * consequence comes back later: as a "Meanwhile…" scene before the next
+ * encounter, and in the home-time recap. Choosing the decent thing pays
+ * nothing and earns nothing: time stops for an awkward, open-ended wait, then
+ * the moment passes. Every day ends with dues to pay. If you can't pay, nobody
+ * goes home until you find the money.
  */
 (function () {
   const T = window.Tuck;
@@ -14,18 +19,24 @@
   const A = T.audio;
 
   const DAY_START = 530; // 08:50
-  const DAY_END = 930; // 15:30
-  const DAYS = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
-  const SAVE_KEY = 'tuck-save-v1';
-  const SPEEDS = [1, 2, 4];
+  const SLOTS = [
+    { t: 615, label: 'Morning break.' },
+    { t: 750, label: 'Lunch.' },
+    { t: 860, label: 'Afternoon break.' },
+  ];
+  const HOME_T = 925; // 15:25
+  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
+  const SAVE_KEY = 'tuck-save-v2';
+  const AWKWARD_MS = 22000; // how long the decent choice leaves you standing there
+  const BEAT_MS = 5200; // how often the awkward wait drifts a line into the log
 
   const $ = (s) => document.querySelector(s);
   const el = {};
   let S = null;
-  let speedIdx = 0;
-  let resultPending = null; // { enc, opt } while showing a result
   let cardOpen = false;
-  let finalTimer = null;
+  let pendingContinue = null; // what "Carry on" does right now
+  let anim = null; // clock animation between beats
+  let awkwardTimer = null, beatTimer = null, finalTimer = null;
 
   /* ---------------- helpers ---------------- */
   function fmt(p) {
@@ -44,13 +55,9 @@
   }
   const act = () => C.acts[S.act];
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  function quota() {
-    const a = act();
-    return a.quotaBase + a.quotaStep * (S.day - 1);
-  }
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
   function fill(str, extra = {}) {
     return str.replace(/\{(\w+)\}/g, (_, k) => {
-      if (k === 'quota') return fmt(quota());
       if (k === 'cash') return fmt(S.cash);
       if (k === 'time') return clock(S.minute);
       if (k in extra) return extra[k];
@@ -63,18 +70,18 @@
 
   function newState(gen = 1) {
     return {
-      v: 1, gen,
-      act: 1, day: 1, minute: 600, cash: 0,
+      v: 2, gen,
+      act: 1, day: 1, slot: 0, minute: 605, cash: 0,
       soul: 100, happy: 100, mono: 5,
-      storyIdx: 0, nextAt: 615, ventures: {}, flags: {},
-      feed: [], feedQueue: [],
-      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0 },
-      current: null, freeze: null, milestoneSnooze: 0,
-      incomeAcc: 0, extAcc: 0, dayStartCash: 0, phase: 'title',
+      storyIdx: 0, flags: {},
+      feed: [], later: [], home: [],
+      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0 },
+      current: null, freeze: null, phase: 'title', lastFiller: -1,
     };
   }
 
   /* ---------------- save / load ---------------- */
+  // Saved at the start of each day.
   function save() {
     if (!S || S.act >= 4) return;
     try {
@@ -113,13 +120,10 @@
     if (sc.tuckSad) tuck.mood = 'sad';
     if (sc.tuckSit) tuck.sitting = true;
     let cast = (sc.cast || []).map(person).filter(Boolean);
-    if (extra.reaction) {
-      // faces change once a choice lands
-      const r = extra.reaction;
-      if (r === 'exploit') { tuck.mood = S.act >= 4 ? 'sad' : 'smug'; cast = cast.map((c) => Object.assign(c, { mood: c.adult ? 'sad' : 'crying' })); }
-      if (r === 'decent') cast = cast.map((c) => Object.assign(c, { mood: 'happy' }));
-      if (r === 'decent') tuck.mood = 'happy';
-    }
+    const r = extra.reaction;
+    if (r === 'exploit') { tuck.mood = S.act >= 4 ? 'sad' : 'smug'; cast.forEach((c) => (c.mood = c.adult ? 'sad' : 'crying')); }
+    if (r === 'decent') cast.forEach((c) => (c.mood = 'happy'));
+    if (r === 'aftermath') cast.forEach((c) => (c.mood = c.adult ? 'sad' : 'crying'));
     return Object.assign({
       style,
       bg: sc.bg || a.bg,
@@ -145,42 +149,20 @@
   function hud() {
     const a = act();
     el.school.textContent = window.innerWidth < 560 ? (a.short || a.school) : a.school;
-    el.day.textContent = S.act < 4 ? `${DAYS[(S.day - 1) % 5]} · day ${S.day}` : 'Monday';
+    el.day.textContent = S.act < 4 ? DAYS[(S.day - 1) % 5] : 'Monday';
     el.time.textContent = clock(S.minute);
     el.time.classList.toggle('frozen', !!S.freeze);
     el.cash.textContent = fmt(S.cash);
-    if (S.act < 4) {
-      const q = quota();
-      el.quota.textContent = fmt(q);
-      const surplus = S.cash - q;
-      el.surplus.textContent = surplus >= 0 ? `+${fmt(surplus)} spare` : `${fmt(-surplus)} short`;
-      el.surplus.className = surplus >= 0 ? 'ok' : 'short';
-    } else {
-      el.quota.textContent = '—';
-      el.surplus.textContent = 'assets frozen';
-      el.surplus.className = 'short';
-    }
     el.soul.style.width = clamp(S.soul, 0, 100) + '%';
     el.happy.style.width = clamp(S.happy, 0, 100) + '%';
     el.mono.style.width = clamp(S.mono, 0, 100) + '%';
-    el.objective.textContent = objectiveText();
-    el.ledgerBtn.disabled = !!a.noLedger;
     el.feedTitle.textContent = a.feedTitle;
-    if (!el.ledger.hidden) renderLedger();
-  }
-  function objectiveText() {
-    const a = act();
-    if (S.act >= 4) return a.objective;
-    const done = storyDone();
-    if (!done) return a.objective;
-    if (S.cash >= a.target) return 'You can afford it now. Somebody will find you.';
-    return a.objective + ' (The £ ledger has ways to make money while you’re busy.)';
   }
 
-  /* ---------------- feed ---------------- */
+  /* ---------------- feed (the log) ---------------- */
   function pushFeed(text, cls = '') {
-    S.feed.unshift({ t: clock(S.minute), text, cls });
-    S.feed = S.feed.slice(0, 40);
+    S.feed.unshift({ t: `${S.act < 4 ? DAYS[(S.day - 1) % 5].slice(0, 3) : 'Mon'} ${clock(S.minute)}`, text, cls });
+    S.feed = S.feed.slice(0, 80);
     renderFeed(true);
     if (cls !== 'sep') {
       el.ticker.textContent = text;
@@ -190,12 +172,16 @@
     }
   }
   function renderFeed(fresh) {
-    el.feedList.innerHTML = S.feed
+    const html = S.feed
       .map((f, i) => `<li class="${f.cls}${fresh && i === 0 ? ' new' : ''}"><time>${f.t}</time>${esc(f.text)}</li>`)
       .join('');
+    el.feedList.innerHTML = html;
+    el.logList.innerHTML = html || '<li class="biz">Nothing yet.</li>';
   }
-  function queueFeed(lines, delay = 12) {
-    (lines || []).forEach((text, i) => S.feedQueue.push({ at: S.minute + delay + i * 20, text }));
+  function toggleLog(force) {
+    const show = force != null ? force : el.log.hidden;
+    el.log.hidden = !show;
+    if (show) { el.logTitle.textContent = act().feedTitle; renderFeed(); }
   }
 
   /* ---------------- fanfare popups ---------------- */
@@ -215,14 +201,82 @@
     });
   }
 
+  /* ---------------- panel helpers ---------------- */
+  function showPanel(which) {
+    el.dialogue.hidden = which !== 'dialogue';
+    el.freeze.hidden = which !== 'freeze';
+  }
+  // A single "Carry on" beat in the story panel.
+  function beat({ speaker = '', kicker = '', html, label = 'Carry on', then }) {
+    el.dSpeaker.textContent = speaker;
+    el.dText.innerHTML = (kicker ? `<p class="kicker">${esc(kicker)}</p>` : '') + html;
+    el.dOptions.innerHTML = '';
+    const b = document.createElement('button');
+    b.className = 'opt opt-continue';
+    b.innerHTML = `<span class="lbl">${esc(label)}</span>`;
+    b.addEventListener('click', () => doContinue());
+    el.dOptions.appendChild(b);
+    pendingContinue = then;
+    el.dialogue.classList.add('result');
+    showPanel('dialogue');
+    el.dialogue.scrollTop = 0;
+  }
+  function doContinue() {
+    if (!pendingContinue) return;
+    const fn = pendingContinue;
+    pendingContinue = null;
+    A.click();
+    fn();
+  }
+
+  /* ---------------- time ---------------- */
+  // Move the clock forward to `to`, visibly, then carry on.
+  function passTime(to, then) {
+    showPanel(null);
+    pendingContinue = null;
+    showScene(null);
+    const from = S.minute;
+    if (to <= from) { then(); return; }
+    anim = { from, to, t: 0, dur: Math.min(1.8, 0.5 + (to - from) / 120), then };
+  }
+  function tick(dt) {
+    if (!anim) return;
+    anim.t += dt;
+    const k = Math.min(1, anim.t / anim.dur);
+    S.minute = Math.round(anim.from + (anim.to - anim.from) * (1 - Math.pow(1 - k, 2)));
+    hud();
+    if (R.view.bg === 'corridor' || R.view.bg === 'office') R.setView({ minute: S.minute });
+    if (k >= 1) { const fn = anim.then; anim = null; fn(); }
+  }
+
+  // The next thing that happens today.
+  function nextSlot() {
+    if (act().noDayEnd) {
+      if (storyRemaining()) passTime(S.minute + 9, () => meanwhile(openNext));
+      return;
+    }
+    if (S.slot >= SLOTS.length) { passTime(HOME_T, homeTime); return; }
+    const slot = SLOTS[S.slot++];
+    el.objective.textContent = slot.label;
+    passTime(slot.t, () => meanwhile(openNext));
+  }
+
+  // Consequences that were waiting for you.
+  function meanwhile(then) {
+    const c = S.later.shift();
+    if (!c) { then(); return; }
+    pushFeed(c.text);
+    showScene({ scene: { bg: c.bg, cast: c.cast, noTuck: true, rain: S.act < 3 } }, { reaction: 'aftermath' });
+    beat({ kicker: 'Meanwhile', html: `<p class="narr">${esc(c.text)}</p>`, then: () => meanwhile(then) });
+  }
+
   /* ---------------- encounters ---------------- */
   function storyList() { return C.story[S.act] || []; }
-  function storyDone() {
+  function skipUnmet() {
     const list = storyList();
-    let i = S.storyIdx;
-    while (i < list.length && list[i].if && !list[i].if(S)) i++;
-    return i >= list.length;
+    while (S.storyIdx < list.length && list[S.storyIdx].if && !list[S.storyIdx].if(S)) S.storyIdx++;
   }
+  function storyRemaining() { skipUnmet(); return S.storyIdx < storyList().length; }
   function findEnc(ref) {
     if (!ref) return null;
     if (ref.kind === 'story') return storyList()[ref.idx];
@@ -230,12 +284,11 @@
     if (ref.kind === 'filler') return C.fillers[S.act][ref.idx];
     return null;
   }
-
-  function spawnNext() {
-    const list = storyList();
-    while (S.storyIdx < list.length && list[S.storyIdx].if && !list[S.storyIdx].if(S)) S.storyIdx++;
-    if (S.storyIdx < list.length) return openEnc({ kind: 'story', idx: S.storyIdx });
-    if (C.fillers[S.act]) return openFiller();
+  function openNext() {
+    if (storyRemaining()) return openEnc({ kind: 'story', idx: S.storyIdx });
+    const ms = C.milestones[S.act];
+    if (ms && S.cash >= act().target) return openEnc({ kind: 'milestone' });
+    openFiller();
   }
   function openFiller(rescue) {
     const fl = C.fillers[S.act];
@@ -245,7 +298,6 @@
     S.lastFiller = idx;
     openEnc({ kind: 'filler', idx, rescue: !!rescue });
   }
-
   function openEnc(ref) {
     S.current = ref;
     const enc = findEnc(ref);
@@ -253,99 +305,83 @@
     renderDialogue(enc);
   }
 
-  function optionTag(o) {
-    if (o.type === 'exploit') return o.cash ? `<span class="tag ex">${o.cash > 0 ? '+' : ''}${fmt(o.cash)}</span>` : '<span class="tag ex">Profitable</span>';
-    if (o.type === 'decent') {
-      const after = S.cash + (o.cash || 0);
-      const ok = after >= quota();
-      let t = `<span class="tag de">Decent${o.cash ? ' · ' + (o.cash > 0 ? '+' : '') + fmt(o.cash) : ''}</span>`;
-      if (S.flags.learnedFreeze && !ok) t += '<span class="tag warn">Can’t afford decency</span>';
-      if (S.flags.learnedFreeze && ok) t += '<span class="tag ok">Affordable</span>';
-      return t;
-    }
-    if (o.type === 'milestone') return `<span class="tag ms">${fmt(o.cost)}</span>`;
-    if (o.type === 'futile' && o.cash) return `<span class="tag fu">${fmt(o.cash)}</span>`;
-    return '';
-  }
-
   function renderDialogue(enc) {
-    resultPending = null;
+    pendingContinue = null;
     const sp = C.people[enc.speaker];
     el.dSpeaker.textContent = sp ? sp.name : '';
     el.dText.innerHTML = `<p class="narr">${esc(fill(enc.text))}</p>` + (enc.line ? `<p class="line">“${esc(enc.line.replace(/^“|”$/g, ''))}”</p>` : '');
     el.dOptions.innerHTML = '';
     enc.options.forEach((o, i) => {
       const b = document.createElement('button');
-      b.className = 'opt opt-' + o.type;
-      const tags = optionTag(o);
-      b.innerHTML = `<kbd>${i + 1}</kbd><span class="lbl">${esc(o.label)}</span>${tags ? `<span class="tags">${tags}</span>` : ''}`;
+      b.className = 'opt';
+      b.innerHTML = `<kbd>${i + 1}</kbd><span class="lbl">${esc(o.label)}</span>`;
       if (o.type === 'milestone' && S.cash < o.cost) b.disabled = true;
       b.addEventListener('click', () => choose(i));
       el.dOptions.appendChild(b);
     });
-    el.dialogue.hidden = false;
     el.dialogue.classList.remove('result');
+    showPanel('dialogue');
     el.dialogue.scrollTop = 0;
   }
 
-  function apply(o) {
-    const d = o.cash || 0;
-    S.cash = Math.max(0, S.cash + d);
-    if (o.type === 'exploit') {
-      if (d > 0) S.stats.extracted += d;
-      S.stats.harmed++;
-      S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
-    }
-    if (o.type === 'futile' && d < 0) S.stats.wasted += -d;
-    S.soul = clamp(S.soul + (o.soul || 0), 0, 100);
-    S.happy = clamp(S.happy + (o.happy || 0), 0, 100);
-    if (o.flags) Object.assign(S.flags, o.flags);
-    if (o.feed) queueFeed(o.feed, o.type === 'futile' ? 1 : 12);
-    popups(o.fanfare);
-    if (o.type === 'decent' && d > 0) A.coin();
+  // Consequences: the first comes back before the next encounter, the rest at home time.
+  function queueConsequences(enc, lines) {
+    if (!lines || !lines.length) return;
+    const sc = enc.scene || {};
+    const where = { bg: sc.bg, cast: sc.cast || [] };
+    S.later.push(Object.assign({ text: lines[0] }, where));
+    lines.slice(1).forEach((text) => S.home.push(text));
   }
 
   function choose(i) {
-    if (!S.current || resultPending || S.freeze) return;
+    if (!S.current || pendingContinue || S.freeze) return;
     const enc = findEnc(S.current);
     const o = enc.options[i];
     if (!o) return;
     A.click();
     switch (o.type) {
-      case 'exploit':
-        apply(o);
-        showResult(enc, o);
+      case 'exploit': {
+        const d = o.cash || 0;
+        S.cash = Math.max(0, S.cash + d);
+        if (d > 0) S.stats.extracted += d;
+        S.stats.harmed++;
+        // Soul and happiness only ever go one way.
+        S.soul = clamp(S.soul + Math.min(0, o.soul || -5), 0, 100);
+        S.happy = clamp(S.happy + Math.min(0, o.happy || -3), 0, 100);
+        S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
+        if (o.flags) Object.assign(S.flags, o.flags);
+        popups(o.fanfare);
+        queueConsequences(enc, o.feed);
+        showResult(enc, o, 'exploit');
         break;
+      }
       case 'decent':
-        if (S.cash + (o.cash || 0) >= quota()) {
-          apply(o);
-          S.stats.kind++;
-          showResult(enc, o);
-        } else {
-          enterFreeze({ kind: 'choice', enc, opt: o });
-        }
+        awkwardWait(enc, o);
         break;
-      case 'futile':
-        apply(o);
+      case 'futile': {
+        const d = o.cash || 0;
+        if (d < 0) S.stats.wasted += Math.min(S.cash, -d);
+        S.cash = Math.max(0, S.cash + d);
         A.thud();
-        showResult(enc, o);
+        queueConsequences(enc, o.feed);
+        showResult(enc, o, null);
         break;
+      }
       case 'milestone':
         if (S.cash < o.cost) return;
         S.cash -= o.cost;
         popups(o.fanfare);
         S.mono = clamp(S.mono + 20, 0, 100);
-        showResult(enc, o);
+        showResult(enc, o, 'exploit');
         break;
       case 'later':
-        S.milestoneSnooze = S.minute + 60;
-        closeEnc(enc);
+        closeEnc();
         break;
       case 'confess':
         finalFreeze();
         break;
       case 'accept':
-        el.dialogue.hidden = true;
+        showPanel(null);
         S.current = null;
         startEnding();
         break;
@@ -353,73 +389,80 @@
     hud();
   }
 
-  function showResult(enc, o) {
-    resultPending = { enc, o };
-    if (o.type === 'exploit' || o.type === 'decent') showScene(enc, { reaction: o.type });
-    el.dialogue.classList.add('result');
-    el.dialogue.scrollTop = 0;
-    el.dText.innerHTML = `<p class="narr">${esc(fill(o.result || ''))}</p>`;
-    el.dOptions.innerHTML = '';
-    const b = document.createElement('button');
-    b.className = 'opt opt-continue';
-    b.innerHTML = '<span class="lbl">Carry on</span>';
-    b.addEventListener('click', continueResult);
-    el.dOptions.appendChild(b);
-    b.focus({ preventScroll: true });
+  function showResult(enc, o, reaction, prefix) {
+    if (reaction) showScene(enc, { reaction });
+    beat({
+      html: (prefix ? `<p class="kicker">${esc(prefix)}</p>` : '') + `<p class="narr">${esc(fill(o.result || ''))}</p>`,
+      then: () => (o.type === 'milestone' ? endAct() : closeEnc()),
+    });
   }
 
-  function continueResult() {
-    if (!resultPending) return;
-    const { enc, o } = resultPending;
-    resultPending = null;
-    A.click();
-    if (o.type === 'milestone') { el.dialogue.hidden = true; S.current = null; endAct(); return; }
-    closeEnc(enc);
-  }
-
-  function closeEnc(enc) {
+  function closeEnc() {
     const ref = S.current;
     S.current = null;
-    el.dialogue.hidden = true;
-    const a = act();
-    if (ref && ref.kind === 'story') {
-      S.storyIdx++;
-      S.nextAt = S.minute + (enc.gap || a.gap);
-    } else {
-      S.nextAt = S.minute + (a.fillerGap || a.gap);
-    }
-    showScene(null);
+    if (ref && ref.kind === 'story') S.storyIdx++;
     hud();
-    if (ref && ref.rescue) endDay();
+    if (ref && ref.rescue) homeTime();
+    else nextSlot();
   }
 
-  /* ---------------- Stagnation Freeze ---------------- */
-  function enterFreeze(f) {
-    S.freeze = Object.assign({ idles: 0, log: [] }, f);
+  /* ---------------- the awkward wait ---------------- */
+  // A decent choice. Time stops. Nothing happens for an uncomfortably long time.
+  function awkwardWait(enc, o) {
+    const sp = C.people[enc.speaker];
+    const name = sp ? sp.name.replace(/^(Little|Head Monitor|Mr|Mrs) /, '').split(',')[0] : 'Everyone';
+    S.freeze = { kind: 'awkward', enc, o, name, started: performance.now(), idles: 0 };
     S.stats.freezes++;
-    const first = !S.flags.learnedFreeze;
-    S.flags.learnedFreeze = true;
-    el.dialogue.hidden = true;
-    el.ledger.hidden = true;
-    const enc = f.enc || null;
     showScene(enc, { frozen: true, frozenT: performance.now() / 1000 });
     A.rainOn(0.22);
     A.tick();
-
-    let reason;
-    if (f.kind === 'quota') {
-      reason = `The bell refuses to ring. You owe ${fmt(quota())} by home time because ${act().quotaWhy}, and you have ${fmt(S.cash)}. Nobody is going home until the numbers work.`;
-    } else {
-      const after = fmt(S.cash + (f.opt.cash || 0));
-      reason = enc.freeze
-        ? fill(enc.freeze, { after })
-        : `Decency would leave you on ${after}. The quota is ${fmt(quota())}, because ${act().quotaWhy}. Time has stopped until the numbers make sense.`;
-    }
-    el.fReason.textContent = reason;
-    el.fHint.textContent = first
-      ? 'This is the Stagnation Freeze. Nothing will happen here. Ever. Decent choices are only possible when you have surplus above the quota.'
-      : '';
+    el.fReason.textContent = fill(enc.awkward || pick(C.awkward.open), { name });
+    el.fHint.textContent = '';
     el.fLog.innerHTML = '';
+    buildIdles();
+    el.fReconsider.hidden = false;
+    el.fReconsider.textContent = 'Change your mind';
+    el.freeze.classList.remove('final');
+    showPanel('freeze');
+    el.freeze.scrollTop = 0;
+    clearTimeout(awkwardTimer);
+    clearInterval(beatTimer);
+    const beats = C.awkward.beats.slice().sort(() => Math.random() - 0.5);
+    let b = 0;
+    beatTimer = setInterval(() => { if (S.freeze && S.freeze.kind === 'awkward') logFreeze(fill(beats[b++ % beats.length], { name }), 'beat'); }, BEAT_MS);
+    awkwardTimer = setTimeout(() => endAwkward(), AWKWARD_MS);
+    hud();
+  }
+  function stopWaiting() {
+    if (S.freeze && S.freeze.started) S.stats.waitedMs += performance.now() - S.freeze.started;
+    clearTimeout(awkwardTimer);
+    clearInterval(beatTimer);
+    A.rainOff();
+  }
+  // The moment passes. The decent thing happens. Nobody pays you for it.
+  function endAwkward() {
+    const F = S.freeze;
+    if (!F || F.kind !== 'awkward') return;
+    stopWaiting();
+    S.freeze = null;
+    S.cash = Math.max(0, S.cash + (F.o.cash || 0));
+    S.stats.kind++;
+    hud();
+    showResult(F.enc, F.o, 'decent', C.awkward.passes);
+  }
+  function changeMind() {
+    const F = S.freeze;
+    if (!F || F.kind === 'final') return;
+    stopWaiting();
+    S.freeze = null;
+    A.click();
+    if (F.kind === 'broke') { openFiller(true); hud(); return; }
+    showScene(F.enc);
+    renderDialogue(F.enc);
+    hud();
+  }
+
+  function buildIdles() {
     el.fIdle.innerHTML = '';
     C.idles.forEach((idle) => {
       const b = document.createElement('button');
@@ -428,14 +471,7 @@
       b.addEventListener('click', () => doIdle(idle));
       el.fIdle.appendChild(b);
     });
-    el.fReconsider.hidden = false;
-    el.fReconsider.textContent = f.kind === 'quota' ? 'Find a quick deal' : 'Reconsider';
-    el.freeze.classList.remove('final');
-    el.freeze.hidden = false;
-    el.freeze.scrollTop = 0;
-    hud();
   }
-
   function doIdle(idle) {
     const F = S.freeze;
     if (!F) return;
@@ -443,15 +479,13 @@
     S.stats.idles++;
     F.counts = F.counts || {};
     const c = (F.counts[idle.id] = (F.counts[idle.id] || 0) + 1);
-    let extra = {};
+    const extra = {};
     if (idle.id === 'rain') {
-      const n = 40 + Math.floor(Math.random() * 300);
-      S.stats.raindrops += n;
+      S.stats.raindrops += 40 + Math.floor(Math.random() * 300);
       extra.n = S.stats.raindrops.toLocaleString('en-GB');
     }
     A.tick();
-    const line = fill(idle.lines[(c - 1) % idle.lines.length], extra);
-    logFreeze(line);
+    logFreeze(fill(idle.lines[(c - 1) % idle.lines.length], extra));
     const esc8 = C.freezeEscalation.find((e) => e.at === F.idles);
     if (esc8) setTimeout(() => logFreeze(esc8.text, 'esc'), 500);
   }
@@ -463,35 +497,67 @@
     while (el.fLog.children.length > 5) el.fLog.lastChild.remove();
   }
 
-  function reconsider() {
-    const F = S.freeze;
-    if (!F || F.kind === 'final') return;
-    S.freeze = null;
-    el.freeze.hidden = true;
-    A.rainOff();
-    A.click();
-    if (F.kind === 'quota') {
-      openFiller(true);
-    } else {
-      showScene(F.enc);
-      renderDialogue(F.enc);
+  /* ---------------- home time ---------------- */
+  function homeTime() {
+    const a = act();
+    el.objective.textContent = 'Home time.';
+    if (S.cash < a.dues) {
+      // Can't pay. The day doesn't end.
+      S.freeze = { kind: 'broke', started: 0, idles: 0 };
+      S.stats.freezes++;
+      showScene(null, { frozen: true, frozenT: performance.now() / 1000 });
+      A.rainOn(0.22);
+      el.fReason.textContent = fill(a.broke);
+      el.fHint.textContent = '';
+      el.fLog.innerHTML = '';
+      buildIdles();
+      el.fReconsider.hidden = false;
+      el.fReconsider.textContent = 'Find the money';
+      el.freeze.classList.remove('final');
+      showPanel('freeze');
+      el.freeze.scrollTop = 0;
+      hud();
+      return;
     }
+    S.cash -= a.dues;
+    pushFeed(a.paid, 'biz');
+    // The day's consequences, all at once, on the way home.
+    const lines = S.home.splice(0);
+    lines.forEach((l) => pushFeed(l));
     hud();
+    showScene(null);
+    showPanel(null);
+    showCard({
+      cls: 'card-home',
+      html: `<p class="kicker">${DAYS[(S.day - 1) % 5]}, on the way home</p>` +
+        (lines.length ? `<ul class="home-list">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : '<p class="sub">Nothing much happened today.</p>') +
+        `<p class="sub">${esc(a.paid)} You have ${fmt(S.cash)} left.</p>`,
+      buttons: [{ label: 'Tomorrow', fn: nextDay }],
+      delay: 900,
+    });
+  }
+  function nextDay() {
+    S.day++;
+    S.slot = 0;
+    S.minute = DAY_START;
+    save();
+    showScene(null);
+    hud();
+    nextSlot();
   }
 
   /* ---------------- final freeze (assembly) ---------------- */
   function finalFreeze() {
-    el.dialogue.hidden = true;
     S.freeze = { kind: 'final', idles: 0 };
     S.stats.freezes++;
     showScene(C.story[4][C.story[4].length - 1], { frozen: true, final: true, frozenT: performance.now() / 1000 });
     A.droneOn();
     el.freeze.classList.add('final');
-    el.fReason.textContent = 'You stand up to apologise. The hall freezes mid-cough. There is no option on the menu for this. Late-stage capitalism offers no clean reset.';
+    el.fReason.textContent = 'You stand up to apologise. The whole hall freezes, mid-cough.';
     el.fHint.textContent = 'Refunds are not available at this time.';
     el.fLog.innerHTML = '';
     el.fIdle.innerHTML = '';
-    C.finalIdles.forEach((idle, i) => {
+    C.finalIdles.forEach((idle) => {
       const b = document.createElement('button');
       b.className = 'idle';
       b.textContent = idle.label;
@@ -504,182 +570,53 @@
       el.fIdle.appendChild(b);
     });
     el.fReconsider.hidden = true;
-    el.freeze.hidden = false;
+    showPanel('freeze');
     el.freeze.scrollTop = 0;
     clearTimeout(finalTimer);
-    finalTimer = setTimeout(revealAccept, 15000);
+    finalTimer = setTimeout(revealAccept, 20000);
     hud();
   }
   function revealAccept() {
     if (!S.freeze || S.freeze.kind !== 'final' || !el.fReconsider.hidden) return;
     el.fReconsider.hidden = false;
     el.fReconsider.textContent = 'Accept expulsion';
-    el.fReconsider.onclick = () => {
-      el.fReconsider.onclick = null;
-      clearTimeout(finalTimer);
-      A.droneOff();
-      S.freeze = null;
-      el.freeze.hidden = true;
-      el.freeze.classList.remove('final');
-      startEnding();
-    };
+  }
+  function acceptExpulsion() {
+    clearTimeout(finalTimer);
+    A.droneOff();
+    S.freeze = null;
+    showPanel(null);
+    el.freeze.classList.remove('final');
+    startEnding();
   }
 
-  /* ---------------- ledger ---------------- */
-  function renderLedger() {
-    const list = Object.entries(C.ventures).filter(([, v]) => v.act === S.act);
-    const income = totalYield();
-    el.ledgerBody.innerHTML =
-      `<p class="ledger-sum">Passive income: <b>${fmt(income)}/hr</b>${act().overhead ? ` · Overheads: <b>${fmt(act().overhead)}/day</b> (${act().overheadWhy})` : ''}</p>` +
-      list
-        .map(([id, v]) => {
-          const owned = !!S.ventures[id];
-          const can = S.cash >= v.cost;
-          return `<div class="venture${owned ? ' owned' : ''}">
-          <div class="v-head"><b>${esc(v.name)}</b><span>${fmt(v.yield)}/hr</span></div>
-          <p>${esc(v.blurb)}</p>
-          ${owned ? '<span class="v-owned">Owned</span>' : `<button data-v="${id}" ${can ? '' : 'disabled'}>Buy · ${fmt(v.cost)}</button>`}
-        </div>`;
-        })
-        .join('');
-    el.ledgerBody.querySelectorAll('button[data-v]').forEach((b) => b.addEventListener('click', () => buyVenture(b.dataset.v)));
-  }
-  function buyVenture(id) {
-    const v = C.ventures[id];
-    if (!v || S.ventures[id] || S.cash < v.cost) return;
-    S.cash -= v.cost;
-    S.ventures[id] = true;
-    S.mono = clamp(S.mono + 8, 0, 100);
-    S.happy = clamp(S.happy - 3, 0, 100);
-    popups(['NEW VENTURE!', v.name.toUpperCase()]);
-    pushFeed(`${v.name} is open for business.`, 'biz');
-    hud();
-  }
-  function totalYield() {
-    return Object.keys(S.ventures).reduce((s, id) => s + (C.ventures[id] && C.ventures[id].act === S.act ? C.ventures[id].yield : 0), 0);
-  }
-  function toggleLedger(force) {
-    if (act().noLedger) return;
-    const show = force != null ? force : el.ledger.hidden;
-    el.ledger.hidden = !show;
-    if (show) renderLedger();
-  }
-
-  /* ---------------- time ---------------- */
-  function tick(dt) {
-    if (!S || S.phase !== 'play' || S.freeze || cardOpen) return;
-    const a = act();
-    const adv = dt * a.rate * SPEEDS[speedIdx];
-    if (adv <= 0) return;
-    const prevMin = S.minute;
-    S.minute += adv;
-    if (a.noDayEnd) S.minute = Math.min(S.minute, DAY_END - 1);
-
-    // passive income
-    if (S.act < 4) {
-      S.incomeAcc += (totalYield() * adv) / 60;
-      if (S.incomeAcc >= 1) {
-        const whole = Math.floor(S.incomeAcc);
-        S.cash += whole;
-        S.stats.extracted += whole;
-        S.incomeAcc -= whole;
-      }
-      // venture externalities, roughly once an in-game hour
-      S.extAcc += adv;
-      if (S.extAcc >= 60) {
-        S.extAcc -= 60;
-        const owned = Object.keys(S.ventures).filter((id) => C.ventures[id].act === S.act);
-        if (owned.length) {
-          const v = C.ventures[owned[Math.floor(Math.random() * owned.length)]];
-          const line = v.ext[Math.floor(Math.random() * v.ext.length)];
-          if (Math.random() < 0.6 && !S.feed.slice(0, 4).some((f) => f.text === line)) pushFeed(line);
-          S.happy = clamp(S.happy - owned.length * 0.8, 0, 100);
-          S.stats.harmed += owned.length;
-        }
-      }
-    }
-    // delayed consequences
-    while (S.feedQueue.length && S.feedQueue[0].at <= S.minute) pushFeed(S.feedQueue.shift().text);
-    if (Math.floor(prevMin) !== Math.floor(S.minute)) {
-      hud();
-      if (R.view.bg === 'corridor' || R.view.bg === 'office') R.setView({ minute: S.minute });
-    }
-
-    if (!S.current && !resultPending) {
-      if (!a.noDayEnd && S.minute >= DAY_END) return endDay();
-      const ms = C.milestones[S.act];
-      if (ms && storyDone() && S.cash >= a.target && S.minute >= S.milestoneSnooze) return openEnc({ kind: 'milestone' });
-      if (S.minute >= S.nextAt) spawnNext();
-    }
-  }
-
-  function endDay() {
-    const a = act();
-    if (!S.dayClosed) {
-      S.dayClosed = true;
-      if (a.overhead) {
-        S.cash = Math.max(0, S.cash - a.overhead);
-        pushFeed(`Paid ${fmt(a.overhead)} in ${a.overheadWhy}.`, 'biz');
-      }
-    }
-    if (S.cash < quota()) {
-      enterFreeze({ kind: 'quota' });
-      return;
-    }
-    const earned = S.cash - S.dayStartCash;
-    S.dayClosed = false;
-    showCard({
-      cls: 'card-day',
-      html: `<h2>End of Day ${S.day}</h2>
-        <p class="sub">${esc(a.school)} · ${DAYS[(S.day - 1) % 5]}</p>
-        <dl>
-          <dt>Net change</dt><dd>${earned >= 0 ? '+' : ''}${fmt(earned)}</dd>
-          <dt>Cash</dt><dd>${fmt(S.cash)}</dd>
-          <dt>Tomorrow's quota</dt><dd>${fmt(a.quotaBase + a.quotaStep * S.day)}</dd>
-          <dt>Playground happiness</dt><dd>${Math.round(S.happy)}%</dd>
-        </dl>`,
-      buttons: [{ label: 'Next day', fn: nextDay }],
-    });
-  }
-  function nextDay() {
-    S.day++;
-    S.minute = DAY_START;
-    S.nextAt = DAY_START + 15;
-    S.dayStartCash = S.cash;
-    S.milestoneSnooze = 0;
-    showScene(null);
-    hud();
-    save();
-  }
-
-  /* ---------------- acts ---------------- */
+  /* ---------------- moving schools ---------------- */
   function startAct(n, opts = {}) {
     const a = C.acts[n];
     S.act = n;
     S.day = 1;
+    S.slot = 0;
     S.minute = a.start;
-    S.nextAt = a.firstAt;
     S.storyIdx = 0;
-    S.ventures = {};
-    a.startVentures.forEach((id) => (S.ventures[id] = true));
     S.current = null;
     S.freeze = null;
-    S.dayClosed = false;
-    S.milestoneSnooze = 0;
-    S.feedQueue = [];
-    S.dayStartCash = S.cash;
+    S.later = [];
+    S.home = [];
     if (n > 1 && n < 4) S.happy = 100;
     S.phase = 'play';
     setMode('play');
     document.body.className = 'style-' + a.style;
     if (n > 1) pushFeed(`— ${a.school} —`, 'sep');
     el.ticker.textContent = '';
-    el.ledger.hidden = true;
+    el.objective.textContent = '';
+    toggleLog(false);
+    showPanel(null);
     showScene(null, n === 4 ? { rain: true } : {}, n === 4 ? { glitch: true } : { fade: true });
     if (n === 4) A.rainOn(0.18); else A.rainOff();
     hud();
     renderFeed();
-    if (!opts.skipIntro) captions(a.intro, save);
+    if (opts.skipIntro) return;
+    captions(a.intro, () => { save(); nextSlot(); });
   }
 
   // Story beats shown one at a time over the scene. No titles, no act numbers.
@@ -689,18 +626,14 @@
       cls: 'card-caption',
       html: `<p>${esc(lines[i])}</p>`,
       buttons: [{ label: i < lines.length - 1 ? '…' : 'Carry on', fn: () => captions(lines, done, i + 1) }],
-      delay: 400,
+      delay: 500,
     });
   }
 
   function endAct() {
     const n = S.act;
-    // liquidate this school's ventures at half price
-    let liq = 0;
-    Object.keys(S.ventures).forEach((id) => { if (C.ventures[id].act === n) liq += Math.floor(C.ventures[id].cost / 2); });
-    S.cash += liq;
-    if (liq) pushFeed(`Sold off the old operation for ${fmt(liq)}.`, 'biz');
     S.phase = 'transition';
+    showPanel(null);
     captions(act().outro || [], () => startAct(n + 1));
   }
 
@@ -713,8 +646,7 @@
     clearSave();
     A.droneOff();
     A.rainOn(0.2);
-    el.dialogue.hidden = true;
-    el.objective.textContent = '';
+    showPanel(null);
     let i = 0;
     const step = () => {
       const e = C.ending[i];
@@ -728,23 +660,27 @@
       showCard({
         cls: 'card-caption' + (e.big ? ' big' : ''),
         html: e.big ? `<h1 class="market">${e.big}</h1>` : `<p>${esc(e.text)}</p>`,
-        buttons: [{ label: '…', fn: step, keep: true }],
-        delay: e.big ? 2500 : 900,
+        buttons: [{ label: '…', fn: step }],
+        delay: e.big ? 2500 : 1200,
       });
     };
     step();
+  }
+  function mins(ms) {
+    const s = Math.round(ms / 1000);
+    return s < 60 ? `${s} seconds` : `${Math.floor(s / 60)}m ${s % 60}s`;
   }
   function finalStats() {
     const st = S.stats;
     showCard({
       cls: 'card-act',
-      html: `<p class="kicker">Generation ${S.gen}</p><h1>The Ledger</h1>
+      html: `<h1>The Ledger</h1>
         <dl>
-          <dt>Total extracted</dt><dd>${fmt(st.extracted)}</dd>
+          <dt>Total taken</dt><dd>${fmt(st.extracted)}</dd>
           <dt>Spent trying to make it go away</dt><dd>${fmt(st.wasted)}</dd>
-          <dt>Children harmed (approx.)</dt><dd>${st.harmed}</dd>
-          <dt>Kindnesses afforded</dt><dd>${st.kind}</dd>
-          <dt>Times time stopped</dt><dd>${st.freezes}</dd>
+          <dt>Children harmed</dt><dd>${st.harmed}</dd>
+          <dt>Decent things done</dt><dd>${st.kind}</dd>
+          <dt>Time spent standing there being decent</dt><dd>${mins(st.waitedMs)}</dd>
           <dt>Raindrops counted</dt><dd>${st.raindrops.toLocaleString('en-GB')}</dd>
           <dt>Soul remaining</dt><dd>${Math.round(S.soul)}/100</dd>
         </dl>
@@ -753,7 +689,7 @@
     });
   }
 
-  /* ---------------- cards (title, transitions) ---------------- */
+  /* ---------------- cards (title, captions, home time) ---------------- */
   function showCard({ html, buttons, cls = '', delay = 0 }) {
     cardOpen = true;
     el.card.className = 'card ' + cls;
@@ -786,16 +722,8 @@
     R.setView(Object.assign(sceneFor(null), { bench: true, cast: [person('billy')] }));
     hud();
     const buttons = [{ label: 'New game', fn: () => newGame(1) }];
-    if (saved) buttons.push({ label: `Continue (${C.acts[saved.act].school}, day ${saved.day})`, fn: () => resume(saved), secondary: true });
-    showCard({
-      cls: 'card-title',
-      html: `<h1 class="logo">TUCK</h1>
-        <p class="kicker">working title: Tuck Shop Tycoon</p>
-        <p>A dark satirical management sim about the micro-economy of a British schoolyard.</p>
-        <p class="small">Exploitation always works. Decency costs money you don't have.<br>If you refuse to play along, time stops. Indefinitely.</p>
-        <p class="small keys">Keys: <kbd>1</kbd>–<kbd>4</kbd> choose · <kbd>Enter</kbd> carry on · <kbd>L</kbd> ledger</p>`,
-      buttons,
-    });
+    if (saved && saved.v === 2) buttons.push({ label: 'Continue', fn: () => resume(saved), secondary: true });
+    showCard({ cls: 'card-title', html: '<h1 class="logo">TUCK</h1>', buttons });
   }
 
   function newGame(gen) {
@@ -805,44 +733,42 @@
     A.droneOff();
     S = newState(gen);
     startAct(1);
-    pushFeed(gen > 1 ? `Generation ${gen}. Same playground. New kid.` : 'Morning break has started.');
   }
   function resume(saved) {
     A.init();
+    const keep = { day: saved.day, minute: saved.minute, storyIdx: saved.storyIdx, happy: saved.happy, slot: 0, later: saved.later || [], home: saved.home || [] };
     S = Object.assign(newState(), saved, { current: null, freeze: null, phase: 'play' });
     startAct(S.act, { skipIntro: true });
-    // startAct resets the day; restore the saved position
-    Object.assign(S, { day: saved.day, minute: saved.minute, nextAt: saved.nextAt, storyIdx: saved.storyIdx, ventures: saved.ventures, happy: saved.happy, dayStartCash: saved.cash, feedQueue: saved.feedQueue || [] });
-    showScene(null);
+    Object.assign(S, keep);
+    S.minute = DAY_START;
     hud();
     renderFeed();
+    nextSlot();
   }
 
   /* ---------------- input ---------------- */
   function onKey(e) {
-    if (e.target && e.target.tagName === 'INPUT') return;
-    if (!el.card.hidden) return; // buttons in cards handle Enter natively via focus
-    if (resultPending && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); continueResult(); return; }
-    if (S && S.current && !resultPending && !S.freeze && /^[1-9]$/.test(e.key)) {
+    if (!el.card.hidden) return; // card buttons take Enter natively via focus
+    if (pendingContinue && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); doContinue(); return; }
+    if (S && S.current && !pendingContinue && !S.freeze && /^[1-9]$/.test(e.key)) {
       const btn = el.dOptions.children[+e.key - 1];
       if (btn && !btn.disabled) choose(+e.key - 1);
       return;
     }
-    if (e.key === 'l' || e.key === 'L') toggleLedger();
-    if (e.key === 'Escape') toggleLedger(false);
+    if (e.key === 'l' || e.key === 'L') toggleLog();
+    if (e.key === 'Escape') toggleLog(false);
   }
 
   /* ---------------- boot ---------------- */
   function boot() {
     const ids = {
-      school: '#hud-school', day: '#hud-day', time: '#hud-time', cash: '#hud-cash',
-      quota: '#hud-quota', surplus: '#hud-surplus', ticker: '#ticker',
+      school: '#hud-school', day: '#hud-day', time: '#hud-time', cash: '#hud-cash', ticker: '#ticker',
       soul: '#bar-soul', happy: '#bar-happy', mono: '#bar-mono',
       objective: '#objective', feedTitle: '#feed-title', feedList: '#feed-list',
       dialogue: '#dialogue', dSpeaker: '#d-speaker', dText: '#d-text', dOptions: '#d-options',
-      ledger: '#ledger', ledgerBody: '#ledger-body', ledgerBtn: '#btn-ledger',
+      log: '#log', logList: '#log-list', logTitle: '#log-title', logBtn: '#btn-log',
       freeze: '#freeze', fReason: '#f-reason', fHint: '#f-hint', fIdle: '#f-idle', fLog: '#f-log', fReconsider: '#f-reconsider',
-      card: '#card', fx: '#fx', game: '#game', speed: '#btn-speed', mute: '#btn-mute',
+      card: '#card', fx: '#fx', game: '#game', mute: '#btn-mute',
     };
     for (const k in ids) el[k] = $(ids[k]);
 
@@ -852,10 +778,13 @@
     fit();
     if (window.ResizeObserver) new ResizeObserver(fit).observe(wrap);
     window.addEventListener('resize', fit);
-    el.ledgerBtn.addEventListener('click', () => { A.click(); toggleLedger(); });
-    $('#ledger-close').addEventListener('click', () => toggleLedger(false));
-    el.fReconsider.addEventListener('click', () => { if (S.freeze && S.freeze.kind !== 'final') reconsider(); });
-    el.speed.addEventListener('click', () => { speedIdx = (speedIdx + 1) % SPEEDS.length; el.speed.textContent = SPEEDS[speedIdx] + '×'; });
+    el.logBtn.addEventListener('click', () => { A.click(); toggleLog(); });
+    $('#log-close').addEventListener('click', () => toggleLog(false));
+    el.fReconsider.addEventListener('click', () => {
+      if (!S.freeze) return;
+      if (S.freeze.kind === 'final') acceptExpulsion();
+      else changeMind();
+    });
     el.mute.addEventListener('click', () => { A.init(); A.setMuted(!A.muted); el.mute.textContent = A.muted ? '♪̸' : '♪'; el.mute.setAttribute('aria-pressed', A.muted); });
     document.addEventListener('keydown', onKey);
 
@@ -875,10 +804,9 @@
       T.debug = {
         get S() { return S; },
         cash(p) { S.cash = p; hud(); },
-        skip(min) { S.minute += min; },
-        speed(x) { SPEEDS[speedIdx] = x; },
-        choose, continueResult, reconsider, startAct, endAct, quota,
-        jumpAct(n) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); },
+        choose, doContinue, changeMind, endAwkward, startAct, endAct,
+        jumpAct(n) { cardOpen = false; el.card.hidden = true; startAct(n, { skipIntro: true }); nextSlot(); },
+        get waiting() { return !!pendingContinue; },
       };
     }
   }

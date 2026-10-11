@@ -82,25 +82,17 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 #hud-school { font-family: var(--font-head); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 #hud-day { color: var(--muted); font-size: 0.85em; white-space: nowrap; }
 #hud-time { font-size: 1.35em; font-weight: 700; font-variant-numeric: tabular-nums; }
+#hud-cash { font-size: 1.35em; font-weight: 700; font-variant-numeric: tabular-nums; min-width: 3.2em; text-align: right; }
 #hud-time.frozen { color: var(--warn); animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0.35; } }
-.hud-money { display: grid; grid-template-columns: auto auto; column-gap: 8px; align-items: baseline; text-align: right; }
-#hud-cash { font-size: 1.35em; font-weight: 700; font-variant-numeric: tabular-nums; grid-row: span 2; align-self: center; }
-.hud-q { font-size: 0.8em; color: var(--muted); white-space: nowrap; }
-.hud-q b { color: var(--ink); }
-#hud-surplus { font-size: 0.8em; white-space: nowrap; }
-#hud-surplus.ok { color: var(--ok); }
-#hud-surplus.short { color: var(--warn); }
 .hud-buttons { display: flex; gap: 4px; }
 .hud-buttons button {
   min-width: 40px; height: 40px; padding: 0 8px; border: 2px solid var(--line); border-radius: 10px;
   background: var(--panel-2); font-size: 17px; font-weight: 700; display: grid; place-items: center;
 }
-#btn-ledger { background: var(--accent); color: var(--accent-ink); }
 
 @media (max-width: 420px) {
   #hud { gap: 6px; padding-left: 8px; font-size: 14.5px; }
-  #btn-speed { display: none; }
   body { --fs: 17px; }
   body.style-pixel { --fs: 20px; }
   body.style-ad, body.style-real { --fs: 15.5px; }
@@ -220,8 +212,8 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 #panel:has(#freeze:not([hidden])) { background: #1e2630; border-color: #6c7d90; }
 #panel:has(#freeze.final:not([hidden])) { background: #0b0b0d; border-color: #333; }
 
-/* ---------------- ledger (sheet) ---------------- */
-#ledger {
+/* ---------------- log (sheet) ---------------- */
+#log {
   position: fixed; z-index: 8; left: 0; right: 0; bottom: 0; max-height: 82dvh;
   display: flex; flex-direction: column;
   background: var(--panel); border-top: var(--bw) solid var(--line); border-radius: 18px 18px 0 0;
@@ -230,19 +222,12 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 }
 @keyframes sheet { from { transform: translateY(40px); opacity: 0; } }
 @media (min-aspect-ratio: 5/4) {
-  #ledger { left: auto; top: 0; width: min(440px, 92vw); max-height: none; border-radius: 0; border-top: 0; border-left: var(--bw) solid var(--line); padding-top: calc(var(--safe-t) + 14px); }
+  #log { left: auto; top: 0; width: min(440px, 92vw); max-height: none; border-radius: 0; border-top: 0; border-left: var(--bw) solid var(--line); padding-top: calc(var(--safe-t) + 14px); }
 }
-.ledger-head { display: flex; justify-content: space-between; align-items: center; }
-.ledger-head h2 { margin: 0; font-family: var(--font-head); font-size: 1.3em; }
-#ledger-close { width: 44px; height: 44px; font-size: 28px; line-height: 1; border: none; background: none; }
-#ledger-body { overflow-y: auto; -webkit-overflow-scrolling: touch; }
-.ledger-sum { margin: 2px 0 10px; font-size: 0.9em; }
-.venture { border: 2px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 10px; background: var(--panel-2); }
-.venture.owned { opacity: 0.85; }
-.v-head { display: flex; justify-content: space-between; gap: 8px; }
-.venture p { margin: 4px 0 8px; font-size: 0.88em; color: var(--muted); }
-.venture button { min-height: 44px; padding: 0 16px; border: 2px solid var(--line); border-radius: 10px; background: var(--accent); color: var(--accent-ink); font-weight: 700; }
-.v-owned { color: var(--ok); font-weight: 700; }
+.log-head { display: flex; justify-content: space-between; align-items: center; }
+.log-head h2 { margin: 0; font-family: var(--font-head); font-size: 1.3em; }
+#log-close { width: 44px; height: 44px; font-size: 28px; line-height: 1; border: none; background: none; }
+#log-list { list-style: none; margin: 8px 0 0; padding: 0; line-height: 1.3; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* ---------------- fanfare popups ---------------- */
 #fx { position: absolute; inset: 0; pointer-events: none; z-index: 3; overflow: hidden; }
@@ -329,10 +314,9 @@ body.style-pixel {
 }
 body.style-pixel #hud-school { font-size: 10px; line-height: 1.6; }
 body.style-pixel #hud { font-size: 19px; }
-body.style-pixel #d-speaker, body.style-pixel #feed h3, body.style-pixel .ledger-head h2, body.style-pixel .card h1, body.style-pixel .card h2 { font-size: 12px; line-height: 1.6; }
+body.style-pixel #d-speaker, body.style-pixel #feed h3, body.style-pixel .log-head h2, body.style-pixel .card h1, body.style-pixel .card h2 { font-size: 12px; line-height: 1.6; }
 body.style-pixel .card h1 { font-size: 18px; }
-body.style-pixel .opt, body.style-pixel .card-buttons button, body.style-pixel .hud-buttons button, body.style-pixel .venture, body.style-pixel .venture button, body.style-pixel .tag, body.style-pixel #d-speaker, body.style-pixel #ledger { border-radius: 0; }
-body.style-pixel .tag { font-family: 'VT323', monospace; font-size: 16px; font-weight: 400; }
+body.style-pixel .opt, body.style-pixel .card-buttons button, body.style-pixel .hud-buttons button, body.style-pixel body.style-pixel .tag { font-family: 'VT323', monospace; font-size: 16px; font-weight: 400; }
 body.style-pixel .tag.ex { color: #ffe83f; }
 body.style-pixel #feed-list li { border-bottom-color: rgba(63, 240, 255, 0.3); }
 body.style-pixel .meter { color: #bfe9ff; }
@@ -361,12 +345,12 @@ body.style-ad {
 }
 body.style-ad { background: #2a0f6e; }
 body.style-ad #game { background: radial-gradient(circle at 30% 0%, #ff4fa3, #6b20d8 55%, #2a0f6e); }
-body.style-ad #hud, body.style-ad #panel, body.style-ad .card-inner, body.style-ad #ledger { background: linear-gradient(180deg, #ffffff 0%, #ffe9f6 100%); }
+body.style-ad #hud, body.style-ad #panel, body.style-ad .card-inner, body.style-ad #log { background: linear-gradient(180deg, #ffffff 0%, #ffe9f6 100%); }
 body.style-ad #hud-school, body.style-ad #d-speaker, body.style-ad #feed h3, body.style-ad .card h1 { font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; }
 body.style-ad #d-speaker { background: linear-gradient(180deg, #ff6fb0, #ff2e88); border-radius: 99px; padding: 2px 14px; }
 body.style-ad .opt { border-radius: 99px; padding-left: 18px; background: linear-gradient(180deg, #fff, #f3f6ff); }
 @media (hover: hover) { body.style-ad .opt:hover:not(:disabled) { background: linear-gradient(180deg, #fffbe0, #ffe97a); } }
-body.style-ad .opt-continue, body.style-ad #btn-ledger, body.style-ad .card-buttons button:not(.secondary), body.style-ad .venture button { background: linear-gradient(180deg, #ff6fb0 0%, #ff2e88 55%, #d4006a 100%); }
+body.style-ad .opt-continue, body.style-ad .card-buttons button:not(.secondary) { background: linear-gradient(180deg, #ff6fb0 0%, #ff2e88 55%, #d4006a 100%); }
 body.style-ad .hud-buttons button { border-radius: 99px; }
 body.style-ad #feed-list time::before { content: '★ '; color: #ff2e88; }
 body.style-ad .meter, body.style-ad #ticker { color: #fff; }
@@ -404,3 +388,21 @@ body.style-real .card h1 { color: #c9ccd0; font-weight: 600; }
 body.style-real .pop { font-weight: 600; text-shadow: none; -webkit-text-stroke: 0; }
 body.style-real #feed h3 { color: #8a9099; }
 body.style-real .meter, body.style-real #ticker { color: #8a9099; }
+
+/* log sheet entries */
+#log-list li { padding: 8px 0; border-bottom: 1px dashed rgba(0, 0, 0, 0.18); }
+#log-list li.biz { color: var(--muted); font-style: italic; }
+#log-list li.sep { text-align: center; font-weight: 700; color: var(--muted); }
+#log-list time { display: block; font-size: 0.72em; color: var(--muted); font-family: Inter, Arial, sans-serif; }
+body.style-pixel #log-list li { border-bottom-color: rgba(63, 240, 255, 0.3); }
+
+/* "Meanwhile" / "Eventually…" beats */
+#d-text .kicker { margin: 0 0 4px; font-size: 0.75em; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted); font-family: Inter, Arial, sans-serif; font-weight: 600; }
+#f-log p.beat { color: #9fb0c2; font-style: italic; }
+#freeze #f-reason { font-size: 1.05em; }
+
+/* home time recap */
+.card-home .card-inner { text-align: left; }
+.card-home .kicker { text-align: left; }
+.home-list { margin: 12px 0; padding-left: 1.1em; }
+.home-list li { margin: 8px 0; }

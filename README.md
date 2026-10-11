@@ -24,11 +24,11 @@ npx http-server -p 8123 -c-1 .
 
 Then open http://localhost:8123. Opening `index.html` directly also works, but the home-screen and offline features need a server.
 
-**Controls:** tap, or on a keyboard `1`–`4` to choose, `Enter` to carry on, `L` for the ledger. Add `?debug` to the URL for a `Tuck.debug` console helper.
+**Controls:** tap, or on a keyboard `1`–`4` to choose, `Enter` to carry on, `L` for the log. Add `?debug` to the URL for a `Tuck.debug` console helper.
 
 ## Changing the story
 
-All narrative content and tuning lives in [`js/content.js`](js/content.js): encounters, dialogue, prices, quotas, ventures, the ending and the advert's small print. Money is in **pence** (`100` = £1). The design doc explains each system.
+All narrative content and tuning lives in [`js/content.js`](js/content.js): encounters, dialogue, prices, daily dues, the awkward-wait lines, the ending and the advert's small print. Money is in **pence** (`100` = £1). The design doc explains each system.
 
 ## Code layout
 
@@ -36,7 +36,7 @@ All narrative content and tuning lives in [`js/content.js`](js/content.js): enco
 index.html              page shell, mobile-first layout
 css/style.css           layout + one UI skin per art style
 js/content.js           story, numbers, all text
-js/game.js              state machine: clock, quota, freezes, ledger, transitions, ending
+js/game.js              turn-based state machine: days, awkward wait, consequences, dues, ending
 js/render.js            core renderer (crayon, pixel), camera, compositing
 js/render-ad.js         '90s TV advert art style
 js/render-real.js       stark realism art style

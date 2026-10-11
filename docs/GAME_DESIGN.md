@@ -16,54 +16,60 @@
 
 | Pillar | How it shows up in play | Intent |
 | --- | --- | --- |
-| **The Stagnation Trap** | Decent choices you can't afford freeze time. Progress needs exploitation. | Make the player actively choose corruption in order to keep playing. |
+| **The Stagnation Trap** | Every decent choice stops time in an awkward wait, then pays nothing. Daily dues freeze the day until you find money, and only exploitation makes money. | Make the player actively choose corruption in order to keep playing, and feel it. |
 | **Visual progression** | Crayon → Y2K pixel art → glossy '90s TV advert → stark cinematic realism. | Mirror Tuck's growing detachment from reality as the empire scales. |
-| **Explicit feedback** | Arcade fanfares for every exploit, while a separate feed reports the human cost a few in-game minutes later. | Set hyperactive rewards against raw human damage. |
+| **Explicit feedback** | Arcade fanfares for every exploit, then a "Meanwhile…" scene of the person you hurt, and a home-time recap of the whole day. | Set hyperactive rewards against raw human damage, and make the player sit with it. |
 | **British satire** | Dry, absurdist tone in the vein of *Thank Goodness You're Here!* | Ground big economic critiques in mundane, recognisable school tropes. |
 | **Organic progression** | The game never says "Act 2". Time passes, Tuck changes schools, and the world, art and interface change around him. | Let the player feel the slide rather than read about it. |
 
 ## 3. Key systems (as built)
 
-### School clock
-Each day runs from 08:50 to 15:30. At 1× speed, one real second is three in-game minutes, so a day lasts about 2¼ minutes. Encounters arrive as the day goes on. The clock stops only during a Stagnation Freeze.
+### Discovery, not instruction
+The game never explains its morality. The title screen is just the name. There are no tutorials, and choices carry no labels: nothing says "decent", "exploit", how much an option pays, or what it will cost. The player learns the rules by living with what happens.
 
-### Debt Quota and Soul Meter
-- **Quota:** a cash floor that rises every day ("the hall monitor wants paying", "Biff needs to see the money", "the shareholders expect liquidity"). You must be at or above it at the end of every day. Below it, the bell refuses to ring (a freeze) until you take a quick deal.
-- **Exploit options always work.** Every other option is **decent**, and is only allowed if your cash *after* the choice is still at or above the quota.
-- **Surplus is the kindness bank.** Cash above the quota is shown as "+£x spare". Spending it is the only way to afford decency, so the player commits exploitative acts specifically to afford small moments of kindness, as the original design intended.
-- **Soul (0–100)** drops with exploitation and rises a little with kindness. Below 30, Tuck's eyes become £ signs.
-- **Playground Happiness** and **Market Monopoly** are tracked as meters and shift with choices and ventures.
+### A school day (turn-based)
+Each day has three moments (**morning break, lunch, afternoon break**), then **home time**. The clock only moves when the player taps *Carry on*, and it visibly runs forward to the next moment, so there is always time to read what just happened. Nothing happens in the background.
 
-### Stagnation Freeze
-Triggered by an unaffordable decent choice, or by ending a day below the quota. The clock blinks red, rain falls, the scene loses its colour and everyone stops mid-motion. The only actions are pointless: count raindrops, look at the clock, retie your shoe, read the poster again, think about the nature of value. Each has its own dry lines, and the freeze escalates its commentary the longer you sit there. **Reconsider** returns you to the choice; there is no other way out.
+### Money only comes from choices
+There is no passive income: no ledger, no ventures, nothing that earns while you wait. The only way to make money is to choose to take it from someone, face to face. Honest options pay very little, and some cost you.
 
-### Ledger (ventures)
-Passive income bought with cash: four ventures per school, each posting regular externalities to the feed. Ventures are sold at half price when Tuck changes school.
+### Consequences you have to face
+Every exploitative choice has consequences that come back later:
+- **Meanwhile…** Before the next encounter, the game cuts to the person you just exploited, alone and in the rain, and tells you what happened to them. You have to tap through it.
+- **On the way home.** At home time, the day's remaining consequences are listed together before you can go to bed.
+- Everything is kept in a log (≡ button), titled *Things That Happened → Gossip → Stakeholder Updates → Evidence* as Tuck changes school.
 
-| School | Ventures |
-| --- | --- |
-| St. Pete's | Jumper Stall, UFO Snaps Resale, Loot-Box Lunchboxes, Plaster Monopoly |
-| St. Jude's | Pawn Desk, Loan Book (200% APR), Rain Shelter Lettings, Homework Factory |
-| Sixth Form | Automated Debt Collection, Volt-Juice™ Distribution, Bootleg Revision Guides, Exam Ring |
+### Being good: the awkward wait
+There are no rewards for being good. Choosing the decent option triggers an **awkward wait**:
+- Time stops. The clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion.
+- Nothing happens, for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small lines drift in ("Billy shifts from one foot to the other.", "Somebody, somewhere, is making money. It isn't you."). You can count raindrops, look at the clock, retie your shoe, read the poster again or think about the nature of value. None of it speeds anything up.
+- At any point you can **Change your mind**, which takes you back to the choice and the options that pay.
+- If you wait it out, *"Eventually, the moment passes."* The decent thing happens, and you get no money, no fanfare and nothing back. Soul does not go up.
 
-### Externalities feed
-Consequences arrive a little after each choice. The feed's title shifts with the setting: *Things That Happened → Gossip → Stakeholder Updates → Evidence*. The newest item also scrolls under the scene.
+### Daily dues (the trap)
+At home time someone always wants paying: **the hall monitor (50p), Biff (£3), then the payroll (£40)**. If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal. Honest income barely covers the dues and never comes close to the next milestone. A player who keeps choosing decency is stuck at St. Pete's indefinitely, frozen at the gate every few days, until they face the fact that they have to sell their soul to make money.
+
+### Meters
+**Soul**, **Playground Happiness** and **Market Monopoly** are shown without numbers. Soul and happiness only ever go down: exploiting lowers them, and kindness never raises them again. Below 30 Soul, Tuck's eyes turn into £ signs.
+
+### Milestones
+Each school ends with a purchase that only exploitation can afford: the **Mega-Coated Trench Coat (£6)**, the **bikeshed from the Senior Hall Monitors (£50)**, and the **five-year exclusive contract with Vice-Principal Crane (£500)**. Once the story at a school runs out, quick deals keep turning up until you can afford it.
 
 ## 4. Narrative arc
 
 | Stage | Setting and art | Mechanics and scams | Milestone that moves you on |
 | --- | --- | --- | --- |
-| Ages 8–10 | St. Pete's Primary. Hand-drawn crayon on paper. | Billy and the Holo-Dragon, the plaster shortage, loot-box lunchboxes, the Swapsies fee, Biff | Buy the Mega-Coated Trench Coat and hire Biff (£10) |
-| Ages 11–13 | St. Jude's Comprehensive. Crisp Y2K pixel art. | Dev's loan (200% plus his Game Boy), rain-shelter tenancy, Penny's homework factory, the flapjack/"Nibbles" smear, debt collection | Bribe the Senior Hall Monitors for the bikeshed (£100) |
-| Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£1,000) |
+| Ages 8–10 | St. Pete's Primary. Hand-drawn crayon on paper. | Billy and the Holo-Dragon, the plaster shortage, loot-box lunchboxes, the Swapsies fee, Biff | Buy the Mega-Coated Trench Coat and take Biff (£6) |
+| Ages 11–13 | St. Jude's Comprehensive. Crisp Y2K pixel art. | Dev's loan (200% plus his Game Boy), rain-shelter tenancy, Penny's homework factory, the flapjack/"Nibbles" smear, debt collection | Bribe the Senior Hall Monitors for the bikeshed (£50) |
+| Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£500) |
 | The Fall | Headteacher's office. Stark cinematic realism. | Mrs Ahmed and the ledger, the audit, Biff's statement, teachers confess, Penny leaves, the assembly | Expulsion. The cycle restarts. |
 
 Transitions between schools are in-world captions ("Summer comes. Billy moves to Leicester…"), not title cards. The cut from the advert into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
 
-### The tutorial: the sardine sandwich and the Holo-Dragon
-Little Billy is crying on a damp bench over a sardine paste sandwich, and wants Tuck's only Gummy Snail.
-- **"50p. Fair's fair."** leaves Tuck short of the £1 the hall monitor wants. The Stagnation Freeze begins: rain, and the clock stops.
-- **"50p. And the Holo-Dragon."** gets an arcade fanfare (+50p! RARE CARD ACQUIRED! SOLD TO KYLE: +75p!) and lets play continue.
+### The first choice: the sardine sandwich and the Holo-Dragon
+Little Billy is crying on a damp bench over a sardine paste sandwich, and wants Tuck's only Gummy Snail. Nothing tells the player what's at stake.
+- **"50p. Fair's fair."** or **"Have it."** Billy looks at you, you look at Billy, it starts to rain, and the clock above the door stops. Nothing happens for a long time. Eventually Billy gets his snail. You're left with 50p or less, and the hall monitor wants paying at home time.
+- **"50p. And the Holo-Dragon."** An arcade fanfare plays (+50p! RARE CARD ACQUIRED! SOLD TO KYLE: +75p!). Then, before the next encounter, *Meanwhile: Billy didn't finish his sandwich.*
 
 ### The Fall and the twist ending
 Every option in the Fall is **futile**: bribes, denial, shredding evidence and hiring a solicitor all cost money and change nothing. In assembly, apologising and offering to give it all back triggers the **final freeze**. A high-pitched drone plays, the whole school freezes mid-cough, and the game refuses redemption ("Refunds are not available at this time"). The only way out is to accept expulsion.
@@ -86,6 +92,7 @@ Tuck sits on a wall outside the gates in the rain, assetless, watching kids play
 - Tap targets are at least 44 px. The layout respects iPhone safe areas and the notch. Keyboard hints only appear on devices with a keyboard.
 - **Home-screen app:** a web app manifest, icons and a service worker mean it can be added to the home screen, runs full-screen and works offline after the first visit.
 - Progress autosaves at the start of each day.
+- Controls are tap-only: options, *Carry on*, the ≡ log and mute. There is no speed control, because the pace is the player's.
 
 ## 7. Technical architecture
 
@@ -93,8 +100,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 
 | File | Role |
 | --- | --- |
-| `js/content.js` | All story, dialogue, prices, quotas, ventures and disclaimers. Edit this file to change the story. |
-| `js/game.js` | State machine: clock, quota, encounters, Stagnation Freeze, ledger, school transitions, ending. |
+| `js/content.js` | All story, dialogue, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
+| `js/game.js` | Turn-based state machine: day moments, encounters, the awkward wait, consequences, home-time dues, school transitions, ending. |
 | `js/render.js` | Core renderer (crayon and pixel styles), camera window, compositing, rain, freeze desaturation. |
 | `js/render-ad.js` | The '90s advert style (sets, mascots, broadcast overlays). |
 | `js/render-real.js` | The stark realism style (perspective rooms, silhouettes, lighting, letterbox). |
@@ -103,6 +110,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v3:** Removed all explanation (the title screen is just the name; no choice labels or tutorial hints). Removed passive income and the ledger, so money only comes from choices. The game is now turn-based (three moments a day plus home time), and consequences come back as "Meanwhile…" scenes and a home-time recap. Being good no longer earns anything: the surplus/quota mechanic is replaced by an awkward, open-ended wait, then no reward. Daily dues freeze the day if you can't pay. Milestone prices are rebalanced (£6 / £50 / £500).
 
 - **v2:** Rebuilt the Act 3 art as a full '90s TV commercial and the Act 4 art as cinematic realism. Rebuilt the layout to be playable on iPhone (portrait-first, safe areas, touch). Removed all act labels and title cards in favour of in-world transitions. Made it installable as a home-screen web app and hosted it on GitHub Pages.
 - **v1:** First playable build of the whole arc: four art styles, Stagnation Freeze, quota and surplus kindness, ventures, externalities feed, the Fall and the cyclical ending.
