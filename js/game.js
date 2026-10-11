@@ -94,7 +94,7 @@
       stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0, beyond: 0 },
       cruelty: 0,
       current: null, freeze: null, phase: 'title', lastFiller: -1,
-      mult: 1, bought: [],
+      mult: 1, bought: [], followups: [], used: {}, series: {},
     };
   }
 
@@ -168,7 +168,7 @@
   function hud() {
     const a = act();
     el.school.textContent = window.innerWidth < 560 ? (a.short || a.school) : a.school;
-    el.day.textContent = S.act < 4 ? DAYS[(S.day - 1) % 5] : 'Monday';
+    el.day.textContent = S.act < 4 ? `${DAYS[(S.day - 1) % 5]}${a.goal ? ' · ' + a.goal : ''}` : 'Monday';
     el.time.textContent = clock(S.minute);
     el.time.classList.toggle('frozen', !!S.freeze);
     el.cash.textContent = fmt(S.cash);
@@ -313,20 +313,56 @@
     if (ref.kind === 'story') return storyList()[ref.idx];
     if (ref.kind === 'milestone') return C.milestones[S.act];
     if (ref.kind === 'filler') return C.fillers[S.act][ref.idx];
+    if (ref.kind === 'follow') return C.followUps[ref.id];
     return null;
   }
+  // Debts and other things that come back: due from the morning of a later day.
+  function dueFollowUp() {
+    S.followups = S.followups || [];
+    const i = S.followups.findIndex((f) => f.act === S.act && S.day >= f.day && C.followUps[f.id]);
+    if (i < 0) return null;
+    return S.followups.splice(i, 1)[0];
+  }
+  function scheduleFollow(id) {
+    const f = C.followUps[id];
+    if (!f) return;
+    S.followups = S.followups || [];
+    S.followups.push({ id, act: S.act, day: S.day + (f.after != null ? f.after : 1) });
+  }
   function openNext() {
+    const fu = dueFollowUp();
+    if (fu) return openEnc({ kind: 'follow', id: fu.id });
     if (storyRemaining()) return openEnc({ kind: 'story', idx: S.storyIdx });
     const ms = C.milestones[S.act];
     if (ms && S.cash >= target()) return openEnc({ kind: 'milestone' });
     openFiller();
   }
+  // Quick deals come out of a bag: nothing repeats until everything has had a turn.
+  // Fillers in a `series` (Callum…) appear in order, one step at a time.
   function openFiller(rescue) {
     const fl = C.fillers[S.act];
     if (!fl) return;
-    let idx = Math.floor(Math.random() * fl.length);
-    if (fl.length > 1 && idx === S.lastFiller) idx = (idx + 1) % fl.length;
+    S.used = S.used || {};
+    S.series = S.series || {};
+    const used = (S.used[S.act] = S.used[S.act] || []);
+    const eligible = (ignoreUsed) => fl.map((e, i) => i).filter((i) => {
+      const e = fl[i];
+      if (!ignoreUsed && used.includes(i)) return false;
+      if (e.series) {
+        const done = S.series[e.series] || 0;
+        if (e.step !== done + 1 && !(e.repeat && e.step === done)) return false;
+      }
+      return true;
+    });
+    let pool = eligible(false);
+    if (!pool.length) { used.length = 0; pool = eligible(true); }
+    const avoid = pool.length > 1 ? S.lastFiller : -1;
+    const choices = pool.filter((i) => i !== avoid);
+    const idx = pick(choices.length ? choices : pool);
+    used.push(idx);
     S.lastFiller = idx;
+    const e = fl[idx];
+    if (e.series) S.series[e.series] = Math.max(S.series[e.series] || 0, e.step);
     openEnc({ kind: 'filler', idx, rescue: !!rescue });
   }
   function openEnc(ref) {
@@ -396,6 +432,7 @@
     if (o.evil >= 2) S.happy = clamp(S.happy + Math.min(0, o.happy || -3), 0, 100);
     if (o.evil >= 2) S.mono = clamp(S.mono + (o.mono || 3), 0, 100);
     if (o.flags) Object.assign(S.flags, o.flags);
+    if (o.follow) scheduleFollow(o.follow);
     popups(o.fanfare, d);
     queueConsequences(enc, o.feed);
     showResult(enc, o, o.evil >= 2 ? 'exploit' : null);
@@ -477,8 +514,7 @@
     el.fHint.textContent = '';
     el.fLog.innerHTML = '';
     buildIdles();
-    el.fReconsider.hidden = false;
-    el.fReconsider.textContent = 'Change your mind';
+    el.fReconsider.hidden = true; // no way out but through
     el.freeze.classList.remove('final');
     showPanel('freeze');
     el.freeze.scrollTop = 0;
@@ -504,6 +540,7 @@
     S.freeze = null;
     S.cash = Math.max(0, S.cash + scale(F.o.cash || 0));
     if (F.o.flags) Object.assign(S.flags, F.o.flags);
+    if (F.o.follow) scheduleFollow(F.o.follow);
     S.stats.kind++;
     hud();
     showResult(F.enc, F.o, 'decent', C.awkward.passes);
@@ -594,10 +631,19 @@
       html: `<p class="kicker">${DAYS[(S.day - 1) % 5]}, on the way home</p>` +
         (lines.length ? `<ul class="home-list">${lines.map((l) => `<li>${esc(l)}</li>`).join('')}</ul>` : '<p class="sub">Nothing much happened today.</p>') +
         `<p class="sub">${esc(paid)} You have ${fmt(S.cash)} left.</p>` +
+        (progressLine() ? `<p class="sub progress">${esc(progressLine())}</p>` : '') +
         (evening ? `<p class="evening">${esc(evening)}</p>` : ''),
       buttons: [{ label: shopFor().length ? 'Carry on' : 'Tomorrow', fn: () => (shopFor().length ? bedtime() : nextDay()) }],
       delay: 900,
     });
+  }
+
+  // How close you are to the goal, told in-world. Never a number (so the hidden scaling stays hidden).
+  function progressLine() {
+    const pr = act().progress;
+    if (!pr || !target()) return '';
+    const r = S.cash / target();
+    return pr[r >= 0.85 ? 2 : r >= 0.45 ? 1 : 0];
   }
 
   /* ---------------- bedtime: the tuck shop ---------------- */
@@ -610,7 +656,7 @@
     if (!list.length) { nextDay(); return; }
     showScene(null);
     const buttons = list.map((u) => {
-      const cost = scale(u.cost);
+      const cost = u.cost;
       return { label: `${u.name} · ${fmt(cost)}`, secondary: true, disabled: S.cash < cost, fn: () => buyUpgrade(u) };
     });
     buttons.push({ label: 'Go to bed', fn: nextDay });
@@ -622,7 +668,7 @@
     });
   }
   function buyUpgrade(u) {
-    const cost = scale(u.cost);
+    const cost = u.cost;
     if (S.cash < cost) { bedtime(); return; }
     S.cash -= cost;
     S.mult = (S.mult || 1) * u.mult; // the world quietly keeps pace; see scale()
@@ -700,6 +746,7 @@
     S.freeze = null;
     S.later = [];
     S.home = [];
+    S.mult = 1; // new school, new business: the old improvements stay behind
     if (n > 1 && n < 4) S.happy = 100;
     S.phase = 'play';
     setMode('play');
@@ -720,9 +767,14 @@
   // Story beats shown one at a time over the scene. No titles, no act numbers.
   function captions(lines, done, i = 0) {
     if (i >= lines.length) { if (done) done(); return; }
+    const ln = typeof lines[i] === 'string' ? { text: lines[i] } : lines[i];
+    if (ln.scene) {
+      if (ln.scene.style) document.body.className = 'style-' + ln.scene.style;
+      showScene({ scene: ln.scene }, {}, ln.glitch ? { glitch: true } : { fade: true });
+    }
     showCard({
-      cls: 'card-caption',
-      html: `<p>${esc(fill(lines[i]))}</p>`,
+      cls: 'card-caption' + (ln.big ? ' big' : ''),
+      html: ln.big ? `<h1 class="market">${esc(fill(ln.text))}</h1>` : `<p>${esc(fill(ln.text))}</p>`,
       buttons: [{ label: i < lines.length - 1 ? '…' : 'Carry on', fn: () => captions(lines, done, i + 1) }],
       delay: 500,
     });
@@ -731,6 +783,7 @@
   function endAct() {
     const n = S.act;
     S.phase = 'transition';
+    setMode('transition');
     showPanel(null);
     captions(act().outro || [], () => startAct(n + 1));
   }

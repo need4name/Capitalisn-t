@@ -85,6 +85,8 @@
       style: 'crayon',
       bg: 'playground',
       target: 600,
+      goal: 'the coat',
+      progress: ['The Year 6 leaver walks past, looks at your pockets, and laughs out loud.', 'The Year 6 leaver walks past, looks at your pockets, and shakes his head. Not yet.', 'The Year 6 leaver walks past, looks at your pockets, and nods. Slowly. Almost.'],
       line: [[1, 1], [4, 2]], // [from day, cruelty required]
       dues: 60, // owed at home time on day 1…
       duesStep: 20, // …and this much more every day after (for duesDays days). The price "depends".
@@ -96,14 +98,17 @@
       feedTitle: 'Things That Happened',
       objective: 'There’s a Year 6 leaver selling a Mega-Coated Trench Coat. {target}.',
       outro: [
-        'Summer comes. Billy moves to Leicester. Nobody tells him why, and nobody tells you. Gary the pigeon sees you off at the gates. He does not wave. Pigeons can’t wave. It’s implied.',
-        'The coat comes with you to big school. So does Biff.',
+        { text: 'The coat goes down to Tuck’s ankles. He walks out of St. Pete’s for the last time with Biff a step behind him, like weather.', scene: { bg: 'playground', cast: ['biff'], style: 'crayon' } },
+        { text: 'Then it’s the summer holidays. It rains for six weeks. Tuck spends them doing stocktake on a jumper.', scene: { bg: 'playground', cast: [], rain: true, style: 'crayon' } },
+        { text: 'Billy moves to Leicester. Nobody tells him why. Gary the pigeon sees Tuck off at the gates. He doesn’t wave. Pigeons can’t wave. It’s implied.', scene: { bg: 'shed', cast: ['gary'], noTuck: true, style: 'crayon' } },
+        { text: 'On the first morning of big school, Tuck’s mum takes a photo of him on the doorstep. When it comes back from Boots, he is very slightly pixelated. So is she. So is the dog. Nobody mentions it.', scene: { bg: 'corridor', cast: [], style: 'pixel' }, glitch: true },
       ],
       intro: [
         "St. Pete's Primary. Morning break.",
         'This is Tucker. Everyone calls him Tuck. Mismatched shoes — one red, one a different red. Navy shorts in a school of grey trousers.',
         "Rolled inside his jumper: eleven Gummy Snails, liberated from his nan's handbag.",
         'The hall monitor wants paying every day at home time. Nobody knows why. The price, he says, depends.',
+        'And behind the sports shed, a Year 6 leaver is selling a Mega-Coated Trench Coat. Eleven inside pockets. It smells of Lynx Africa and ambition. Tuck has never wanted anything more in his life.',
       ],
     },
     2: {
@@ -115,6 +120,8 @@
       style: 'pixel',
       bg: 'corridor',
       target: 5000,
+      goal: 'the bikeshed',
+      progress: ['Gavin watches you from the bikeshed. He doesn’t even bother looking the other way.', 'Gavin watches you from the bikeshed. He looks the other way, but only slightly.', 'Gavin watches you from the bikeshed and very nearly looks completely the other way.'],
       line: [[1, 2], [3, 3]],
       dues: 800,
       duesStep: 200,
@@ -123,8 +130,9 @@
       broke: 'Biff is waiting by the gates. Today Biff is on {dues}. You have {cash}. Biff doesn’t go home until he’s paid, and neither do you.',
       paid: 'Paid Biff {dues}. He counted it twice. His rate has gone up. He says it’s “inflation”. He pronounces it “inflection”.',
       outro: [
-        'Three years go by the way three years do at that age: all at once, and then forever.',
-        'You stop selling things. You start owning the things other people sell.',
+        { text: 'Gavin hands over the keys to the bikeshed. The bikeshed doesn’t have a door. He hands them over anyway, very solemnly, and looks slightly to the left for the rest of his life.', scene: { bg: 'bikeshed', cast: ['gavin'], style: 'pixel' } },
+        { text: 'Then Year 9 happens. Then GCSEs happen. A moustache happens, mostly.', scene: { bg: 'corridor', cast: [], style: 'pixel' } },
+        { text: 'One morning Tuck wakes up and everything is glossy. The cornflakes have a jingle. His mum’s teeth go *ting* when she smiles. Biff has a slogan. Nobody mentions it.', scene: { bg: 'sixth', cast: [], style: 'ad' }, glitch: true },
       ],
       start: 530,
       feedTitle: 'Gossip',
@@ -133,6 +141,7 @@
         "St. Jude's Comprehensive. 1,400 pupils. One working radiator.",
         'Tuck is eleven now. The coat is still enormous. It is a statement. The statement is: inside this coat there are things you want.',
         "Biff came too. Biff was held back, then pushed forward, and now he's in Year 7 with you. He's on a daily rate. The rate is whatever Biff says it is.",
+        'At St. Jude’s there is exactly one dry, unsupervised, teacher-blind square metre: the bikeshed. Whoever runs the bikeshed runs the school. The Senior Hall Monitors run the bikeshed. For now.',
       ],
     },
     3: {
@@ -144,6 +153,8 @@
       style: 'ad',
       bg: 'sixth',
       target: 60000,
+      goal: 'the contract',
+      progress: ['Mr Crane passes you in the corridor and doesn’t wink.', 'Mr Crane passes you in the corridor and winks. Once.', 'Mr Crane passes you in the corridor, winks twice, and pats his inside pocket, where the envelope lives.'],
       line: [[1, 2], [3, 3]],
       dues: 6000,
       duesStep: 2000,
@@ -152,7 +163,9 @@
       broke: 'Biff, Gavin and Mr Pembleton are waiting outside your office. Today they’re owed {dues} between them. You have {cash}. Nobody leaves until everybody’s paid.',
       paid: 'Paid out {dues} in retainers: Biff, Gavin, and an envelope for Mr Pembleton, who has started counting his.',
       outro: [
-        'The confetti is still coming down when the picture cuts out.',
+        { text: 'There is a jingle. There is confetti that you paid for, falling from a ceiling that you own. Somebody hands you a giant novelty cheque. It is made out to you, from you.', scene: { bg: 'office', cast: ['crane'], style: 'ad' } },
+        { text: 'Meanwhile, in lost property, under a PE bag that nobody has claimed since 2003, somebody finds a ledger.', scene: { bg: 'corridor', cast: [], style: 'ad' } },
+        { text: 'The confetti is still coming down when the picture cuts out.', scene: { bg: 'sixth', cast: [], style: 'ad' } },
       ],
       start: 530,
       feedTitle: 'Stakeholder Updates',
@@ -161,6 +174,7 @@
         'TUCK ENTERPRISES™. Est. Year 9. Now with a Sixth Form Campus Division!',
         "Tuck doesn't deal any more. He has a digital organiser, a mission statement, and a moustache he's very proud of. It's mostly shadow.",
         'Remember: playground happiness is a renewable resource. Until it isn’t.',
+        'Mr Crane, the Vice-Principal, keeps mentioning a five-year exclusive contract. He mentions it every time he sees you. Then he winks. It might be a tic. It is not a tic.',
       ],
     },
     4: {
@@ -200,8 +214,8 @@
           { evil: 1, label: '“50p. Fair’s fair.”', cash: 50, result: 'Billy hands over a warm 50p and eats the snail slowly, like it’s the last good thing that will ever happen to him.' },
           { evil: 0, label: '“Have it. It’s only a snail.”', cash: 0, soul: 3, result: 'Billy stops crying. He says thank you four times. You feel something warm in your chest. It doesn’t pay the hall monitor.' },
           {
-            evil: 2, label: '“A pound. You can owe me the other 50p.”', cash: 100, soul: -5, happy: -3,
-            fanfare: ['+50p!', 'IOU ACQUIRED!'],
+            evil: 2, label: '“A pound. You can owe me the other 50p.”', cash: 50, soul: -5, happy: -3, follow: 'billy-iou',
+            fanfare: ['IOU ACQUIRED!'],
             result: 'Billy hands over 50p and an IOU in felt tip. It says I.O.U. 50P. LOVE BILLY. The “love” is the worst part. You fold it into the jumper with the snails.',
             feed: ['Billy has started skipping his Wotsits to pay back the 50p. He is eight. He has a repayment plan.'],
           },
@@ -229,7 +243,7 @@
             feed: ['Jade’s class went to the Sea Life Centre. Jade stayed behind and did colouring with the deputy head.', 'Nurse Pat has started recommending “walking it off”.'],
           },
           {
-            evil: 3, label: '“Two plasters, £1.20, plus a wound maintenance contract. 10p a day.”', cash: 220, soul: -10, happy: -6, mono: 5,
+            evil: 3, label: '“Two plasters, £1.20, plus a wound maintenance contract. 10p a day.”', cash: 140, follow: 'jade-sub', soul: -10, happy: -6, mono: 5,
             fanfare: ['+£1.20!', 'RECURRING REVENUE!', 'SUBSCRIPTION ACTIVE!'],
             result: 'Jade signs the contract in crayon. Every morning you inspect her knee by looking at it from about a metre away and nodding. She pays 10p for the nod.',
             feed: ['Jade’s knee healed on Wednesday. She’s still paying. The contract has no end date. She’s eight.', 'Jade has started limping on purpose. She thinks that’s what she’s paying for.'],
@@ -246,7 +260,7 @@
           { evil: 1, label: '“It’s a carrot, Priya. 30p.”', cash: 30, result: 'Priya buys the carrot. She appreciates the honesty. Honesty, it turns out, is 30p.' },
           { evil: 0, label: 'Swap lunches with her. No charge.', cash: 0, soul: 3, result: 'Priya eats your crisps. You eat her cheese sandwich. It is, honestly, a superb cheese sandwich.' },
           {
-            evil: 2, label: '“30p a box. Could be a Wagon Wheel. Could be anything.”', cash: 120, soul: -7, happy: -6, mono: 5,
+            evil: 2, label: '“30p a box. Could be a Wagon Wheel. Could be anything.”', cash: 90, follow: 'priya-credit', soul: -7, happy: -6, mono: 5,
             fanfare: ['+£1.20!', 'NEW REVENUE STREAM!'],
             result: 'Priya opens three boxes. Carrot. Carrot. A different carrot. She buys a fourth on credit. There is no Wagon Wheel. There has never been a Wagon Wheel.',
             feed: ['Priya owes you 30p. She has started drawing Wagon Wheels in her maths book.', 'Mystery lunchboxes are now banned at St. Pete’s. Demand has doubled.'],
@@ -602,10 +616,9 @@
       scene: { bg: 'shed', cast: ['leaver'] },
       speaker: 'leaver',
       text: 'Behind the sports shed, a Year 6 leaver is selling a Mega-Coated Trench Coat. It is enormous. It has eleven inside pockets. It smells of Lynx Africa and ambition.',
-      line: '{target}. And I’ll throw in Biff. He follows the coat.',
+      line: 'Show us your pockets. …Yeah. That’ll do. I’ll throw in Biff. He follows the coat.',
       options: [
-        { type: 'milestone', label: 'Buy the coat. Take Biff. ({target})', cost: 600, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
-        { type: 'later', label: '“Not yet.”' },
+        { type: 'milestone', label: 'Hand it over.', cost: 600, fanfare: ['MEGA-COATED TRENCH COAT!', 'SECURITY HIRED: BIFF!'], result: 'You put on the coat. It drags on the ground. Biff falls in behind you like a weather system. Primary school is over. You are ready for the big leagues.' },
       ],
     },
     2: {
@@ -613,21 +626,19 @@
       scene: { bg: 'bikeshed', cast: ['gavin'] },
       speaker: 'gavin',
       text: 'The Senior Hall Monitors control the bikeshed: the only covered, unsupervised, teacher-blind square metre at St. Jude’s. Head Monitor Gavin wears his sash like a war medal.',
-      line: '{target}, Tucker, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
+      line: 'I’ve been watching your pockets, Tucker. That’s the price. Don’t ask what the price is. That’s the price, and the bikeshed is yours. I didn’t see anything. I never see anything. That’s the job.',
       options: [
-        { type: 'milestone', label: 'Pay Gavin. Take the bikeshed. ({target})', cost: 5000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
-        { type: 'later', label: '“Not yet.”' },
+        { type: 'milestone', label: 'Hand it over.', cost: 5000, fanfare: ['HALL MONITORS BRIBED!', 'EXCLUSIVE TRADING HUB SECURED!'], result: 'Gavin pockets the money and adjusts his sash. From now on, nothing happens at the bikeshed, officially. Unofficially, everything does.' },
       ],
     },
     3: {
       id: 'contract',
       scene: { bg: 'office', cast: ['crane'] },
       speaker: 'crane',
-      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He would like {target}. He has brought an envelope.',
+      text: 'The Vice-Principal, Mr Crane, has a proposal. Five years. Exclusive commercial rights to every vending machine, fountain, photocopier and tuck shop on campus. He has brought an envelope. It is exactly the right size. He doesn’t say what for.',
       line: 'Just sign here, Tucker. And here. And initial there. Lovely pen, isn’t it?',
       options: [
-        { type: 'milestone', label: 'Sign the five-year exclusive contract. ({target})', cost: 60000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
-        { type: 'later', label: '“Not yet.”' },
+        { type: 'milestone', label: 'Fill the envelope. Sign.', cost: 60000, fanfare: ['5-YEAR EXCLUSIVE CONTRACT!', 'MARKET MONOPOLY: 100%!', 'TUCK ENTERPRISES™ WINS!'], result: 'You sign. Mr Crane shakes your hand. Somewhere a jingle plays. Confetti that you paid for falls from a ceiling that you own. You have won capitalism. You are sixteen.' },
       ],
     },
   };
@@ -668,7 +679,7 @@
         ],
       },
       {
-        id: 'f-ribena', scene: { cast: ['callum'] }, speaker: 'callum',
+        id: 'f-ribena', series: 'callum', step: 1, scene: { cast: ['callum'] }, speaker: 'callum',
         text: 'Callum in Year 4 has drunk so much Ribena that the school nurse says he is “technically a cordial”. His mum has banned it. He has found out that you have a bottle.',
         line: 'I can feel my blood going normal, Tuck. Please. I don’t like it.',
         options: [
@@ -685,6 +696,83 @@
           { evil: 1, label: 'Fish them out. Wait meaningfully for a tip.', cash: 20, soul: -1, result: 'Mr Dobson gives you 20p and a single nod. The nod is worth more. The 20p is worth 20p.' },
           { evil: 0, label: 'Fish them out with a ruler and some chewing gum.', cash: 0, result: 'You hand back the keys. Mr Dobson looks at you, then at the keys, then mops your shoes, slowly and with great tenderness. It is the nicest thing anyone has ever done to your shoes.' },
           { evil: 2, label: 'Fish them out. Rent him his keys by the hour.', cash: 100, soul: -6, happy: -3, fanfare: ['+£1!', 'KEY WORKER!'], result: 'Mr Dobson pays 10p an hour for his own keys. He says nothing. He mops the drain where they fell, for a very long time.', feed: ['Mr Dobson mopped the same tile all lunchtime. It was a mop of grief.'] },
+        ],
+      },
+      {
+        id: 'f-callum2', series: 'callum', step: 2, scene: { cast: ['callum'] }, speaker: 'callum',
+        text: 'Callum is back. He isn’t purple any more. He’s mauve. He says it’s “a phase”. His mum has hidden every bottle of Ribena in the house inside a hollowed-out Bible.',
+        line: 'I found it on Sunday. I’ve been reading it all week. Not the words. The Ribena.',
+        options: [
+          { evil: 0, label: 'Tell him mauve really suits him.', cash: 0, result: 'Callum beams. “Thanks, Tuck.” He looks at his hands. “It does, doesn’t it.” It does, actually.' },
+          { evil: 1, label: 'One small cup. 20p.', cash: 25, soul: -1, result: 'Callum drinks it standing up, eyes closed, like a man at a christening.' },
+          { evil: 2, label: 'Sell him “Ribena Extra”: Ribena, plus more Ribena.', cash: 110, soul: -6, happy: -4, fanfare: ['NEW PRODUCT LINE!'], result: 'Ribena Extra is a bottle of Ribena with “EXTRA” written on it. Callum holds it up to the light and says “I can taste the extra.”', feed: ['Callum has gone back from mauve to purple. He says it was “a relapse”, then laughs for a full minute.'] },
+          { evil: 3, label: 'Ribena by subscription, delivered to his desk by Year 2s on scooters.', cash: 190, soul: -11, happy: -6, fanfare: ['SUBSCRIPTION ACTIVE!', 'LAST-MILE DELIVERY!'], result: 'Every forty minutes a Year 2 scoots into Numeracy, hands Callum a cup, and scoots out. Miss Tranter has stopped asking.', feed: ['Callum’s desk is now permanently sticky. Nothing will stay on it. A pencil case slid off it and out of the window.', 'One of the delivery Year 2s has started demanding a pension.'] },
+        ],
+      },
+      {
+        id: 'f-callum3', series: 'callum', step: 3, scene: { cast: ['callum'] }, speaker: 'callum',
+        text: 'Callum has started a Ribena support group. It meets behind the mobile classroom. He is the only member. He has asked you to come and speak.',
+        line: 'You don’t have to say much. Just “hello Callum” and then whatever’s in your heart. And maybe a bottle.',
+        options: [
+          { evil: 0, label: 'Go. Say “hello Callum”. Mean it.', cash: 0, result: 'You say hello Callum. He says hello Tuck. Neither of you knows what to say next, so you sit on the step for a bit. A blackbird lands. It’s nice. It’s really nice.' },
+          { evil: 1, label: 'Speak. Charge a modest speaker’s fee.', cash: 30, soul: -1, result: 'Your speech is four words long. Callum claps for a long time. He pays in 1p coins, which take longer than the speech.' },
+          { evil: 2, label: 'Speak. Sell refreshments. The refreshments are Ribena.', cash: 120, soul: -7, happy: -4, fanfare: ['CATERING CONTRACT!'], result: 'The support group runs for twelve minutes and Callum drinks the entire refreshment table. He calls it “the best meeting we’ve ever had”.', feed: ['Callum has made you an honorary member of his support group. He’s written your name on the sign-in sheet in purple.'] },
+          { evil: 3, label: 'Franchise it. Ribena Anonymous: now open to every Year 4. Membership £1.', cash: 210, soul: -12, happy: -8, mono: 6, fanfare: ['FRANCHISE OPENED!', 'MEMBERSHIP FEES!'], result: 'Ribena Anonymous has nineteen members by Friday. None of them drank Ribena before they joined. All of them do now. The meetings are catered.', feed: ['Nineteen Year 4s have gone purple. The school photo has been postponed.', 'Callum says he feels “less alone now, but also worse”.'] },
+        ],
+      },
+      {
+        id: 'f-callum4', series: 'callum', step: 4, repeat: true, scene: { cast: ['callum'] }, speaker: 'callum',
+        text: 'In assembly, Mrs Whitlock accidentally reads out Callum’s name for the Cycling Proficiency award. He can’t ride a bike. He accepts it anyway, in tears, from a stage he has also never been on.',
+        line: 'This is the best day of my life. Everybody’s looking at me. I’m going to remember this when I’m forty.',
+        options: [
+          { evil: 0, label: 'Clap louder than anyone.', cash: 0, result: 'You clap until your hands hurt. Callum points at you from the stage like a pop star. Mrs Whitlock never corrects it. He keeps the badge for ever.' },
+          { evil: 1, label: 'Sell him a frame for the certificate.', cash: 30, soul: -1, result: 'The frame is a cereal box with a square cut out. Callum says it’s “museum quality”.' },
+          { evil: 2, label: 'Sell signed photos of “Award-Winning Callum”. 10p each.', cash: 120, soul: -6, happy: -3, fanfare: ['CELEBRITY MERCH!'], result: 'Callum signs forty photos in purple felt tip and sells every one. He thinks the money goes to charity. It goes in the jumper.', feed: ['Callum asked what charity the photos were for. You said “a local one”. He’s very proud of the local one.'] },
+          { evil: 3, label: 'Tell the real winner she can have it back. For a fee.', cash: 200, soul: -12, happy: -8, fanfare: ['AWARD BROKERED!'], result: 'Ellie in Year 6, who can actually ride a bike, pays £2 to get her badge back. You take the badge off Callum during wet play while he’s showing it to a radiator.', feed: ['Callum asked everyone if they’d seen his badge. Nobody said anything. Ellie wore it to the end of term, facing inwards.'] },
+        ],
+      },
+      {
+        id: 'f-milk', scene: { cast: ['year2'] }, speaker: 'year2',
+        text: 'The milk monitor is off with chickenpox, so somebody has to hand out the free milk. “Free” is such an ugly word.',
+        line: 'Is it milk time? Mrs Pike says milk makes your bones like Superman.',
+        options: [
+          { evil: 0, label: 'Hand out the milk. All of it. For free.', cash: 0, result: 'Thirty cartons, thirty straws, thirty very small moustaches. One Year 2 calls you “the milk man” for the rest of the year, with total respect.' },
+          { evil: 1, label: 'Hand it out. Sell the spare cartons at 5p.', cash: 30, soul: -1, result: 'There are six spare cartons. They go in a minute. Milk, it turns out, has a secondary market.' },
+          { evil: 2, label: 'Charge 5p a carton. Call it “admin”.', cash: 120, soul: -6, happy: -5, fanfare: ['ADMIN FEE!'], result: 'Twenty-four children pay for free milk. Six can’t. They watch the others drink it, which you file under “marketing”.', feed: ['Six Year 2s went without milk. One of them told her mum her bones are “just going to have to cope”.'] },
+          { evil: 3, label: 'Charge for the milk, then sell the empty cartons to the art teacher for robot-making.', cash: 190, soul: -11, happy: -6, fanfare: ['CIRCULAR ECONOMY!', 'SOLD TWICE!'], result: 'The art teacher buys thirty empty cartons for the Year 2 robots. The Year 2s spend the afternoon building robots out of the milk they paid for and didn’t all get.', feed: ['The Year 2 robot display is called OUR FRIENDS THE ROBOTS. Three of the robots are crying. The children drew that on themselves.'] },
+        ],
+      },
+      {
+        id: 'f-conker', scene: { cast: ['kyle'] }, speaker: 'kyle',
+        text: 'It’s conker season. Tommy in Year 5 has a conker that has beaten forty-seven other conkers. It is called Dennis. Dennis has a fan club. Kyle is the treasurer.',
+        line: 'Dennis is undefeated, Tuck. Dennis is a legend. Dennis is basically a horse.',
+        options: [
+          { evil: 0, label: 'Ask if you can hold Dennis. Respectfully.', cash: 0, result: 'You hold Dennis. He is warm from Tommy’s pocket. He is, you have to admit, an incredible conker.' },
+          { evil: 1, label: 'Run the queue to fight Dennis. 5p a go.', cash: 40, soul: -1, result: 'Dennis beats eight more conkers. Tommy is carried round the playground. You count the 5ps.' },
+          { evil: 2, label: 'Take bets. Soak Dennis in vinegar overnight, “for his health”.', cash: 130, soul: -6, happy: -4, fanfare: ['BOOKMAKER LICENSED!'], result: 'Vinegar Dennis is unstoppable. You knew he would be. You bet on him. Everybody who bet against him pays you, including Tommy’s mum.', feed: ['Tommy’s hands smell of vinegar. He thinks it’s the smell of victory.'] },
+          { evil: 3, label: 'Swap Dennis for a painted pebble. Sell the real Dennis to Kyle.', cash: 210, soul: -12, happy: -7, fanfare: ['ASSET STRIPPED!', 'DENNIS ACQUIRED!'], result: 'Tommy loses his first ever match, to a Year 3, with a pebble. He doesn’t understand. Kyle keeps Dennis in a matchbox and visits him at weekends.', feed: ['Tommy has retired from conkers. He says he “lost his touch”. He’s ten.', 'Kyle has added Dennis to his business card.'] },
+        ],
+      },
+      {
+        id: 'f-gary2', scene: { cast: ['gary'] }, speaker: '',
+        text: 'Gary the pigeon has worked out how to take crisps straight out of open packets. He is bringing them to you and laying them at your feet, like a cat with a mouse.',
+        line: '',
+        options: [
+          { evil: 0, label: 'Give the crisps back to the kids. Tell Gary no.', cash: 0, result: 'Gary looks at you for a long time. Then he takes one crisp back off a Year 3, very deliberately, and eats it in front of you. You respect that.' },
+          { evil: 1, label: 'Sell the crisps back to their owners at cost.', cash: 30, soul: -1, result: 'You sell people back their own crisps for what they paid for them. Everyone agrees this is fair. Nobody is sure why they feel worse.' },
+          { evil: 2, label: 'Sell them back at full price. Gary gets one crisp in five.', cash: 110, soul: -6, happy: -4, fanfare: ['PIGEON PARTNERSHIP!'], result: 'Gary is an exceptional employee. He works through lunch, takes no breaks, and only bites people who deserve it.', feed: ['Packets of crisps at St. Pete’s are now opened under desks, in silence, like contraband.'] },
+          { evil: 3, label: 'Train Gary properly. Give him targets.', cash: 190, soul: -11, happy: -7, mono: 6, fanfare: ['WORKFORCE EXPANDED!', 'GARY: EMPLOYEE OF THE MONTH!'], result: 'Gary takes twenty-two crisps from nine children in a single lunchtime. You give him a little paper hat. He looks magnificent. He looks like he knows exactly what he’s done.', feed: ['The dinner ladies have put up a sign: DO NOT FEED GARY. Underneath, someone has written: GARY FEEDS HIMSELF.', 'A Year 1 had a full sandwich taken out of his hand. He says Gary “looked sorry, but did it anyway”.'] },
+        ],
+      },
+      {
+        id: 'f-nits', scene: { cast: ['jade'] }, speaker: 'jade',
+        text: 'It’s nit-check day. Nurse Pat has a metal comb and the eyes of a hawk. A Year 4 has already fainted at the sight of the comb.',
+        line: 'If I’ve got nits I get to go home. I want to go home. Have YOU got nits?',
+        options: [
+          { evil: 0, label: 'Tell her she’s fine and walk her to the nurse.', cash: 0, result: 'Jade has no nits. She is outraged. She has to stay for Spelling.' },
+          { evil: 1, label: 'Sell carrier-bag “nit hats”. 10p.', cash: 35, soul: -1, result: 'A row of Year 4s sits through nit-check in Tesco bags. Nurse Pat doesn’t say anything. She just combs harder.' },
+          { evil: 2, label: 'Tell Year 3 that nits are lucky. Sell them by the nit.', cash: 120, soul: -6, happy: -5, fanfare: ['NEW MARKET!'], result: 'You have no nits to sell. You sell grains of rice, one at a time, in a matchbox. Demand is extraordinary.', feed: ['Three Year 3s asked their mums to “put the nits back in” after a lice treatment.'] },
+          { evil: 3, label: 'Sell nits to kids who want a day off. Sell the cure to their parents.', cash: 200, soul: -12, happy: -8, fanfare: ['BOTH SIDES SOLD!', 'VERTICALLY INTEGRATED!'], result: 'You buy a jar of real nits off a Year 6 nobody talks to. By Thursday, half of Year 4 is at home, and their parents are buying your “nit shampoo”. It is washing-up liquid.', feed: ['St. Pete’s has had to close two classrooms. The council has sent a letter. The letter has nits.', 'The Year 6 who sold you the nits has made his first ever friend. It’s a nit.'] },
         ],
       },
       {
@@ -759,6 +847,61 @@
         ],
       },
       {
+        id: 'f-tamagotchi', scene: { cast: ['year7s'] }, speaker: 'year7s',
+        text: 'A Year 7’s Tamagotchi is dying in Geography and she isn’t allowed to feed it in lessons. It’s beeping. Everyone can hear it beeping. It’s beeping in a way that sounds like it knows.',
+        line: 'He’s called Kevin Two. Kevin One died in Science. Please.',
+        options: [
+          { evil: 0, label: 'Feed Kevin Two for her, under your desk.', cash: 0, result: 'You press the little button. Kevin Two eats a little pixel burger and does a little dance. She mouths “thank you” across the room. You get a detention for “fiddling”.' },
+          { evil: 1, label: 'Babysit him through Geography. £1.', cash: 200, soul: -1, result: 'Kevin Two survives Geography. So do you, just about. Geography is about rivers this term.' },
+          { evil: 2, label: 'Babysit him at £1 an hour. Overtime after the bell.', cash: 550, soul: -6, happy: -4, fanfare: ['CHILDCARE!'], result: 'You keep Kevin Two alive for a day and a half. Your invoice is longer than his life expectancy.', feed: ['The Year 7 paid in instalments. Kevin Two died during the second one.'] },
+          { evil: 3, label: 'Take the money. Let Kevin Two die. Sell her Kevin Three.', cash: 1050, soul: -12, happy: -7, fanfare: ['PLANNED OBSOLESCENCE!', 'REPEAT CUSTOMER!'], result: 'Kevin Two dies at 11:14. You’re very sorry. You happen to have Kevin Three in your coat. Kevin Three is the same Tamagotchi with the battery taken out and put back in.', feed: ['She has held a funeral for Kevin Two in the bikeshed. You charged her for the venue.', 'Kevin Three is doing well. She checks him every four minutes, in case.'] },
+        ],
+      },
+      {
+        id: 'f-detention', scene: { cast: ['year7s'] }, speaker: 'year7s',
+        text: 'Detention. You, eleven others, and Mr Kettle, who has fallen asleep with his mouth open. He makes a noise like a kettle. That’s not why he’s called Mr Kettle. Nobody knows why he’s called Mr Kettle.',
+        line: 'Should we just… go? Can we go? Tuck, can we go?',
+        options: [
+          { evil: 0, label: 'Let him sleep. Do your homework quietly.', cash: 0, result: 'Everyone does their homework in silence while Mr Kettle whistles gently. It’s the most productive hour St. Jude’s has ever seen.' },
+          { evil: 1, label: 'Keep watch at the door for 20p each.', cash: 220, soul: -1, result: 'Eleven people leave early on your watch. Mr Kettle wakes up at four, alone with you, and says “well done, everyone”.' },
+          { evil: 2, label: 'Charge 50p each to leave early.', cash: 550, soul: -6, happy: -4, fanfare: ['EXIT FEES!'], result: 'Eleven children pay to leave a room with no lock. You hold the door open for them. It feels like a service.', feed: ['Mr Kettle woke up to an empty room and wrote “excellent behaviour” in the detention book.'] },
+          { evil: 3, label: 'Charge them to leave. Then wake him up and point at the empty chairs.', cash: 1000, soul: -12, happy: -8, fanfare: ['DOUBLE DIP!', 'GRASS PREMIUM!'], result: 'Eleven Saturday detentions. Mr Kettle thanks you personally and asks if you’d like to be a detention prefect. The badge comes with a 50p allowance.', feed: ['Eleven children did Saturday detention. They all paid you to leave the first one.', 'Somebody has written “GRASS” on your locker. You’ve started charging people to look at it.'] },
+        ],
+      },
+      {
+        id: 'f-snow', scene: { cast: ['year7s'], rain: true }, speaker: 'year7s',
+        text: 'It has snowed two inches. The whole of St. Jude’s is pressed against the windows, staring at the Head’s office, waiting for the announcement that school is closing. It is the most united anyone has ever been.',
+        line: 'They’ll close it. They have to close it. My cousin’s school closed for one inch. ONE INCH.',
+        options: [
+          { evil: 0, label: 'Go outside and build the worst snowman in Britain.', cash: 0, result: 'He has crisps for eyes and a Ribena bottle for a nose. Thirty people help. School doesn’t close. Nobody minds, for once.' },
+          { evil: 1, label: 'Sell sledges made of lunch trays. 20p a go.', cash: 220, soul: -1, result: 'The lunch trays are terrible sledges and an excellent business. Two Year 8s end up in the staff car park, delighted.' },
+          { evil: 2, label: 'Sell “inside information” that school is about to close.', cash: 600, soul: -6, happy: -5, fanfare: ['INSIDER TRADING!'], result: 'Sixty kids pay 10p for a whisper that school’s closing at eleven. It doesn’t close at eleven. You sell them a second whisper about twelve.', feed: ['Forty Year 7s walked home at lunch because you told them school was closed. It wasn’t. Their parents have been informed.'] },
+          { evil: 3, label: 'Pull the fire alarm. Sell hot chocolate to everyone standing outside.', cash: 1200, soul: -12, happy: -9, fanfare: ['MANUFACTURED DEMAND!', 'HOT CHOCOLATE: £1!'], result: 'Fourteen hundred people stand in the snow for forty minutes. You sell hot chocolate out of the coat at a pound a cup. It is mostly hot water and a feeling.', feed: ['The fire brigade came. They bought hot chocolate too.', 'A Year 7 got frostbite on one ear. Only one. He’s calling it “a souvenir”.'] },
+        ],
+      },
+      {
+        id: 'f-darren', scene: { bg: 'corridor', cast: ['year7s'] }, speaker: 'year7s',
+        text: 'A Year 7 has found that the radiator in 9C is on. Properly on. Warm. Word has got round. The queue goes past the library, down the stairs and out into the rain.',
+        line: 'I touched it. I touched it and I felt my fingers again. Is this what Darren felt?',
+        options: [
+          { evil: 0, label: 'Join the queue. Wait your turn like everyone else.', cash: 0, result: 'You get forty seconds with the radiator. It’s wonderful. Behind you, someone is crying with happiness. Nobody is charging anybody for anything.' },
+          { evil: 1, label: 'Run the queue. Tickets, 10p.', cash: 220, soul: -1, result: 'Order is restored. Everyone gets their thirty seconds. Some people go round twice. You make a reasonable living out of warmth.' },
+          { evil: 2, label: '20p a minute. Biff times it with a stopwatch.', cash: 600, soul: -6, happy: -5, fanfare: ['HEAT METERED!'], result: 'Biff takes his job seriously. A Year 8 who goes four seconds over is removed from the radiator like a limpet from a rock.', feed: ['A Year 7 who couldn’t afford a minute stood near the queue to feel the warm air coming off the other people.'] },
+          { evil: 3, label: 'Charge for the radiator. Sell commemorative DARREN mugs. Of hot water.', cash: 1150, soul: -12, happy: -8, mono: 6, fanfare: ['HERITAGE BRAND!', 'DARREN™!'], result: 'The DARREN mug sells out by lunch. Each one is a plastic cup with DARREN written on in marker and hot water from the radiator’s bleed valve. People cry holding them.', feed: ['Darren’s mum has seen the mugs. Darren is alive. He’s a plumber in Swindon. He’s furious.', 'The caretaker has turned the radiator off again “for safety”. The queue stayed for an hour anyway.'] },
+        ],
+      },
+      {
+        id: 'f-gary3', scene: { bg: 'bikeshed', cast: ['gary'] }, speaker: '',
+        text: 'Gary the pigeon has set up on the bikeshed roof and is running a protection racket for the other pigeons. Any pigeon that wants the roof has to bring Gary a crisp. He has a ledger. It’s a leaf.',
+        line: '',
+        options: [
+          { evil: 0, label: 'Leave Gary to it. Respect the hustle.', cash: 0, result: 'You nod at Gary. Gary nods back. Two businessmen. Two different roofs. For now.' },
+          { evil: 1, label: 'Charge the pigeons a small landing fee too.', cash: 200, soul: -1, result: 'You charge the pigeons in crisps and sell the crisps back to Year 7s. Gary watches from the gutter, impressed and slightly threatened.' },
+          { evil: 2, label: 'Take a cut of Gary’s racket. One crisp in three.', cash: 550, soul: -6, happy: -3, fanfare: ['MERGER COMPLETE!'], result: 'Gary agrees, because what else can a pigeon do. You shake hands. You shake foot. It’s awkward for both of you.', feed: ['The bikeshed pigeons look thinner. Gary looks exactly the same.'] },
+          { evil: 3, label: 'Take over. Gary works for you now. Gary’s pigeons pay double.', cash: 1000, soul: -11, happy: -5, mono: 6, fanfare: ['HOSTILE TAKEOVER!', 'GARY: MIDDLE MANAGEMENT!'], result: 'Gary is demoted to middle management. He does the job well and hates every minute of it, which is how you know he’s middle management.', feed: ['A pigeon tried to unionise the bikeshed roof. Gary dealt with it. Nobody knows how. There are feathers.'] },
+        ],
+      },
+      {
         id: 'f-drain', scene: { cast: ['year7s'] }, speaker: 'year7s',
         text: 'A Year 7 has dropped his dinner money down a drain. He is staring at the drain as if it might apologise.',
         line: 'That was my dinner. That was my whole dinner.',
@@ -815,6 +958,61 @@
         options: [
           { evil: 0, label: '“Go on then, Josh.”', cash: 0, result: 'Josh hits the radiator with the spanner. It comes on for the first time since 1996. Somewhere a plaque that just says DARREN gets very slightly warmer.' },
           { evil: 2, label: 'Sell him a “radiator repair licence”. £70. Non-transferable.', cash: 7000, soul: -6, happy: -5, fanfare: ['REGULATORY FRAMEWORK!', '+£70!'], result: 'Josh buys the licence and laminates it. The licence is a Post-it note that says LICENCE. He laminates that too.', feed: ['Josh fixed the radiator, then got fined £70 for not displaying his licence. You run the fines.', 'Josh has eaten the licence.'] },
+        ],
+      },
+      {
+        id: 'f-billy', scene: { cast: ['billy'] }, speaker: 'billy',
+        text: 'Billy is back. He’s sixteen, visiting from Leicester, being shown round his old school by his nan. He’s tall now. He has a moustache that works. He doesn’t recognise you.',
+        line: 'Sorry, do I know you? I used to go here when I was little. I was always crying, apparently. Can’t remember why.',
+        options: [
+          { evil: 0, label: '“It’s me. Tuck. I’m sorry. About the dragon. About all of it.”', cash: 0, result: 'Billy looks at you for a long time. Then he laughs. “The dragon! I’d forgotten the dragon.” He hadn’t. You can tell he hadn’t. He shakes your hand anyway.' },
+          { evil: 1, label: 'Sell him a guided tour of the school.', cash: 3000, soul: -1, result: 'You show Billy the bench where he cried. He says “huh”, quietly, and sits on it for a while.' },
+          { evil: 2, label: 'Sell him a Holo-Dragon. Mint condition. £60.', cash: 6000, soul: -7, happy: -4, fanfare: ['COLLECTOR’S ITEM!'], result: 'Billy buys the Holo-Dragon. He holds it up to the light and goes very still. He doesn’t know why he wants it so badly. You do.', feed: ['Billy keeps the Holo-Dragon in his wallet, behind his bus pass.'] },
+          { evil: 3, label: 'Sell him the Holo-Dragon. It’s his Holo-Dragon. Make him bid against Kyle.', cash: 12000, soul: -15, happy: -6, fanfare: ['AUCTION WON!', 'SOLD BACK TO OWNER!'], result: 'Kyle bids £80 out of spite. Billy bids £120 out of something he can’t name. He wins. He walks out holding his own card. His nan asks if he’s all right. He says he’s fine.', feed: ['Billy’s nan rang the school to ask what happened. Nobody could tell her.', 'Kyle has added “Auctioneer” to his business card.'] },
+        ],
+      },
+      {
+        id: 'f-prom', scene: { cast: ['sixthformer'] }, speaker: 'sixthformer',
+        text: 'The Sixth Form prom is in a fortnight. The theme is “Enchantment Under the Sea”. The budget is £4 and a roll of blue crepe paper.',
+        line: 'Can you help? We were going to do a starfish out of a pizza.',
+        options: [
+          { evil: 0, label: 'Help them make the pizza starfish.', cash: 0, result: 'The pizza starfish is magnificent and smells of pizza. Everyone agrees it’s the best prom in the history of St. Jude’s. Nobody can afford any other prom, so this is technically true.' },
+          { evil: 1, label: 'Sell them decorations at cost.', cash: 3000, soul: -1, result: 'The hall looks like the bottom of the sea, if the sea was mostly crepe paper. It’s lovely.' },
+          { evil: 2, label: 'Sponsor it. “Enchantment Under the Volt-Juice™”.', cash: 7000, soul: -7, happy: -6, fanfare: ['EVENT SPONSORED!'], result: 'Voltage Vince is the DJ. He only plays the jingle. Nobody can dance to it, so everyone does a sort of nervous hop.', feed: ['Prom photos have Vince in the background of every single one, giving a thumbs-up.'] },
+          { evil: 3, label: 'Sell prom tickets. Then sell tickets to the after-party. It’s the same room.', cash: 12000, soul: -14, happy: -9, fanfare: ['SOLD TWICE!', 'VIP AREA: A CHAIR!'], result: 'At ten o’clock, Biff makes everyone leave the hall, waits a minute, and lets them back in for £10. The VIP area is a chair. The chair sells for £30.', feed: ['Three couples broke up over the VIP chair.', 'Somebody’s dad drove three hours to pick them up from the after-party, which was in the room they were already in.'] },
+        ],
+      },
+      {
+        id: 'f-employee', scene: { cast: ['vince'] }, speaker: 'vince',
+        text: 'Voltage Vince has been nominated for Employee of the Month. He’s the only employee. He’s also the only nominee. He’s very nervous. He’s written a speech on the inside of the can.',
+        line: 'If I win, Mr Tuck, I’d like to thank the can. And me mam. And the can.',
+        options: [
+          { evil: 0, label: 'Give him the award. Let him read the speech.', cash: 0, result: 'Vince reads the speech from inside the can. It’s mostly muffled. The bit you can hear is “and me mam”. Everyone stands up. Vince cries, which you can hear, and which echoes.' },
+          { evil: 1, label: 'Give him the award. Charge for the ceremony.', cash: 3000, soul: -1, result: 'Tickets to Vince’s awards ceremony sell well. It’s the kind of thing people say they were there for, later.' },
+          { evil: 2, label: 'Make him pay for his own nomination.', cash: 7000, soul: -7, happy: -4, fanfare: ['NOMINATION FEE!'], result: 'Vince pays the nomination fee in coins from somewhere inside the can. They are warm. You don’t ask.', feed: ['Vince has been saving up for next month’s nomination. He’s stopped eating, which, for Vince, is hard to tell.'] },
+          { evil: 3, label: 'Give it to Gary instead. Charge Vince for a seat at the ceremony.', cash: 12000, soul: -14, happy: -6, fanfare: ['SURPRISE WINNER!', 'GARY™!'], result: 'Gary accepts Employee of the Month in his little tie. He says nothing, which is a better speech than most. Vince claps from the back row, which he paid for.', feed: ['Vince has taped his speech to the inside of the can, where he’ll see it every day.', 'Gary’s portrait now hangs in reception. It’s a better portrait than the Head’s.'] },
+        ],
+      },
+      {
+        id: 'f-council3', scene: { cast: ['council'] }, speaker: 'council',
+        text: 'The Man from the Council is back. He is measuring your profits with a tape measure. It goes out of the door, down the corridor and across the road. He looks worried. He looks impressed.',
+        line: 'This is a very long profit, young man. I’m going to have to write it down in two places.',
+        options: [
+          { evil: 0, label: 'Show him the real books. All of them.', cash: 0, result: 'He reads the books on the spot, in total silence, for forty minutes. Then he takes off his glasses and says, very quietly, “oh, son.” He doesn’t write anything down. He just leaves.' },
+          { evil: 1, label: 'Pay him a consultation fee to go away.', cash: 3000, soul: -1, result: 'You pay him to stop measuring. He takes the money and keeps measuring anyway, more slowly, out of principle.' },
+          { evil: 2, label: 'Sell him a measuring service. You measure things for the council now.', cash: 7000, soul: -7, happy: -4, fanfare: ['PUBLIC CONTRACT!'], result: 'You win the council measuring contract. Biff measures things. Everything Biff measures is “about a metre”. The council is delighted.', feed: ['The council has declared every road in town “about a metre long”.'] },
+          { evil: 3, label: 'Send him to measure Maya’s Greggs. Fine her for the length of her queue.', cash: 12000, soul: -15, happy: -8, fanfare: ['COMPETITOR FINED!', 'REGULATORY CAPTURE!'], result: 'Maya’s Greggs is fined for an “excessively long queue”. The queue was long because the sausage rolls are good. You collect the fine on the council’s behalf.', feed: ['Maya had to let one of her staff go to pay the fine. It was the Year 12 who worked at Greggs. She works for you now.'] },
+        ],
+      },
+      {
+        id: 'f-josh2', scene: { cast: ['josh'] }, speaker: 'josh',
+        text: 'Josh wants to run for Head Boy again. He is already Head Boy. He wants to be more Head Boy. He has made a campaign poster. It just says MORE JOSH.',
+        line: 'People want more Josh, Tuck. I can feel it. I can feel it in my teeth.',
+        options: [
+          { evil: 0, label: '“You’re already Head Boy, Josh. You’re enough Josh.”', cash: 0, result: 'Josh thinks about this for a long time. Then he hugs you. It smells of chalk. He takes the poster down and keeps it under his bed.' },
+          { evil: 1, label: 'Sell him some campaign badges.', cash: 3000, soul: -1, result: 'MORE JOSH badges appear on every lapel. Nobody voted for this. Nobody minds. Josh is everywhere now, and he’s very happy about it.' },
+          { evil: 2, label: 'Run his campaign. Charge him a management fee.', cash: 7000, soul: -7, happy: -4, fanfare: ['CAMPAIGN MANAGER!'], result: 'Josh wins Head Boy by a landslide, against nobody. He thanks you in his speech. Then he eats the speech.', feed: ['Josh is now Head Boy twice. Nobody knows what the second one does. It has its own badge.'] },
+          { evil: 3, label: 'Run him against himself. Charge both campaigns.', cash: 12000, soul: -14, happy: -6, fanfare: ['BOTH SIDES OWNED!', 'DEMOCRACY™!'], result: 'MORE JOSH runs against LESS JOSH. Both are Josh. Both are your clients. The debate is Josh, alone on stage, arguing with a mirror. He loses. He also wins. He cries either way.', feed: ['Josh hasn’t spoken to himself since the election.', 'The student council has been suspended “until Josh is feeling better”.'] },
         ],
       },
       {
@@ -944,6 +1142,70 @@
     '*Gary the pigeon is a non-executive director and is not available for comment.',
   ];
 
+  /* ------------------------------------------------------------------ */
+  /* Follow-ups: IOUs and other things that come back on a later day.   */
+  /* An option with `follow: 'id'` schedules one (after: days, def. 1). */
+  /* ------------------------------------------------------------------ */
+  const followUps = {
+    'billy-iou': {
+      scene: { cast: ['billy'], bench: true }, speaker: 'billy',
+      text: 'Billy finds you at break. He has been saving. He opens his hand, very slowly, like a magician who isn’t sure the trick will work: 38p, a Wotsit, and a small, very clean stone.',
+      line: 'That’s nearly 50p, Tuck. The stone’s nice. I washed it.',
+      options: [
+        { evil: 0, label: '“Keep it, Billy. We’re square.”', cash: 0, result: 'Billy closes his hand around the 38p and the Wotsit and the stone and looks at you as if you’ve done a magic trick. You haven’t been paid. You feel this very precisely, somewhere behind your ribs.' },
+        { evil: 1, label: 'Take the 38p. Let him keep the stone.', cash: 38, result: 'Billy keeps the stone. He holds it all afternoon. It’s the only thing he owns that you haven’t had.' },
+        { evil: 2, label: 'Take the lot. Stone included.', cash: 50, soul: -6, happy: -3, fanfare: ['DEBT SETTLED!'], result: 'You take the money, the Wotsit and the stone. Billy says “thanks, Tuck” as if you’ve done him a favour. You put the stone in the jumper with the snails.', feed: ['Billy’s mum asked where his special stone went. Billy said he “invested it”.'] },
+        { evil: 3, label: 'Take the lot. Add 20p for being late. He can owe you that.', cash: 50, soul: -12, happy: -5, follow: 'billy-iou2', fanfare: ['LATE FEE APPLIED!'], result: 'Billy nods. He writes a new IOU on the back of the old one. I.O.U. 20P. STILL LOVE BILLY. The “still” is the worst part.', feed: ['Billy has stopped buying anything at all. He walks past the tuck stall with his hands in his pockets, holding the 20p he owes you.'] },
+      ],
+    },
+    'billy-iou2': {
+      scene: { cast: ['billy'], bench: true }, speaker: 'billy',
+      text: 'Billy is back with the 20p. It’s in 1p coins, in a sandwich bag, labelled TUCK. Some of the coins are from 1971. He has clearly had to go into his nan’s change jar.',
+      line: 'That’s everything now, isn’t it? We’re done now? I can have snails again?',
+      options: [
+        { evil: 0, label: '“We’re done. Have a snail. On me.”', cash: 0, result: 'You give Billy a snail. He eats it very slowly, staring at you, as though it might be a trap. It isn’t. He doesn’t believe that. He’s eight and he’s learned.' },
+        { evil: 1, label: 'Take the 20p. Call it square.', cash: 20, result: 'Billy watches you count it. All twenty. Then he walks away very lightly, like a boy who’s taken off a heavy coat.' },
+        { evil: 2, label: 'Take it. Remind him the snails have gone up.', cash: 20, soul: -6, result: 'Billy nods as if he expected it. He doesn’t ask how much. He just goes back to his bench.' },
+        { evil: 3, label: 'Take it. Sell what’s left of his debt to Kyle.', cash: 60, soul: -12, happy: -4, fanfare: ['DEBT SECURITISED!'], result: 'There isn’t any debt left. You sell Kyle a piece of paper that says there is. Kyle collects from Billy for the rest of term. Billy pays. He doesn’t know what else to do.', feed: ['Kyle has added “Debt Recovery” to his business card. Billy is his only client.'] },
+      ],
+    },
+    'jade-sub': {
+      after: 2,
+      scene: { cast: ['jade'] }, speaker: 'jade',
+      text: 'It’s Jade’s wound-maintenance renewal day. Her knee healed on Wednesday. There is no wound. There is a slightly paler bit of knee, which she points at, nervously, in case it counts.',
+      line: 'Mum says it’s just a knee now. Do I still have to pay? I’ve still got the scab. I kept it. It’s in a tissue.',
+      options: [
+        { evil: 0, label: 'Cancel the contract. Tell her the knee is magnificent.', cash: 0, result: 'Jade looks at her knee as if seeing it for the first time. “It is, isn’t it,” she says. She runs off with both knees, at full speed, for the first time in a week.' },
+        { evil: 1, label: 'Final payment, and we’re done.', cash: 30, result: 'Jade pays her last 10p three times over to be sure. She asks for a receipt. You draw her one. It has a dinosaur on it.' },
+        { evil: 2, label: 'Renew. Scabs need monitoring.', cash: 110, soul: -6, happy: -4, follow: 'jade-sub2', fanfare: ['RENEWED!'], result: 'Jade signs again. You inspect the scab in its tissue with a very serious face. You say “hmm”. She pays for the hmm.', feed: ['Jade has been walking very carefully, so as not to disturb a knee that is completely fine.'] },
+        { evil: 3, label: 'Upgrade her to Gold Knee Cover. Both knees. Elbows extra.', cash: 180, soul: -12, happy: -6, follow: 'jade-sub2', fanfare: ['UPSOLD!', 'GOLD KNEE COVER™!'], result: 'Jade is now insured against all four of her joints. You give her a gold star sticker to wear on each one so other people know she’s covered. She is very proud.', feed: ['Jade’s mum found four gold stars and a payment schedule in her book bag. She thinks it’s a maths project. She’s helping.'] },
+      ],
+    },
+    'jade-sub2': {
+      after: 2,
+      scene: { cast: ['jade'] }, speaker: 'jade',
+      text: 'Jade has fallen over on purpose. Properly. On the hopscotch. She thinks if she’s going to be paying for a knee, she might as well use it.',
+      line: 'Look! Look, it’s bleeding! Is this covered? Tell me this is covered.',
+      options: [
+        { evil: 0, label: 'Get her a plaster. Free. End the contract.', cash: 0, result: 'You stick a plaster on Jade’s knee. A free one. It has a dinosaur on it. She stares at it as if it’s the first free thing she’s ever been given. It might be.' },
+        { evil: 1, label: 'Claim approved. Final payment.', cash: 30, result: 'Jade pays her last instalment and you give her a plaster. She seems to feel it’s been worth it, which is somehow worse.' },
+        { evil: 2, label: 'Claim denied. Small print. Renew anyway.', cash: 110, soul: -6, happy: -4, result: 'There is no small print. You write some, quite small, while she watches. She renews anyway, because she’s already in this deep.', feed: ['Jade has stopped playing hopscotch. She says she has “a bad knee”. She has a perfectly good knee.'] },
+        { evil: 3, label: 'Claim denied. Charge her an excess for using it.', cash: 170, soul: -12, happy: -6, fanfare: ['EXCESS APPLIED!'], result: 'Jade pays an excess on a knee you made up, for a wound she gave herself, under a policy you wrote in crayon. She says thank you. They always say thank you.', feed: ['Jade’s knee is fine. Jade is not fine. Nurse Pat has noticed.'] },
+      ],
+    },
+    'priya-credit': {
+      scene: { cast: ['priya'] }, speaker: 'priya',
+      text: 'Priya brings you the 30p she owes for the fourth box in an envelope. On the front it says SORRY. On the back it says I DIDN’T GET A WAGON WHEEL BUT I STILL OWE IT.',
+      line: 'I saved my bus money. I walked. It’s fine. It’s only two miles. It’s fine.',
+      options: [
+        { evil: 0, label: '“Keep it. There was never a Wagon Wheel.”', cash: 0, result: 'Priya looks at you. Then at the envelope. Then she says “I know,” very quietly, and puts it back in her bag, and you both stand there with that for a bit.' },
+        { evil: 1, label: 'Take the 30p.', cash: 30, result: 'You take the envelope. It is warm. She has been holding it all morning.' },
+        { evil: 2, label: 'Take the 30p. Plus 15p interest.', cash: 60, soul: -6, happy: -4, fanfare: ['INTEREST!'], result: 'Priya doesn’t have 15p. She gives you a pencil sharpener shaped like a strawberry and promises it’s worth at least 15p. It smells like a strawberry. It’s worth 15p.', feed: ['Priya has started walking to school every day. Her mum thinks she’s “getting fit”.'] },
+        { evil: 3, label: 'Take it, and sell her another box on credit. This one might be the one.', cash: 100, soul: -12, happy: -6, follow: 'priya-credit', fanfare: ['REPEAT CUSTOMER!', 'CREDIT EXTENDED!'], result: 'She buys another box on credit. Carrot. She looks at the carrot for a long time. She says “next time, though,” and means it, and you write it down.', feed: ['Priya has drawn up a little chart of every box she’s bought. Every line says CARROT. She’s still filling it in.'] },
+      ],
+    },
+  };
+
   /* The awkward wait after a decent choice. {name} is whoever you're with. */
   const awkward = {
     open: [
@@ -1059,21 +1321,30 @@
   /* ------------------------------------------------------------------ */
   const upgrades = {
     1: [
-      { id: 'u-jumper', name: 'A second jumper', cost: 80, mult: 1.3, text: 'Nick your little brother’s school jumper. Twice the pockets. Snails stay warmer, and it turns out people will pay for a warm snail.', feed: 'Your little brother went to school in his pyjama top. He says he’s “trying a look”.' },
-      { id: 'u-ribena', name: 'Water down the Ribena', cost: 100, mult: 1.3, text: 'One bottle becomes four. Nobody will notice, apart from Callum, and nobody listens to Callum.', feed: 'Callum says the Ribena tastes “thin”. He’s drinking twice as much to make up for it.' },
-      { id: 'u-premium', name: 'Premium snails', cost: 120, mult: 1.3, text: 'Write PREMIUM on the snail bag in biro. Same snails. Better snails.', feed: 'Everybody agrees the Premium Snails taste more premium. Nobody can say how.' },
+      { id: 'u-jumper', name: 'A second jumper', cost: 240, mult: 1.15, text: 'Nick your little brother’s school jumper. Twice the pockets. Snails stay warmer, and it turns out people will pay for a warm snail.', feed: 'Your little brother went to school in his pyjama top. He says he’s “trying a look”.' },
+      { id: 'u-ribena', name: 'Water down the Ribena', cost: 300, mult: 1.15, text: 'One bottle becomes four. Nobody will notice, apart from Callum, and nobody listens to Callum.', feed: 'Callum says the Ribena tastes “thin”. He’s drinking twice as much to make up for it.' },
+      { id: 'u-premium', name: 'Premium snails', cost: 360, mult: 1.15, text: 'Write PREMIUM on the snail bag in biro. Same snails. Better snails.', feed: 'Everybody agrees the Premium Snails taste more premium. Nobody can say how.' },
+      { id: 'u-gold', name: 'Gold snails', cost: 450, mult: 1.1, text: 'Colour some snails in with a yellow felt tip and sell them as “gold”. The felt tip is not food-safe. Neither are the snails, really.', feed: 'Three Year 3s have yellow tongues. They show everybody. They think it means they’re rich.' },
+      { id: 'u-hat', name: 'A SECURITY hat for Biff', cost: 550, mult: 1.1, text: 'A baseball cap that says SECURITY in Tipp-Ex. Biff wears it like a crown. Biff starts saying “I’m going to have to ask you to leave” to people who aren’t anywhere.', feed: 'Biff asked a dinner lady to leave the dinner hall. She left.' },
+      { id: 'u-board', name: 'The PTA noticeboard', cost: 650, mult: 1.1, text: 'Rent the PTA noticeboard from the PTA, who aren’t sure they own it, and fill it with adverts for yourself.', feed: 'The PTA noticeboard now just says TUCK. The bake sale has had to advertise on a car.' },
     ],
     2: [
-      { id: 'u-pockets', name: 'Eleven more pockets', cost: 600, mult: 1.3, text: 'Biff’s nan sews eleven extra pockets into the coat. She thinks it’s for a school play. It is, in a way.', feed: 'Biff’s nan asked how the play is going. Biff said “great”. Biff has never seen a play.' },
-      { id: 'u-laminate', name: 'Laminated prices', cost: 800, mult: 1.3, text: 'Laminate the price list. You can argue with paper. You cannot argue with lamination.', feed: 'A Year 8 tried to argue with the laminated price list. The lamination won.' },
-      { id: 'u-biffer', name: 'Hire Biffer', cost: 1000, mult: 1.3, text: 'Biff’s cousin Biffer, for collections. Nobody is sure Biffer isn’t just Biff in a different hat.', feed: 'Biff and Biffer have never been seen in the same room. Biffer is also on a daily rate.' },
+      { id: 'u-pockets', name: 'Eleven more pockets', cost: 1800, mult: 1.15, text: 'Biff’s nan sews eleven extra pockets into the coat. She thinks it’s for a school play. It is, in a way.', feed: 'Biff’s nan asked how the play is going. Biff said “great”. Biff has never seen a play.' },
+      { id: 'u-laminate', name: 'Laminated prices', cost: 2400, mult: 1.15, text: 'Laminate the price list. You can argue with paper. You cannot argue with lamination.', feed: 'A Year 8 tried to argue with the laminated price list. The lamination won.' },
+      { id: 'u-biffer', name: 'Hire Biffer', cost: 3000, mult: 1.15, text: 'Biff’s cousin Biffer, for collections. Nobody is sure Biffer isn’t just Biff in a different hat.', feed: 'Biff and Biffer have never been seen in the same room. Biffer is also on a daily rate.' },
+      { id: 'u-locker', name: 'A second locker', cost: 3600, mult: 1.1, text: 'And then a third. Then the one belonging to a Year 9 who moved to Wales and nobody told the locker.', feed: 'The Year 9 who moved to Wales has come back for his PE kit. It’s been sold.' },
+      { id: 'u-pager', name: 'A pager', cost: 4200, mult: 1.1, text: 'Nobody has your number. Nobody has ever paged you. It’s not about being paged. It’s about the message it sends.', feed: 'Your pager went off for the first time. It was a wrong number. You charged them for it.' },
+      { id: 'u-oatbars', name: 'Tuck’s Oaty Bar factory', cost: 5000, mult: 1.1, text: 'Biff’s nan makes Tuck’s Oaty Bars in her kitchen. She thinks they’re for a church raffle. There is no church raffle. There is a church, but it is very confused.', feed: 'The vicar has started buying Tuck’s Oaty Bars. He thinks he’s supporting the raffle.' },
     ],
     3: [
-      { id: 'u-platinum', name: 'Volt-Juice™ Platinum', cost: 8000, mult: 1.3, text: 'The same can, with a gold sticker and a price that suggests the gold is real.', feed: 'A Year 10 is saving up for Volt-Juice Platinum. He has stopped buying lunch to afford it.' },
-      { id: 'u-loyalty', name: 'A loyalty scheme', cost: 10000, mult: 1.3, text: 'Ten stamps gets you a stamp. The stamp is very glossy.', feed: 'Somebody completed a loyalty card. They got a stamp. They cried a bit, from happiness, they think.' },
-      { id: 'u-consultant', name: 'A consultant', cost: 12000, mult: 1.3, text: 'Josh has eaten a book about consultancy. He now consults. Mostly he says “synergy” and points at things.', feed: 'Josh pointed at the radiator and said “synergy”. It has not been switched on since.' },
+      { id: 'u-platinum', name: 'Volt-Juice™ Platinum', cost: 24000, mult: 1.15, text: 'The same can, with a gold sticker and a price that suggests the gold is real.', feed: 'A Year 10 is saving up for Volt-Juice Platinum. He has stopped buying lunch to afford it.' },
+      { id: 'u-loyalty', name: 'A loyalty scheme', cost: 30000, mult: 1.15, text: 'Ten stamps gets you a stamp. The stamp is very glossy.', feed: 'Somebody completed a loyalty card. They got a stamp. They cried a bit, from happiness, they think.' },
+      { id: 'u-consultant', name: 'A consultant', cost: 36000, mult: 1.15, text: 'Josh has eaten a book about consultancy. He now consults. Mostly he says “synergy” and points at things.', feed: 'Josh pointed at the radiator and said “synergy”. It has not been switched on since.' },
+      { id: 'u-jingle', name: 'A second jingle', cost: 42000, mult: 1.1, text: 'The first jingle is for the product. The second jingle is for the first jingle.', feed: 'Both jingles now play over each other at break. A Year 7 has started speaking only in jingle.' },
+      { id: 'u-vince2', name: 'A second Vince', cost: 50000, mult: 1.1, text: 'A second man in a second can. Nobody has seen either of them out of the cans. Nobody has seen them together.', feed: 'There are two Vinces now. They stand at opposite ends of the quad and never look at each other.' },
+      { id: 'u-garysalary', name: 'Put Gary on salary', cost: 60000, mult: 1.1, text: 'A full salary, a pension and a company car for Gary. The car is a shoebox. He sits in it every morning.', feed: 'Gary has started arriving late and leaving early. He’s management now.' },
     ],
   };
 
-  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings, upgrades };
+  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings, upgrades, followUps };
 })();

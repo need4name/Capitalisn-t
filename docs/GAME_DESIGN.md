@@ -61,7 +61,7 @@ An encounter never demands more than the cruellest option it actually offers, so
 
 - **At or above the line,** the choice just happens. Crueller options pay more, so **pure vindictiveness is the speedrun**. Doing only what the line demands is deliberately *just* enough: at St. Pete's it leaves well under a pound spare at the end of most days, so the player keeps weighing whether to go one step further. Going beyond what's needed is counted and shown in the final ledger.
 - **Options are shuffled** every time an encounter appears, so the kind answer isn't always at the top and the cruel one at the bottom.
-- **Below the line,** the **awkward wait** begins. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. **Change your mind** takes you back to the choice. If you wait it out, *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
+- **Below the line,** the **awkward wait** begins. **It cannot be skipped**: there is no button out. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. You have to wait it out. Then *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
 - The total cruelty of your choices is the hidden **morality score**. The player never sees it until the final ledger, alongside "times you held back" and "times you went further than you had to".
 - A player who is always kind never leaves St. Pete's.
 
@@ -84,6 +84,12 @@ At home time someone always wants paying: **the hall monitor, then Biff, then th
 
 If you can't pay, the day doesn't end. The bell doesn't ring, the scene freezes, nobody goes home, and the only way out is to **find the money**, which means another deal.
 
+### IOUs and things that come back
+Some options pay only part now and leave a debt (`follow` in the content). On a later morning the debtor turns up with whatever they've scraped together, and that's a new choice with its own cruelty ladder:
+- **Billy** pays the other 50p as "38p, a Wotsit, and a small, very clean stone". Charge him a late fee and he's back with 20p in 1971 pennies from his nan's change jar. Then you can sell what's left of his debt to Kyle.
+- **Jade's** wound-maintenance subscription comes up for renewal after her knee has healed. Renew or "upgrade to Gold Knee Cover" and she falls over on purpose to make a claim.
+- **Priya** brings her 30p in an envelope marked SORRY. You can sell her another box on credit, which brings her back again.
+
 ### Bedtime: the tuck shop (the treadmill)
 After home time, if you have money left, you lie awake thinking about the business and can buy grubby "improvements". Each one has an in-world description and a consequence that turns up the next morning:
 
@@ -93,15 +99,23 @@ After home time, if you have money left, you lie awake thinking about the busine
 | St. Jude's | Eleven more pockets (sewn by Biff's nan, who thinks it's for a play), laminated prices, Biffer (Biff's cousin, or Biff in a hat) |
 | Sixth Form | Volt-Juice™ Platinum (a gold sticker), a loyalty scheme (ten stamps gets you a stamp), a consultant (Josh, who ate a book about consultancy) |
 
-Each improvement makes every deal pay about 30% more. **Hidden from the player:** the world scales every dues payment, every milestone price and every later improvement by exactly the same factor. Upgrades never make the game easier; they only ever cost what you paid for them. In testing, a player who buys everything takes longer at every school (9, 5 and 6 days) than one who buys nothing. The game never says so, and the text never contradicts it, because all prices in the text come from the same scaled numbers. Buying an improvement also counts towards the hidden cruelty score.
+There are six per school, at fixed list prices that never change: £2.40–£6.50, £18–£50, then £240–£600. Each makes every deal pay 10–15% more. The effect resets when Tuck changes school, so it never exceeds about 2×. **Hidden from the player:** the world scales every dues payment, every milestone price and every later improvement by exactly the same factor. Upgrades never make the game easier; they only ever cost what you paid for them. In testing, buying every improvement roughly triples the time a school takes, even for a vindictive player. The game never says so, and the text never contradicts it, because shop prices are fixed list prices and the goal price is never shown. Buying an improvement also counts towards the hidden cruelty score.
 
 ### Hidden state
 Nothing about morality is shown on screen. **Soul**, **playground happiness** and **market monopoly** are still tracked, but there are no meters. The only visible sign is Tuck himself: below 30 Soul, his eyes turn into £ signs. Soul only ever goes down. The player sees their cash and nothing else.
 
-### Milestones
-Each school ends with a purchase that only exploitation can afford: the **Mega-Coated Trench Coat (£6)**, the **bikeshed from the Senior Hall Monitors (£50)**, and the **five-year exclusive contract with Vice-Principal Crane (£600)**. These are the base prices; they scale secretly with tuck-shop improvements. Once the story at a school runs out, quick deals keep turning up until you can afford it.
+### The goal (always visible, never priced)
+Each school's intro sets up what Tuck wants, and the HUD always shows it next to the day ("Monday · the coat"):
 
-## 3b. Tone, cast and the world being strange
+| Where | Goal |
+| --- | --- |
+| St. Pete's | **The coat**: a Mega-Coated Trench Coat with eleven inside pockets, sold by a Year 6 leaver behind the sports shed |
+| St. Jude's | **The bikeshed**: the only dry, teacher-blind square metre, run by the Senior Hall Monitors |
+| Sixth Form | **The contract**: Mr Crane's five-year exclusive deal ("He winks. It might be a tic. It is not a tic.") |
+
+**The price is never shown as a number.** Progress is told in-world at home time ("The Year 6 leaver walks past, looks at your pockets, and laughs out loud" → "shakes his head. Not yet." → "nods. Slowly. Almost."). When you have enough, the seller just takes it: "Show us your pockets. …Yeah. That'll do." There is **no "Not yet" option**, so a player who has decided money is pointless can't refuse and soft-lock themselves; the world simply moves them on. Keeping the price invisible is also what keeps the hidden scaling hidden. The base prices (£6, £50 and £600) scale secretly with tuck-shop improvements.
+
+## 3b.## 3b. Tone, cast and the world being strange
 
 The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're Here!*: mundane British school life treated with enormous gravity, small things escalating past reason, and nobody remarking on it. The jokes keep coming at you while the moral weight lands quietly underneath.
 
@@ -126,7 +140,7 @@ The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're
 
 **How the world fills in around the choices:**
 - **Interludes:** between encounters there's a coin-flip chance of a short in-world beat with no choice: a tannoy announcement ("the field is out of bounds due to the field"), something overheard, wet play, show and tell, a board meeting with Gary. Each plays once per run. There are about 12 per school, and 3 quiet ones in the Fall.
-- **Quick deals** at each school feature the cast. They follow the same rules as everything else: exploiting pays and comes back on you, and decency pays nothing.
+- **Quick deals** at each school feature the cast: 15, 12 and 11 of them. They come out of a bag, so none repeats until all have played. Some run as a **series** that escalates each time it appears: Cordial Callum goes purple, then mauve ("a phase"), then starts a one-member Ribena support group, then accidentally wins the Cycling Proficiency award. Others call back across schools: Billy returns at sixteen and can be sold his own Holo-Dragon. They follow the same rules as everything else: exploiting pays and comes back on you, and decency pays nothing.
 - **Evenings:** each home-time recap ends with a line from home (Nan, Countdown, the cat bought to blame, fish fingers arranged as a bar chart).
 - **The waits** fill with absurd beats instead of commentary ("A silence arrives. It sits down next to you. It has brought sandwiches."). Dobson, the Council man and Gary wander through.
 
@@ -139,7 +153,12 @@ The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're
 | Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£600) |
 | The Fall | Headteacher's office. Stark cinematic realism. | Mrs Ahmed and the ledger, the audit, Biff's statement, teachers confess, Penny leaves, the assembly | Expulsion. The cycle restarts. |
 
-Transitions between schools are in-world captions ("Summer comes. Billy moves to Leicester…"), not title cards. The cut from the advert into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
+Transitions between schools are short comic story beats with their own scenes, and each one explains the change in art style:
+- **St. Pete's → St. Jude's:** Tuck walks out in the coat with Biff behind him "like weather", spends six weeks of rain doing stocktake on a jumper, and Gary sees him off. On the first morning of big school his mum's photo comes back from Boots and he's "very slightly pixelated. So is she. So is the dog. Nobody mentions it."
+- **St. Jude's → Sixth Form:** Gavin hands over the keys to a bikeshed with no door. "Year 9 happens. GCSEs happen. A moustache happens, mostly." Then everything turns glossy: the cornflakes have a jingle, and his mum's teeth go *ting*.
+- **Sixth Form → the Fall:** a giant novelty cheque made out to you, from you. Somebody in lost property finds a ledger. "The confetti is still coming down when the picture cuts out."
+
+The HUD is hidden during transitions. The cut from the advert into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
 
 ### The first choice: the sardine sandwich and the Holo-Dragon
 Little Billy is crying on a damp bench over a sardine paste sandwich, and wants Tuck's only Gummy Snail. Nothing tells the player what's at stake.
@@ -190,6 +209,8 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v7:** IOUs pay part now, and the debtor returns on a later day as a new choice (Billy, Jade, Priya). Every school shows its goal in the HUD and intro, with progress told in-world and never as a number. Milestones can no longer be refused (no soft-lock). The shop is bigger (six items per school) at fixed prices about three times higher, with smaller effects that reset per school, so the hidden scaling can't be spotted. Added about 19 new quick deals, including a four-part Cordial Callum series and Billy returning at sixteen. Quick deals no longer repeat until all have played. Transitions are now comic story beats that explain each art-style change. The awkward wait can no longer be skipped.
 
 - **v6:** Rebalanced so that doing only what the line demands is just about enough to scrape by. Dues now rise daily for the first few days at each school, then level off. The Sixth Form line starts at exploitative. St. Jude's quick deals gained vindictive options. Added the bedtime tuck shop: immoral improvements that secretly don't help, because the world scales to match. Options are now shuffled. Removed the Soul, Happiness and Monopoly meters from the screen. Characters now visibly match their descriptions. Milestone and dues amounts in the text are generated from the scaled numbers.
 

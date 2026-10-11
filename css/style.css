@@ -291,6 +291,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 /* title and ending: just the scene and the card */
 #game[data-mode='title'] #hud, #game[data-mode='title'] #meters, #game[data-mode='title'] #ticker, #game[data-mode='title'] #panel,
 #game[data-mode='ending'] #hud, #game[data-mode='ending'] #meters, #game[data-mode='ending'] #ticker, #game[data-mode='ending'] #panel { visibility: hidden; }
+#game[data-mode='transition'] #hud, #game[data-mode='transition'] #ticker, #game[data-mode='transition'] #panel { visibility: hidden; }
 
 /* ================= SKINS ================= */
 
