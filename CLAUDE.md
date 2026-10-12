@@ -10,7 +10,7 @@
   - No rewards for being good. Every option has a hidden `evil` rating (0 kind … 3 vindictive). Each school has a hidden rising `line`, and any choice below it triggers the awkward wait. Crueller pays more (vindictive is the speedrun), and Soul never goes back up. Any new encounter must rate every option and should offer a range of cruelty, including one at or above the line where it appears.
   - The game must be paced so the player can read and face the consequences: turn-based days, "Meanwhile…" beats, a home-time recap.
   - The path of least resistance (exactly the line) should only just scrape by. Dues rise daily for a few days per school. Re-run the balance bots after changing any money (see the design doc's balance table).
-  - Tuck-shop improvements secretly change nothing: the world scales dues and targets by the same multiplier (reset each school). Never reveal this. Shop prices are fixed list prices. The goal price is never shown as a number: use in-world progress lines and write dues as `{dues}`.
+  - Tuck-shop improvements secretly change nothing: the world scales dues and targets by the same multiplier (reset each school). Never reveal this, except in the one-off reveal the morning after the player buys a school's last improvement (the owner's joke: they only learn it after stepping over the edge). Shop prices are fixed list prices. The goal price is never shown as a number: use in-world progress lines and write dues as `{dues}`.
   - Each school's goal is always visible (HUD and intro). Milestones can't be refused (no "Not yet"), so nobody can soft-lock.
   - The awkward wait cannot be skipped.
   - Variety: quick deals come from a no-repeat bag; recurring bits go in a `series`. IOUs use `follow` to bring the debtor back later.

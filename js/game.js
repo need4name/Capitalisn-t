@@ -91,7 +91,7 @@
       soul: 100, happy: 100, mono: 5,
       storyIdx: 0, flags: {},
       feed: [], later: [], home: [], seen: [],
-      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0, beyond: 0 },
+      stats: { extracted: 0, harmed: 0, kind: 0, freezes: 0, raindrops: 0, idles: 0, wasted: 0, waitedMs: 0, beyond: 0, improved: 0 },
       cruelty: 0,
       current: null, freeze: null, phase: 'title', lastFiller: -1,
       mult: 1, bought: [], followups: [], used: {}, series: {},
@@ -651,8 +651,17 @@
     S.bought = S.bought || [];
     return ((C.upgrades || {})[S.act] || []).filter((u) => !S.bought.includes(u.id));
   }
-  function bedtime() {
+  function bedtime(justBought) {
     const list = shopFor();
+    if (!list.length && justBought && C.treadmillReveal) {
+      // The top of the precipice: everything bought, one good night's sleep.
+      showCard({
+        cls: 'card-home card-shop',
+        html: `<p class="kicker">Bedtime</p><p>You have ${fmt(S.cash)}. ${esc(C.treadmillReveal.allBought)}</p>`,
+        buttons: [{ label: 'Go to bed', fn: nextDay }],
+      });
+      return;
+    }
     if (!list.length) { nextDay(); return; }
     showScene(null);
     const buttons = list.map((u) => {
@@ -662,7 +671,7 @@
     buttons.push({ label: 'Go to bed', fn: nextDay });
     showCard({
       cls: 'card-home card-shop',
-      html: `<p class="kicker">Bedtime</p><p>You have ${fmt(S.cash)}. You lie awake thinking about the business.</p>` +
+      html: `<p class="kicker">Bedtime</p><p>You have ${fmt(S.cash)}. ${S.flags.treadmillSeen && C.treadmillReveal ? esc(C.treadmillReveal.shop) : 'You lie awake thinking about the business.'}</p>` +
         `<ul class="home-list">${list.map((u) => `<li><b>${esc(u.name)}.</b> ${esc(u.text)}</li>`).join('')}</ul>`,
       buttons,
     });
@@ -673,21 +682,46 @@
     S.cash -= cost;
     S.mult = (S.mult || 1) * u.mult; // the world quietly keeps pace; see scale()
     S.bought.push(u.id);
+    S.spentAct = (S.spentAct || 0) + cost;
+    S.stats.improved = (S.stats.improved || 0) + cost;
+    // Bought the last one? Tomorrow morning, somebody shows them the maths (once per run).
+    if (!shopFor().length && !S.flags.treadmillSeen) S.revealDue = true;
     S.cruelty += 1;
     S.soul = clamp(S.soul - 3, 0, 100);
     if (u.feed) S.later.push({ text: u.feed, cast: [] });
     popups(['BUSINESS IMPROVED!', u.name.toUpperCase() + '!']);
     hud();
-    bedtime();
+    bedtime(true);
   }
   function nextDay() {
     S.day++;
     S.slot = 0;
     S.minute = DAY_START;
+    const reveal = S.revealDue && C.treadmillReveal;
+    if (reveal) { S.revealDue = false; S.flags.treadmillSeen = true; }
     save();
     showScene(null);
     hud();
-    nextSlot();
+    if (reveal) treadmillReveal(); else nextSlot();
+  }
+
+  // The joke, told only after the last improvement is bought: none of it ever did anything.
+  function treadmillReveal() {
+    const R = C.treadmillReveal;
+    const goal = act().goal || 'The goal';
+    const extra = {
+      spent: fmt(S.spentAct || 0),
+      pct: Math.round(((S.mult || 1) - 1) * 100) + '%',
+      goal: goal.charAt(0).toUpperCase() + goal.slice(1),
+    };
+    showCard({
+      cls: 'card-home',
+      html: `<p class="kicker">${DAYS[(S.day - 1) % 5]}, before registration</p>` +
+        `<p>${esc(R.teller[S.act] || R.teller[1])}</p>` +
+        `<ul class="home-list">${R.lines.map((l) => `<li>${esc(fill(l, extra))}</li>`).join('')}</ul>`,
+      buttons: [{ label: R.button, fn: nextSlot }],
+      delay: 2500,
+    });
   }
 
   /* ---------------- final freeze (assembly) ---------------- */
@@ -746,6 +780,7 @@
     S.freeze = null;
     S.later = [];
     S.home = [];
+    S.spentAct = 0;
     S.mult = 1; // new school, new business: the old improvements stay behind
     if (n > 1 && n < 4) S.happy = 100;
     S.phase = 'play';
@@ -829,6 +864,7 @@
         <dl>
           <dt>Total taken</dt><dd>${fmt(st.extracted)}</dd>
           <dt>Spent trying to make it go away</dt><dd>${fmt(st.wasted)}</dd>
+          <dt>Spent improving the business</dt><dd>${fmt(st.improved || 0)}</dd>
           <dt>Children harmed</dt><dd>${st.harmed}</dd>
           <dt>Times you held back</dt><dd>${st.kind}</dd>
           <dt>Times you went further than you had to</dt><dd>${st.beyond || 0}</dd>

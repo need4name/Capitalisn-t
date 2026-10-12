@@ -1346,5 +1346,26 @@
     ],
   };
 
-  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings, upgrades, followUps };
+  // The morning after the player buys the last improvement at a school (once per run),
+  // somebody shows them the maths. Only then. Tokens: {spent}, {pct}, {goal}.
+  const treadmillReveal = {
+    teller: {
+      1: 'Priya has done the maths in her rough book. She shows it to you gently, the way a vet shows you an X-ray.',
+      2: 'Josh has done the maths on the blackboard, in chalk, at a size you can see from the corridor. A small crowd has formed. Someone is taking notes.',
+      3: 'A folder has been left on your desk. Nobody hired an auditor. The folder is very thin. Gary is sitting on it.',
+    },
+    lines: [
+      'Since your first improvement, you have spent {spent} improving the business.',
+      'In that time, everything you sell has gone up {pct}. Everything you owe has gone up {pct}. {goal} has gone up {pct}.',
+      'Every price in the world rose by exactly what you put into it. You are precisely where you would have been. Minus {spent}.',
+      'It was never going to work. It was always going to cost {spent}.',
+    ],
+    button: 'Oh.',
+    // Bedtime, the night the last improvement is bought.
+    allBought: 'There is nothing left to improve. The business is fully improved. You sleep like a baby, which is to say you wake up twice, crying, for no reason you can name.',
+    // Bedtime, every night after the reveal.
+    shop: 'You know what these do now. You lie awake looking at them anyway.',
+  };
+
+  T.content = { people, tuckLook, acts, story, milestones, fillers, idles, freezeEscalation, finalIdles, ending, adDisclaimers, awkward, interludes, evenings, upgrades, followUps, treadmillReveal };
 })();
