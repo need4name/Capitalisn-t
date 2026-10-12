@@ -69,8 +69,10 @@ An encounter never demands more than the cruellest option it actually offers, so
 
 | Strategy | St. Pete's | St. Jude's | Sixth Form |
 | --- | --- | --- | --- |
-| Pure vindictive | 2 days | 3 days | 3 days |
-| Only what the line demands | 7 days | 4 days | 4 days |
+| Pure vindictive | 2 days | 2 days | 2 days |
+| Only what the line demands | 5 days | 4 days | 3–4 days |
+| Vindictive, buying every improvement | 2–5 days | 7 days | 5–10 days |
+| The line, buying every improvement | 6–16 days | 7–13 days | 5–11 days |
 | Always kind | Stuck: still at St. Pete's on day 12, frozen at the gate every night | | |
 
 ### Daily dues (the trap)
@@ -219,7 +221,7 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 
 ## 8. Change log
 
-- **v9:** Fanfare pop-ups now stay on screen until you carry on, so there's time to read them. The awkward wait is 16 seconds (was 22). Every school is shorter (goals 15% cheaper) and there are many more quick deals (St. Pete's 27, St. Jude's 24, Sixth Form 23), so a normal playthrough never repeats one; Callum's last episode no longer loops. New running storylines: the Squashquatch (all three schools, ending in the reveal that it's Callum's dad), Desmond the Year 4 solicitor, Mr Pell the eternal supply teacher, and Brenda the wellbeing beanbag. Series can be joined partway through at a new school (`catchUp`) and come up a little more often so they finish. The Sixth Form's '90s advert art, which was painful to look at, is replaced by a calm flat corporate-illustration style, and the transition into it is rewritten ("everything is flat. Not sad. Flat.").
+- **v9:** Fanfare pop-ups now stay on screen until you carry on, so there's time to read them. The awkward wait is 16 seconds (was 22). Every school is shorter (goals 15% cheaper) and there are many more quick deals (St. Pete's 42, St. Jude's 24, Sixth Form 23), so a normal playthrough never repeats one (only the slowest route, buying every improvement while doing the bare minimum, can run out at the later schools); Callum's last episode no longer loops. New running storylines: the Squashquatch (all three schools, ending in the reveal that it's Callum's dad), Desmond the Year 4 solicitor, Mr Pell the eternal supply teacher, and Brenda the wellbeing beanbag. Series can be joined partway through at a new school (`catchUp`) and come up a little more often so they finish. The Sixth Form's '90s advert art, which was painful to look at, is replaced by a calm flat corporate-illustration style, and the transition into it is rewritten ("everything is flat. Not sad. Flat.").
 
 - **v8:** The tuck-shop treadmill is now revealed, once per run, the morning after the player buys the last improvement at a school, with the real numbers (spent, and the identical percentage rise in sales, dues and the goal). Before that, a "fully improved" bedtime beat; afterwards a knowing bedtime line. The final ledger shows total spent on improvements.
 
