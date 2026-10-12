@@ -30,7 +30,7 @@
     if (a) return a;
     a = hex(c);
     if (style === 'pixel') a = sat(a, 1.25);
-    else if (style === 'ad') a = mix(sat(a, 1.5), [255, 255, 255], 0.04);
+    else if (style === 'flat') a = mix(sat(a, 0.72), [243, 236, 224], 0.14); // calm pastels
     else if (style === 'real') a = mix(sat(a, 0.15), [70, 78, 86], 0.3).map((v) => v * 0.9);
     a = a.map((v) => Math.max(0, Math.min(255, Math.round(v))));
     cache.set(key, a);
@@ -165,31 +165,10 @@
         }
         break;
       }
-      case 'ad': {
+      case 'flat': {
         trace();
-        const gr = g.createLinearGradient(0, b.y0, 0, b.y1);
-        gr.addColorStop(0, this.c(col, 1, 0.35));
-        gr.addColorStop(0.5, this.c(col));
-        gr.addColorStop(1, this.c(col, 1, -0.25));
-        g.fillStyle = gr;
+        g.fillStyle = this.c(col, o.wash != null && o.wash < 0.5 ? 0.85 : 1);
         g.fill();
-        if (o.gloss !== false && b.y1 - b.y0 > 2 * k) {
-          g.save();
-          g.clip();
-          const gl = g.createLinearGradient(0, b.y0, 0, b.y0 + (b.y1 - b.y0) * 0.5);
-          gl.addColorStop(0, 'rgba(255,255,255,0.55)');
-          gl.addColorStop(1, 'rgba(255,255,255,0)');
-          g.fillStyle = gl;
-          g.fillRect(b.x0, b.y0, b.x1 - b.x0, (b.y1 - b.y0) * 0.5);
-          g.restore();
-        }
-        if (outline) {
-          trace();
-          g.strokeStyle = '#1b0f2e';
-          g.lineWidth = 0.9 * k;
-          g.lineJoin = 'round';
-          g.stroke();
-        }
         break;
       }
       default: {
@@ -251,18 +230,10 @@
     const g = this.g, k = this.k;
     const Pp = this.pts(pts, false);
     tracePath(g, Pp, false);
-    g.strokeStyle = this.st === 'ad' && w > 1.5 ? this.c(col) : this.c(col);
+    g.strokeStyle = this.c(col);
     g.lineWidth = this.st === 'pixel' ? Math.max(1, Math.round(w)) : w * k * (this.st === 'crayon' ? 1.1 : 1);
     g.lineCap = 'round';
     g.lineJoin = 'round';
-    if (this.st === 'ad' && w > 1.5) {
-      g.save();
-      g.strokeStyle = '#1b0f2e';
-      g.lineWidth += 0.9 * k;
-      g.stroke();
-      g.restore();
-      g.strokeStyle = this.c(col);
-    }
     g.stroke();
   };
   P.line = function (x1, y1, x2, y2, col, w = 1) {
@@ -272,7 +243,7 @@
   const FONTS = {
     crayon: '"Patrick Hand", "Comic Sans MS", cursive',
     pixel: '"Press Start 2P", monospace',
-    ad: 'Anton, Impact, "Arial Black", sans-serif',
+    flat: 'Inter, "Helvetica Neue", Arial, sans-serif',
     real: 'Inter, "Helvetica Neue", Arial, sans-serif',
   };
   P.text = function (s, x, y, size, col, o = {}) {
@@ -284,11 +255,6 @@
     g.textBaseline = 'middle';
     g.translate(x * k, y * k);
     if (this.st === 'crayon') g.rotate((this.r() - 0.5) * 0.05);
-    if (this.st === 'ad') {
-      g.lineWidth = 0.8 * k;
-      g.strokeStyle = '#1b0f2e';
-      g.strokeText(s, 0, 0);
-    }
     g.fillStyle = this.c(col);
     g.fillText(s, 0, 0);
     g.restore();
@@ -323,21 +289,6 @@
     gr.addColorStop(1, this.c(bottom));
     g.fillStyle = gr;
     g.fillRect(0, 0, W, h * k);
-    if (this.st === 'ad' && !this.noBurst) {
-      // rotating sunburst
-      g.save();
-      g.translate(W * 0.35, H * 0.25);
-      g.rotate(this.t * 0.08);
-      g.fillStyle = 'rgba(255,255,255,0.18)';
-      for (let i = 0; i < 16; i++) {
-        g.beginPath();
-        g.moveTo(0, 0);
-        g.arc(0, 0, W * 1.2, (i / 16) * Math.PI * 2, ((i + 0.5) / 16) * Math.PI * 2);
-        g.closePath();
-        g.fill();
-      }
-      g.restore();
-    }
   };
 
   /* ---------------- figures ---------------- */
@@ -405,8 +356,8 @@
     const swing = f.frozen ? 0 : Math.sin(p.t * 2 + x) * 0.6 * s;
     p.line(x - bw / 2, sh + 2 * s, x - bw / 2 - 2.5 * s, hip + swing, sleeve, 3 * s);
     p.line(x + bw / 2, sh + 2 * s, x + bw / 2 + 2.5 * s, hip - swing, sleeve, 3 * s);
-    p.circle(x - bw / 2 - 2.5 * s, hip + swing + 0.5 * s, 1.5 * s, f.skin, { outline: p.st === 'ad' });
-    p.circle(x + bw / 2 + 2.5 * s, hip - swing + 0.5 * s, 1.5 * s, f.skin, { outline: p.st === 'ad' });
+    p.circle(x - bw / 2 - 2.5 * s, hip + swing + 0.5 * s, 1.5 * s, f.skin, { outline: false });
+    p.circle(x + bw / 2 + 2.5 * s, hip - swing + 0.5 * s, 1.5 * s, f.skin, { outline: false });
 
     // carried items
     if (f.jumperRoll) {
@@ -504,6 +455,18 @@
     if (f.clipboard) {
       p.rect(x - bw / 2 - 7 * s, hip - 8 * s, 5.5 * s, 7.5 * s, '#8a6a3a');
       p.rect(x - bw / 2 - 6.4 * s, hip - 7 * s, 4.3 * s, 5.8 * s, '#ffffff', { outline: false });
+    }
+    if (f.briefcase) {
+      p.rect(x - bw / 2 - 8 * s, hip - 3 * s, 7 * s, 5 * s, '#5a3a1e');
+      p.rect(x - bw / 2 - 5.8 * s, hip - 4.4 * s, 2.6 * s, 1.4 * s, '#3a2412', { outline: false });
+    }
+    if (f.flask) {
+      p.rect(x + bw / 2 + 1 * s, hip - 7 * s, 3 * s, 7 * s, '#4a7a5a');
+      p.rect(x + bw / 2 + 0.8 * s, hip - 8 * s, 3.4 * s, 1.4 * s, '#d0d0d0', { outline: false });
+    }
+    if (f.patches) {
+      p.circle(x - bw / 2 - 1.6 * s, sh + 8 * s, 1.5 * s, '#5a4024', { outline: false });
+      p.circle(x + bw / 2 + 1.6 * s, sh + 8 * s, 1.5 * s, '#5a4024', { outline: false });
     }
     if (f.mop) {
       p.line(x + bw / 2 + 2.5 * s, hip - 2 * s, x + bw / 2 + 8 * s, yy - 1 * s, '#a07a4a', 1.2 * s);
@@ -681,6 +644,52 @@
     if (f.tie) p.poly([x + 5.5 * s, y - 10 * s, x + 6.5 * s, y - 10 * s, x + 6.3 * s, y - 6.5 * s, x + 5.7 * s, y - 6.5 * s], '#c0392b', { outline: false });
   }
 
+  // The Squashquatch: seven feet of undiluted orange squash, faintly see-through, pulp drifting inside.
+  function squatch(p, f) {
+    const s = (f.s || 1) * 1.05, x = f.x, y = f.y != null ? f.y : GROUND;
+    const slosh = f.frozen ? 0 : Math.sin(p.t * 2.2 + x) * 1.2;
+    const g = p.g;
+    const top = y - 58 * s, mid = y - 30 * s;
+    // sticky puddle
+    p.poly([x - 16 * s, y + 1, x + 16 * s, y + 1, x + 13 * s, y + 3 * s, x - 13 * s, y + 3 * s], '#f08a1c', { outline: false, wash: 0.35, gloss: false });
+    // shaggy body: a tall blob with drippy fringe
+    const pts = [];
+    const n = 22;
+    for (let i = 0; i <= n; i++) {
+      const a = Math.PI + (i / n) * Math.PI; // top half outline, left to right
+      const rx = 13 * s + Math.sin(i * 1.7) * 1.2 * s, ry = 30 * s;
+      pts.push(x + Math.cos(a) * rx + (i === 0 || i === n ? 0 : slosh * Math.sin(i)), mid + Math.sin(a) * ry);
+    }
+    // ragged hem along the bottom (fur and drips)
+    for (let i = 0; i <= 10; i++) {
+      const xx = x + 13 * s - (i / 10) * 26 * s;
+      const drip = i % 2 ? 0 : (2 + ((i * 7) % 3)) * s + (f.frozen ? 0 : Math.abs(Math.sin(p.t * 1.5 + i)) * 1.2 * s);
+      pts.push(xx, y - 2 * s + drip * 0.6);
+    }
+    g.save();
+    if (p.st === 'real') g.globalAlpha = 0.86;
+    else if (p.st === 'flat') g.globalAlpha = 0.93;
+    p.poly(pts, p.st === 'flat' ? '#ff9a1a' : '#f39221', { wash: 0.55, outline: p.st !== 'real' && p.st !== 'flat' });
+    g.restore();
+    // highlight and pulp
+    p.poly([x - 9 * s, top + 8 * s, x - 5 * s, top + 4 * s, x - 3 * s, top + 22 * s, x - 7 * s, top + 26 * s], '#ffd08a', { outline: false, wash: 0.45, gloss: false });
+    const r = rng(41);
+    for (let i = 0; i < 9; i++) {
+      const px = x + (r() - 0.5) * 18 * s, py = top + 14 * s + r() * 36 * s + (f.frozen ? 0 : Math.sin(p.t * 0.8 + i) * 2 * s);
+      p.circle(px, py, (0.6 + r() * 0.7) * s, '#ffb347', { outline: false, wash: 0.7 });
+    }
+    // arms: long, shaggy, drooping
+    p.line(x - 12 * s, mid - 8 * s, x - 17 * s, mid + 14 * s + slosh, '#e07a12', 4 * s);
+    p.line(x + 12 * s, mid - 8 * s, x + 17 * s, mid + 14 * s - slosh, '#e07a12', 4 * s);
+    // face: sad
+    const ey = top + 14 * s;
+    p.circle(x - 4 * s, ey, 1.6 * s, '#3a1a06', { outline: false });
+    p.circle(x + 4 * s, ey, 1.6 * s, '#3a1a06', { outline: false });
+    p.line(x - 6.5 * s, ey - 2 * s, x - 2.5 * s, ey - 3.6 * s, '#a0500a', 0.9); // sad: inner ends up
+    p.line(x + 6.5 * s, ey - 2 * s, x + 2.5 * s, ey - 3.6 * s, '#a0500a', 0.9);
+    p.path([x - 3 * s, ey + 6.5 * s, x, ey + 5.2 * s, x + 3 * s, ey + 6.5 * s], '#7a3a06', 0.9);
+  }
+
   function crowd(p, v) {
       const r = rng(77);
       const cols = ['#1d1410', '#6b4a2b', '#e7bf62', '#c4552b', '#3a2a1a'];
@@ -719,7 +728,7 @@
   let lastSceneT = -1, sceneSeed = 1, fade = 0, staticFlash = 0, sceneDirty = true;
   let cropX = 0; // left edge of the camera window, in canvas pixels (portrait phones see a 4:3 crop)
   const drops = [];
-  const styles = (T.styles = T.styles || {}); // per-style modules (render-ad.js, render-real.js)
+  const styles = (T.styles = T.styles || {}); // per-style modules (render-flat.js, render-real.js)
 
   function makePaper() {
     const c = document.createElement('canvas');
@@ -809,7 +818,7 @@
     const onStage = view.bg === 'assembly' && !mod;
     const fy = lay.y || (onStage ? 96 : GROUND);
     const fs = lay.scale || (onStage ? FIG * 0.85 : FIG);
-    const one = (f) => (f.pigeon ? pigeon(p, f) : fig(p, f));
+    const one = (f) => (f.pigeon ? pigeon(p, f) : f.squatch ? squatch(p, f) : fig(p, f));
     const drawCast = () => {
       if (!view.noTuck && view.tuck) fig(p, Object.assign({}, view.tuck, { x: tuckX, y: fy, s: (view.tuck.s || 1) * fs, frozen: view.frozen, isTuck: true }));
       cast.forEach((f, i) => {
@@ -837,7 +846,7 @@
     const n = Math.floor(drops.length * heavy);
     ctx.save();
     if (st === 'pixel') ctx.fillStyle = '#9fd0ff';
-    else ctx.strokeStyle = st === 'real' ? 'rgba(190,205,215,0.22)' : st === 'crayon' ? 'rgba(60,110,220,0.7)' : 'rgba(255,255,255,0.8)';
+    else ctx.strokeStyle = st === 'real' ? 'rgba(190,205,215,0.22)' : st === 'crayon' ? 'rgba(60,110,220,0.7)' : st === 'flat' ? 'rgba(111,143,184,0.55)' : 'rgba(255,255,255,0.8)';
     ctx.lineWidth = st === 'crayon' ? 3 : st === 'real' ? 1.2 : 1.5;
     ctx.lineCap = 'round';
     ctx.beginPath();
@@ -908,6 +917,6 @@
   }
 
   // Shared toolkit for the style modules.
-  T.kit = { Painter, rng, hex, mix, mapColor, figure, props, wallClock, HAIR, VW, VH, W, H, K, GROUND, FIG };
+  T.kit = { Painter, rng, hex, mix, mapColor, figure, props, pigeon, squatch, wallClock, HAIR, VW, VH, W, H, K, GROUND, FIG };
   T.render = { init, setView, setViewport, frame, get view() { return view; } };
 })();

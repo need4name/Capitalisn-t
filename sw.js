@@ -1,8 +1,8 @@
 /* Tuck service worker: network first (so updates arrive straight away), cache as an offline fallback. */
-const CACHE = 'tuck-v8';
+const CACHE = 'tuck-v9';
 const CORE = [
   './', 'index.html', 'css/style.css', 'manifest.webmanifest',
-  'js/content.js', 'js/audio.js', 'js/render.js', 'js/render-ad.js', 'js/render-real.js', 'js/game.js',
+  'js/content.js', 'js/audio.js', 'js/render.js', 'js/render-flat.js', 'js/render-real.js', 'js/game.js',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/apple-touch-icon.png',
 ];
 

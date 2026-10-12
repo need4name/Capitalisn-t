@@ -95,7 +95,7 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
   #hud { gap: 6px; padding-left: 8px; font-size: 14.5px; }
   body { --fs: 17px; }
   body.style-pixel { --fs: 20px; }
-  body.style-ad, body.style-real { --fs: 15.5px; }
+  body.style-flat, body.style-real { --fs: 15.5px; }
   #panel > section { padding: 10px 12px 12px; }
 }
 
@@ -234,14 +234,19 @@ button:disabled { cursor: not-allowed; opacity: 0.45; }
 .pop {
   position: absolute; left: 50%; font-family: var(--pop-font); font-size: clamp(13px, 3.6vw, 26px); color: var(--pop-ink);
   -webkit-text-stroke: 3px var(--pop-stroke); paint-order: stroke fill; text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.6);
-  white-space: nowrap; animation: pop 2s ease-out forwards; translate: -50% 0;
+  max-width: 92%; width: max-content; text-align: center; line-height: 1.1;
+  animation: pop 0.7s ease-out forwards; translate: -50% 0;
 }
+/* They stay up until the player carries on, so there's time to read them. */
+.pop.out { animation: pop-out 0.45s ease-in forwards; }
 @keyframes pop {
   0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
-  12% { transform: scale(1.2) rotate(3deg); opacity: 1; }
-  25% { transform: scale(1) rotate(0); }
-  80% { opacity: 1; }
-  100% { transform: translateY(-40px); opacity: 0; }
+  45% { transform: scale(1.15) rotate(3deg); opacity: 1; }
+  100% { transform: scale(1) rotate(var(--tilt, 0deg)); opacity: 1; }
+}
+@keyframes pop-out {
+  from { transform: scale(1) rotate(var(--tilt, 0deg)); opacity: 1; }
+  to { transform: translateY(-30px) rotate(var(--tilt, 0deg)); opacity: 0; }
 }
 
 /* ---------------- cards (title, day end, captions) ---------------- */
@@ -323,39 +328,40 @@ body.style-pixel #feed-list li { border-bottom-color: rgba(63, 240, 255, 0.3); }
 body.style-pixel .meter { color: #bfe9ff; }
 @media (hover: hover) { body.style-pixel .opt:hover:not(:disabled) { background: #1f3a94; } }
 
-/* Sixth Form — glossy '90s advert */
-body.style-ad {
-  --stage-bg: #ff9ad6;
-  --panel: #ffffff;
-  --panel-2: #fff5fb;
-  --ink: #1b0f2e;
-  --muted: rgba(27, 15, 46, 0.6);
-  --accent: #ff2e88;
-  --accent-2: #0077ff;
-  --ok: #00a650;
-  --warn: #e8202a;
-  --line: #1b0f2e;
-  --radius: 22px;
+/* Sixth Form — flat 'corporate illustration': calm pastels, soft shapes, no outlines */
+body.style-flat {
+  --bg: #e9e1d3;
+  --stage-bg: #f3ece0;
+  --panel: #fffdf8;
+  --panel-2: #ffffff;
+  --ink: #2d2a32;
+  --muted: rgba(45, 42, 50, 0.6);
+  --accent: #e07a62;
+  --accent-ink: #ffffff;
+  --accent-2: #6f8fb8;
+  --ok: #6f9a6c;
+  --warn: #c8664f;
+  --line: #d9cfbf;
+  --bw: 1.5px;
+  --radius: 20px;
   --font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
-  --font-head: 'Anton', Impact, sans-serif;
+  --font-head: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --fs: 17px;
-  --shadow: 0 5px 0 #1b0f2e, 0 10px 22px rgba(255, 46, 136, 0.35);
-  --pop-font: 'Anton', Impact, sans-serif;
-  --pop-ink: #ffe600;
-  --pop-stroke: #1b0f2e;
+  --shadow: 0 6px 18px rgba(80, 60, 40, 0.10);
+  --pop-font: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --pop-ink: #2d2a32;
+  --pop-stroke: #fffdf8;
 }
-body.style-ad { background: #2a0f6e; }
-body.style-ad #game { background: radial-gradient(circle at 30% 0%, #ff4fa3, #6b20d8 55%, #2a0f6e); }
-body.style-ad #hud, body.style-ad #panel, body.style-ad .card-inner, body.style-ad #log { background: linear-gradient(180deg, #ffffff 0%, #ffe9f6 100%); }
-body.style-ad #hud-school, body.style-ad #d-speaker, body.style-ad #feed h3, body.style-ad .card h1 { font-weight: 400; letter-spacing: 0.02em; text-transform: uppercase; }
-body.style-ad #d-speaker { background: linear-gradient(180deg, #ff6fb0, #ff2e88); border-radius: 99px; padding: 2px 14px; }
-body.style-ad .opt { border-radius: 99px; padding-left: 18px; background: linear-gradient(180deg, #fff, #f3f6ff); }
-@media (hover: hover) { body.style-ad .opt:hover:not(:disabled) { background: linear-gradient(180deg, #fffbe0, #ffe97a); } }
-body.style-ad .opt-continue, body.style-ad .card-buttons button:not(.secondary) { background: linear-gradient(180deg, #ff6fb0 0%, #ff2e88 55%, #d4006a 100%); }
-body.style-ad .hud-buttons button { border-radius: 99px; }
-body.style-ad #feed-list time::before { content: '★ '; color: #ff2e88; }
-body.style-ad .meter, body.style-ad #ticker { color: #fff; }
-body.style-ad .pop { -webkit-text-stroke: 4px var(--pop-stroke); font-size: clamp(18px, 5vw, 36px); letter-spacing: 0.02em; }
+body.style-flat #game { background: var(--bg); }
+body.style-flat #hud-school, body.style-flat .card h1 { font-weight: 800; letter-spacing: -0.01em; }
+body.style-flat #d-speaker { display: inline-block; background: #dfe8d9; color: #3d5a3a; border-radius: 99px; padding: 2px 12px; font-weight: 700; font-size: 0.85em; }
+body.style-flat .opt { border-radius: 14px; border-width: 1.5px; background: #ffffff; box-shadow: none; }
+@media (hover: hover) { body.style-flat .opt:hover:not(:disabled) { background: #fbf3e2; } }
+body.style-flat .opt-continue, body.style-flat .card-buttons button:not(.secondary) { background: var(--accent); color: #fff; border-color: transparent; }
+body.style-flat .hud-buttons button { border-radius: 99px; border-width: 1.5px; }
+body.style-flat #feed h3 { font-weight: 700; color: var(--muted); }
+body.style-flat #ticker { color: #5a5560; }
+body.style-flat .pop { font-weight: 800; -webkit-text-stroke: 5px var(--pop-stroke); text-shadow: 0 3px 10px rgba(80, 60, 40, 0.18); letter-spacing: -0.01em; font-size: clamp(15px, 4.2vw, 30px); }
 
 /* The Fall — stark realism */
 body.style-real {

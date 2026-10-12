@@ -27,8 +27,8 @@
   const HOME_T = 925; // 15:25
   const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
   const SAVE_KEY = 'tuck-save-v2';
-  const AWKWARD_MS = 22000; // how long the decent choice leaves you standing there
-  const BEAT_MS = 5200; // how often the awkward wait drifts a line into the log
+  const AWKWARD_MS = 16000; // how long the decent choice leaves you standing there
+  const BEAT_MS = 3900; // how often the awkward wait drifts a line into the log
 
   const $ = (s) => document.querySelector(s);
   const el = {};
@@ -201,22 +201,36 @@
   }
 
   /* ---------------- fanfare popups ---------------- */
-  function popups(list, cash) {
+  let popTimers = [];
+  // `linger`: how long they stay (ms). By default they stay until the player carries on.
+  function popups(list, cash, linger) {
     list = (list || []).filter((t) => !/£\d|\d+p\b/.test(t));
     if (cash > 0) list.unshift(`+${fmt(cash)}!`);
     if (!list.length) return;
+    clearPopups(true);
     A.fanfare(act().style);
     list.forEach((txt, i) => {
-      setTimeout(() => {
+      popTimers.push(setTimeout(() => {
         const d = document.createElement('div');
         d.className = 'pop';
         d.textContent = txt;
-        d.style.left = 35 + Math.random() * 30 + '%';
-        d.style.top = 18 + i * 16 + '%';
+        d.style.left = 44 + Math.random() * 12 + '%';
+        d.style.top = 4 + i * 16 + '%';
+        d.style.setProperty('--tilt', (Math.random() * 6 - 3).toFixed(1) + 'deg');
         el.fx.appendChild(d);
-        setTimeout(() => d.remove(), 2000);
-      }, i * 280);
+        if (linger) popTimers.push(setTimeout(() => fadePop(d), linger));
+      }, i * 650));
     });
+  }
+  function fadePop(d) {
+    if (!d.isConnected || d.classList.contains('out')) return;
+    d.classList.add('out');
+    setTimeout(() => d.remove(), 450);
+  }
+  function clearPopups(now) {
+    popTimers.forEach(clearTimeout);
+    popTimers = [];
+    [...el.fx.querySelectorAll('.pop')].forEach((d) => (now ? d.remove() : fadePop(d)));
   }
 
   /* ---------------- panel helpers ---------------- */
@@ -244,6 +258,7 @@
     const fn = pendingContinue;
     pendingContinue = null;
     A.click();
+    clearPopups();
     fn();
   }
 
@@ -350,7 +365,9 @@
       if (!ignoreUsed && used.includes(i)) return false;
       if (e.series) {
         const done = S.series[e.series] || 0;
-        if (e.step !== done + 1 && !(e.repeat && e.step === done)) return false;
+        // `catchUp`: the first episode at a new school can start the story fresh
+        // for anyone who missed the earlier ones.
+        if (e.step !== done + 1 && !(e.catchUp && done < e.step) && !(e.repeat && e.step === done)) return false;
       }
       return true;
     });
@@ -358,7 +375,10 @@
     if (!pool.length) { used.length = 0; pool = eligible(true); }
     const avoid = pool.length > 1 ? S.lastFiller : -1;
     const choices = pool.filter((i) => i !== avoid);
-    const idx = pick(choices.length ? choices : pool);
+    // Running storylines come up a little more often, so they get to finish.
+    const weighted = [];
+    (choices.length ? choices : pool).forEach((i) => { weighted.push(i); if (fl[i].series) weighted.push(i, i); });
+    const idx = pick(weighted);
     used.push(idx);
     S.lastFiller = idx;
     const e = fl[idx];
@@ -689,7 +709,7 @@
     S.cruelty += 1;
     S.soul = clamp(S.soul - 3, 0, 100);
     if (u.feed) S.later.push({ text: u.feed, cast: [] });
-    popups(['BUSINESS IMPROVED!', u.name.toUpperCase() + '!']);
+    popups(['BUSINESS IMPROVED!', u.name.toUpperCase() + '!'], 0, 3500);
     hud();
     bedtime(true);
   }

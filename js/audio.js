@@ -34,11 +34,14 @@
   function fanfare(style) {
     if (!ac) return;
     if (style === 'real') { tone(N(45), 0, 1.2, 'sine', 0.08); return; }
-    const type = style === 'crayon' ? 'triangle' : style === 'ad' ? 'sawtooth' : 'square';
-    const vol = style === 'ad' ? 0.06 : 0.1;
+    if (style === 'flat') {
+      // a soft corporate marimba: the sound of a notification you didn't ask for
+      [72, 79, 76, 84].forEach((n, i) => tone(N(n), i * 0.09, 0.28, 'sine', 0.09));
+      return;
+    }
+    const type = style === 'crayon' ? 'triangle' : 'square';
     const seq = [72, 76, 79, 84, 79, 84];
-    seq.forEach((n, i) => tone(N(n), i * 0.075, i === seq.length - 1 ? 0.45 : 0.12, type, vol));
-    if (style === 'ad') [60, 64, 67].forEach((n) => tone(N(n), 0.38, 0.6, 'square', 0.04));
+    seq.forEach((n, i) => tone(N(n), i * 0.075, i === seq.length - 1 ? 0.45 : 0.12, type, 0.1));
     tone(N(96), 0.45, 0.25, 'sine', 0.05);
   }
 

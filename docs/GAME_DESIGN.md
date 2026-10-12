@@ -17,7 +17,7 @@
 | Pillar | How it shows up in play | Intent |
 | --- | --- | --- |
 | **The Stagnation Trap** | Any choice kinder than the hidden, rising line stops time in an awkward wait. Daily dues freeze the day until you find money. You have to get progressively worse to keep going. | Make the player actively choose corruption in order to keep playing, and feel it. |
-| **Visual progression** | Crayon → Y2K pixel art → glossy '90s TV advert → stark cinematic realism. | Mirror Tuck's growing detachment from reality as the empire scales. |
+| **Visual progression** | Crayon → Y2K pixel art → flat corporate illustration → stark cinematic realism. | Mirror Tuck's growing detachment from reality as the empire scales. |
 | **Explicit feedback** | Arcade fanfares for every exploit, then a "Meanwhile…" scene of the person you hurt, and a home-time recap of the whole day. | Set hyperactive rewards against raw human damage, and make the player sit with it. |
 | **British satire** | Dry, absurdist tone in the vein of *Thank Goodness You're Here!* | Ground big economic critiques in mundane, recognisable school tropes. |
 | **Organic progression** | The game never says "Act 2". Time passes, Tuck changes schools, and the world, art and interface change around him. | Let the player feel the slide rather than read about it. |
@@ -61,7 +61,7 @@ An encounter never demands more than the cruellest option it actually offers, so
 
 - **At or above the line,** the choice just happens. Crueller options pay more, so **pure vindictiveness is the speedrun**. Doing only what the line demands is deliberately *just* enough: at St. Pete's it leaves well under a pound spare at the end of most days, so the player keeps weighing whether to go one step further. Going beyond what's needed is counted and shown in the final ledger.
 - **Options are shuffled** every time an encounter appears, so the kind answer isn't always at the top and the cruel one at the bottom.
-- **Below the line,** the **awkward wait** begins. **It cannot be skipped**: there is no button out. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (about 20 seconds), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. You have to wait it out. Then *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
+- **Below the line,** the **awkward wait** begins. **It cannot be skipped**: there is no button out. Time stops: the clock above the door stops, it starts to rain, the colour drains out and everyone freezes mid-motion. Nothing happens for an uncomfortably long time (16 seconds; it was 22, which was a few seconds too long), with **no indication of when it will end**. Small absurd lines drift in, and you can count raindrops, look for Gary, retie your shoe and so on. None of it speeds anything up. You have to wait it out. Then *"Eventually, the moment passes."* What you chose happens, slowly, with no fanfare and nothing extra. Soul does not go up.
 - The total cruelty of your choices is the hidden **morality score**. The player never sees it until the final ledger, alongside "times you held back" and "times you went further than you had to".
 - A player who is always kind never leaves St. Pete's.
 
@@ -115,7 +115,7 @@ Each school's intro sets up what Tuck wants, and the HUD always shows it next to
 | St. Jude's | **The bikeshed**: the only dry, teacher-blind square metre, run by the Senior Hall Monitors |
 | Sixth Form | **The contract**: Mr Crane's five-year exclusive deal ("He winks. It might be a tic. It is not a tic.") |
 
-**The price is never shown as a number.** Progress is told in-world at home time ("The Year 6 leaver walks past, looks at your pockets, and laughs out loud" → "shakes his head. Not yet." → "nods. Slowly. Almost."). When you have enough, the seller just takes it: "Show us your pockets. …Yeah. That'll do." There is **no "Not yet" option**, so a player who has decided money is pointless can't refuse and soft-lock themselves; the world simply moves them on. Keeping the price invisible is also what keeps the hidden scaling hidden. The base prices (£6, £50 and £600) scale secretly with tuck-shop improvements.
+**The price is never shown as a number.** Progress is told in-world at home time ("The Year 6 leaver walks past, looks at your pockets, and laughs out loud" → "shakes his head. Not yet." → "nods. Slowly. Almost."). When you have enough, the seller just takes it: "Show us your pockets. …Yeah. That'll do." There is **no "Not yet" option**, so a player who has decided money is pointless can't refuse and soft-lock themselves; the world simply moves them on. Keeping the price invisible is also what keeps the hidden scaling hidden. The base prices (£5.10, £42.50 and £510) scale secretly with tuck-shop improvements.
 
 ## 3b.## 3b. Tone, cast and the world being strange
 
@@ -142,7 +142,14 @@ The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're
 
 **How the world fills in around the choices:**
 - **Interludes:** between encounters there's a coin-flip chance of a short in-world beat with no choice: a tannoy announcement ("the field is out of bounds due to the field"), something overheard, wet play, show and tell, a board meeting with Gary. Each plays once per run. There are about 12 per school, and 3 quiet ones in the Fall.
-- **Quick deals** at each school feature the cast: 15, 12 and 11 of them. They come out of a bag, so none repeats until all have played. Some run as a **series** that escalates each time it appears: Cordial Callum goes purple, then mauve ("a phase"), then starts a one-member Ribena support group, then accidentally wins the Cycling Proficiency award. Others call back across schools: Billy returns at sixteen and can be sold his own Holo-Dragon. They follow the same rules as everything else: exploiting pays and comes back on you, and decency pays nothing.
+- **Quick deals** at each school feature the cast. There are enough that a normal playthrough never sees one twice: 42, 24 and 23 of them. They come out of a bag, so none repeats until all have played. Many run as a **series** that escalates each time it appears (series episodes come up a little more often, so they get to finish):
+  - **Cordial Callum** (St. Pete's) goes purple, then mauve ("a phase"), starts a one-member Ribena support group, then accidentally wins the Cycling Proficiency award.
+  - **The Squashquatch** (all three schools): a seven-foot creature made entirely of undiluted orange squash, looking for Callum. Sticky footprints and a sighting at the fence; then it enrols at St. Jude's as a "mature student"; and finally, in the Sixth Form, it finds Callum and the truth comes out: it is Callum's dad, who popped out for a bottle of squash ten years ago and has been concentrating ever since. Callum can dilute him back to a normal man one glass at a time, or Tuck can bottle him ("Squashquatch: Dad Strength").
+  - **Desmond, solicitor** (St. Pete's, then the Sixth Form): a Year 4 with a clip-on tie and a briefcase containing one satsuma, charging a Panini sticker an hour. He sues the climbing frame, gets an injunction against Wet Play, and brings THE PLAYGROUND v. TUCK. At seventeen he's still not a lawyer, brings a class action against Volt-Juice™, then sues Time.
+  - **Mr Pell, supply** (St. Jude's): has covered the same Year 9 Geography lesson on oxbow lakes since 1994. Nobody knows who for.
+  - **Brenda** (Sixth Form): a purple beanbag hired as Head of Wellbeing, promoted to Assistant Head (Vibes), and then she bursts.
+
+  The first episode at each new school is marked `catchUp`, so it works for someone who missed the earlier ones. Others call back across schools: Billy returns at sixteen and can be sold his own Holo-Dragon. They follow the same rules as everything else: exploiting pays and comes back on you, and decency pays nothing.
 - **Evenings:** each home-time recap ends with a line from home (Nan, Countdown, the cat bought to blame, fish fingers arranged as a bar chart).
 - **The waits** fill with absurd beats instead of commentary ("A silence arrives. It sits down next to you. It has brought sandwiches."). Dobson, the Council man and Gary wander through.
 
@@ -150,17 +157,17 @@ The comedy is deadpan, absurd and surreal, in the vein of *Thank Goodness You're
 
 | Stage | Setting and art | Mechanics and scams | Milestone that moves you on |
 | --- | --- | --- | --- |
-| Ages 8–10 | St. Pete's Primary. Hand-drawn crayon on paper. | Billy and the Holo-Dragon, the plaster shortage, loot-box lunchboxes, the Swapsies fee, Biff | Buy the Mega-Coated Trench Coat and take Biff (£6) |
-| Ages 11–13 | St. Jude's Comprehensive. Crisp Y2K pixel art. | Dev's loan (200% plus his Game Boy), rain-shelter tenancy, Penny's homework factory, the flapjack/"Nibbles" smear, debt collection | Bribe the Senior Hall Monitors for the bikeshed (£50) |
-| Ages 14–16 | Sixth Form Campus. Glossy '90s TV commercial. | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£600) |
+| Ages 8–10 | St. Pete's Primary. Hand-drawn crayon on paper. | Billy and the Holo-Dragon, the plaster shortage, loot-box lunchboxes, the Swapsies fee, Biff | Buy the Mega-Coated Trench Coat and take Biff (£5.10) |
+| Ages 11–13 | St. Jude's Comprehensive. Crisp Y2K pixel art. | Dev's loan (200% plus his Game Boy), rain-shelter tenancy, Penny's homework factory, the flapjack/"Nibbles" smear, debt collection | Bribe the Senior Hall Monitors for the bikeshed (£42.50) |
+| Ages 14–16 | Sixth Form Campus. Flat corporate illustration (startup-website style). | Framing Maya in the election, breaking the fountains for Volt-Juice™, Mr Pembleton's photocopier, the exam ring, Penny's contract clause | Sign the five-year exclusive contract with Vice-Principal Crane (£510) |
 | The Fall | Headteacher's office. Stark cinematic realism. | Mrs Ahmed and the ledger, the audit, Biff's statement, teachers confess, Penny leaves, the assembly | Expulsion. The cycle restarts. |
 
 Transitions between schools are short comic story beats with their own scenes, and each one explains the change in art style:
 - **St. Pete's → St. Jude's:** Tuck walks out in the coat with Biff behind him "like weather", spends six weeks of rain doing stocktake on a jumper, and Gary sees him off. On the first morning of big school his mum's photo comes back from Boots and he's "very slightly pixelated. So is she. So is the dog. Nobody mentions it."
-- **St. Jude's → Sixth Form:** Gavin hands over the keys to a bikeshed with no door. "Year 9 happens. GCSEs happen. A moustache happens, mostly." Then everything turns glossy: the cornflakes have a jingle, and his mum's teeth go *ting*.
+- **St. Jude's → Sixth Form:** Gavin hands over the keys to a bikeshed with no door. "Year 9 happens. GCSEs happen. A moustache happens, mostly." Then everything turns flat: "Not sad. Flat." Everyone's arms are much longer, their heads much smaller, and they all seem delighted about it. His mum waves goodbye with an arm that reaches the end of the drive. Biff has a mission statement.
 - **Sixth Form → the Fall:** a giant novelty cheque made out to you, from you. Somebody in lost property finds a ledger. "The confetti is still coming down when the picture cuts out."
 
-The HUD is hidden during transitions. The cut from the advert into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
+The HUD is hidden during transitions. The cut from the flat corporate world into the Fall is a hard burst of static: *"The confetti is still coming down when the picture cuts out."*
 
 ### The first choice: the sardine sandwich and the Holo-Dragon
 Little Billy is crying on a damp bench over a sardine paste sandwich, and wants Tuck's only Gummy Snail. Nothing tells the player what's at stake.
@@ -180,11 +187,11 @@ Tuck sits on a wall outside the gates in the rain, assetless, watching kids play
 | --- | --- |
 | **Crayon** | Hand-drawn wobbly outlines and diagonal hatching on lined paper. The linework redraws ("boils") at 8 fps. Stick-figure kids with big heads. |
 | **Y2K pixel** | Drawn at 320×180 and scaled up with nearest-neighbour; dithered skies, scanlines, a navy/cyan/magenta UI and pixel fonts. |
-| **'90s TV advert** | A studio set with a rotating sunburst, floating Memphis-pattern confetti, an extruded TUCK logo and a reflective floor with a perspective grid. A hero Volt-Juice™ can sits on a pedestal with a lens flare, or the boardroom has a sunset over the school. Glossy mascot characters have big shiny eyes and fixed grins: **everybody smiles in the advert, even the crying kids**. Broadcast overlays include a TUCK TV channel bug, a NEW!/400%/FREE* starburst, scanlines, VHS tracking glitches and rotating small-print disclaimers ("*Tuck Enterprises™ accepts no liability for childhood"). |
+| **Flat corporate illustration** | The style of a startup's About page (replaced the '90s advert in v9, which was too harsh on the eyes). Calm pastels on cream (coral, sage, dusty blue, mustard, lilac), soft blobs behind everything, no outlines, no gradients, nothing flashing. Sets: a common room with a big window, a pendant lamp, a bean bag and a chart that only goes up; Tuck's office with a pastel skyline, a laptop and a framed chart; a corridor of pastel lockers under a "DREAM BIG (£2)" poster; and a rebranded school outside. Everything is branded "tuck." (lower case, with a coral full stop). People have long noodly limbs, tiny heads, dot eyes and big flat shoes, and Tuck always holds one arm out as if presenting a slide. Vince is a big flat can with "volt" on it. Small-print disclaimers drift along the bottom in quiet grey ("*Tuck Enterprises™ accepts no liability for childhood"). |
 | **Stark realism** | One-point-perspective rooms (office, corridor, assembly hall, street at dusk) lit by cold window light and failing fluorescent tubes. Rain runs down the glass. People have realistic proportions and are drawn as backlit silhouettes with rim light, with only shadowed eye sockets for faces. Heads drop and shoulders slump when sad; arms fold when angry. Letterboxed with film grain and a vignette. The final freeze fully desaturates the frame. |
 
 ### Characters match their descriptions
-Every detail the text mentions is drawn: Billy's sardine sandwich, Jade's grazed knee, Priya's sandwich, Kyle's business card, Biff's moustache, Penny's tired eyes, Mr Dobson's mop, Dinner Lady Maureen's hairnet, Callum's purple Ribena stain, Mr Grieve's burning eyebrows, the Council man's clipboard, Josh's chalky mouth, Voltage Vince's can, Gary the pigeon, and Tuck's sixth-form moustache ("mostly shadow").
+Every detail the text mentions is drawn: Billy's sardine sandwich, Jade's grazed knee, Priya's sandwich, Kyle's business card, Biff's moustache, Penny's tired eyes, Mr Dobson's mop, Dinner Lady Maureen's hairnet, Callum's purple Ribena stain, Mr Grieve's burning eyebrows, the Council man's clipboard, Josh's chalky mouth, Voltage Vince's can, Gary the pigeon, the Squashquatch (seven feet of see-through orange squash with pulp drifting inside it, a sticky puddle and sad eyes), Desmond's briefcase and clip-on tie, Mr Pell's elbow-patched cardigan and flask, and Tuck's sixth-form moustache ("mostly shadow").
 
 ## 6. Platforms and interface
 
@@ -204,13 +211,15 @@ The original blueprint suggested Unity or Godot. The game is built instead as a 
 | `js/content.js` | All story, dialogue, characters, interludes, evenings, tuck-shop improvements, prices, dues, awkward-wait lines and disclaimers. Edit this file to change the story. |
 | `js/game.js` | Turn-based state machine: day moments, encounters, the awkward wait, consequences, home-time dues, school transitions, ending. |
 | `js/render.js` | Core renderer (crayon and pixel styles), camera window, compositing, rain, freeze desaturation. |
-| `js/render-ad.js` | The '90s advert style (sets, mascots, broadcast overlays). |
+| `js/render-flat.js` | The Sixth Form's flat corporate-illustration style (pastel sets, long-limbed small-headed people, small print). |
 | `js/render-real.js` | The stark realism style (perspective rooms, silhouettes, lighting, letterbox). |
 | `js/audio.js` | Synthesised sound: fanfares, rain, the final drone. |
 | `css/style.css` | Mobile-first layout and one UI skin per style. |
 | `manifest.webmanifest`, `sw.js`, `icons/` | Home-screen app support. |
 
 ## 8. Change log
+
+- **v9:** Fanfare pop-ups now stay on screen until you carry on, so there's time to read them. The awkward wait is 16 seconds (was 22). Every school is shorter (goals 15% cheaper) and there are many more quick deals (St. Pete's 27, St. Jude's 24, Sixth Form 23), so a normal playthrough never repeats one; Callum's last episode no longer loops. New running storylines: the Squashquatch (all three schools, ending in the reveal that it's Callum's dad), Desmond the Year 4 solicitor, Mr Pell the eternal supply teacher, and Brenda the wellbeing beanbag. Series can be joined partway through at a new school (`catchUp`) and come up a little more often so they finish. The Sixth Form's '90s advert art, which was painful to look at, is replaced by a calm flat corporate-illustration style, and the transition into it is rewritten ("everything is flat. Not sad. Flat.").
 
 - **v8:** The tuck-shop treadmill is now revealed, once per run, the morning after the player buys the last improvement at a school, with the real numbers (spent, and the identical percentage rise in sales, dues and the goal). Before that, a "fully improved" bedtime beat; afterwards a knowing bedtime line. The final ledger shows total spent on improvements.
 
